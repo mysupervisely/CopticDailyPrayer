@@ -6,16 +6,143 @@
 .hourSwitch{display:flex;gap:8px;padding:12px 16px 4px;max-width:760px;margin:auto;overflow-x:auto;scrollbar-width:none}.hourSwitch::-webkit-scrollbar{display:none}
 .hourBtn{flex:0 0 auto;min-width:104px;border:1px solid #d7c7b3;background:#f8f2e8;color:var(--wine);border-radius:999px;padding:11px 12px;font-weight:800}
 .hourBtn.active{background:var(--wine);color:#fff;border-color:var(--wine)}
+
+/* M17: Coptic visual language + interactive hour/father experience */
+.copticBand{
+  margin:18px 0 16px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  color:var(--wine);opacity:.9
+}
+.copticBand svg{width:22px;height:22px;flex:0 0 auto}
+.copticBand .line{height:1px;flex:1;max-width:110px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.hourChooser{margin:0 0 14px;position:relative}
+.changeHourBtn{
+  width:100%;min-height:72px;border:1px solid var(--line);background:rgba(255,250,244,.88);
+  border-radius:20px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 8px 26px rgba(72,41,25,.05);text-align:left;color:var(--ink)
+}
+.changeHourBtn .left{display:flex;gap:12px;align-items:center}
+.hourGlyph{
+  width:42px;height:42px;border-radius:50%;border:1px solid #d7c09e;background:#f7ecdc;
+  display:grid;place-items:center;color:var(--wine);font-size:22px;font-family:Georgia,serif
+}
+.hourMini{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.hourCurrent{display:block;font-family:Georgia,serif;font-size:22px;font-weight:700;margin-top:3px}
+.hourChev{font-size:24px;color:var(--wine)}
+.hourMenu{
+  position:absolute;z-index:30;left:0;right:0;top:80px;background:#fffaf4;border:1px solid var(--line);
+  border-radius:18px;padding:7px;box-shadow:0 18px 50px rgba(55,32,22,.18);max-height:410px;overflow:auto
+}
+.hourMenu.hide{display:none}
+.hourOption{
+  width:100%;border:0;background:transparent;border-radius:13px;padding:11px 10px;
+  display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;text-align:left;color:var(--ink)
+}
+.hourOption.active{background:var(--soft);color:var(--wine)}
+.hourOption .icon{
+  width:40px;height:40px;border-radius:50%;background:#f4e8d7;border:1px solid #dcc5a3;
+  display:grid;place-items:center;font-family:Georgia,serif;font-size:18px;color:var(--wine)
+}
+.hourOption strong{display:block;font-size:16px}
+.hourOption small{display:block;color:var(--muted);margin-top:2px;font-size:12px}
+.hourOption .state{font-size:12px;color:var(--muted)}
+.fatherTop{
+  margin:0 0 14px;padding:20px 18px 18px;border:1px solid #d8c09d;border-radius:22px;
+  background:
+    radial-gradient(circle at 10% 0%,rgba(123,31,42,.08),transparent 30%),
+    linear-gradient(180deg,#fffaf2,#fbf3e6);
+  box-shadow:0 10px 28px rgba(72,41,25,.06);position:relative;overflow:hidden
+}
+.fatherTop:before,.fatherTop:after{
+  content:"✣";position:absolute;color:rgba(123,31,42,.12);font-size:52px;font-family:Georgia,serif
+}
+.fatherTop:before{left:-10px;top:-16px}.fatherTop:after{right:-10px;bottom:-20px}
+.fatherEyebrow{text-align:center;font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:var(--wine);font-weight:850}
+.fatherQuote{font-family:Georgia,serif;font-size:22px;line-height:1.55;text-align:center;margin:12px auto 8px;max-width:620px}
+.fatherAttribution{text-align:center;color:var(--wine);font-weight:800}
+.fatherSource{text-align:center;color:var(--muted);font-size:13px;font-style:italic;margin-top:2px}
+.selahBtn{
+  margin:15px auto 0;border:1px solid #ccb28c;background:transparent;color:var(--wine);
+  min-height:42px;border-radius:999px;padding:0 18px;font-weight:800;display:block
+}
+.selahOverlay{
+  position:fixed;inset:0;background:rgba(31,21,16,.94);z-index:1000;color:#f7efe4;
+  display:flex;align-items:center;justify-content:center;padding:28px
+}
+.selahOverlay.hide{display:none}
+.selahInner{text-align:center;max-width:360px}
+.selahCross{font-size:48px;color:#d6b27f;margin-bottom:18px;font-family:Georgia,serif}
+.selahWord{font-family:Georgia,serif;font-size:34px;letter-spacing:.18em;margin-bottom:12px}
+.selahText{color:#d9cdbf;line-height:1.7;font-size:15px}
+.selahClose{margin-top:26px;border:1px solid #9d8064;background:transparent;color:#f7efe4;border-radius:999px;padding:11px 20px;font-weight:800}
+.quickActions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 14px}
+.quickAction{
+  border:1px solid var(--line);border-radius:18px;background:#fffaf4;padding:14px;text-align:left;color:var(--ink)
+}
+.quickAction .qaIcon{font-size:20px;color:var(--wine)}
+.quickAction strong{display:block;margin-top:7px}
+.quickAction small{display:block;color:var(--muted);margin-top:2px;line-height:1.35}
+@media(max-width:430px){
+  .fatherQuote{font-size:20px}
+  .quickActions{grid-template-columns:1fr}
+}
+
 </style></head><body><main class="app">
-<div class="top"><div class="cross">☩</div><div class="eyebrow">Coptic Orthodox Agpeya</div><h1>First Hour</h1><p class="sub">Prime • Morning Prayer</p></div><div class="orn"></div><div class="hourSwitch">
-<button class="hourBtn active" data-hour="first" onclick="selectHour('first')">First Hour</button>
-<button class="hourBtn" data-hour="third" onclick="selectHour('third')">Third Hour</button>
-<button class="hourBtn" data-hour="sixth" onclick="selectHour('sixth')">Sixth Hour</button>
-<button class="hourBtn" data-hour="ninth" onclick="selectHour('ninth')">Ninth Hour</button>
-<button class="hourBtn" data-hour="eleventh" onclick="selectHour('eleventh')">Eleventh Hour</button>
-<button class="hourBtn" data-hour="compline" onclick="selectHour('compline')">Twelfth Hour</button>
-<button class="hourBtn" data-hour="midnight" onclick="selectHour('midnight')">Midnight</button>
+<div class="top"><div class="cross">☩</div><div class="eyebrow">Coptic Orthodox Agpeya</div><h1>First Hour</h1><p class="sub">Prime • Morning Prayer</p></div><div class="orn"></div>
+
+<div class="copticBand" aria-hidden="true">
+  <span class="line"></span>
+  <svg viewBox="0 0 64 64" fill="none">
+    <path d="M27 6h10v13h13v10H37v29H27V29H14V19h13V6Z" fill="currentColor"/>
+    <circle cx="32" cy="24" r="17" stroke="currentColor" stroke-width="2" opacity=".35"/>
+  </svg>
+  <span class="line"></span>
 </div>
+
+<div class="hourChooser">
+  <button class="changeHourBtn" onclick="toggleHourMenu()" id="changeHourBtn" aria-expanded="false">
+    <span class="left">
+      <span class="hourGlyph" id="currentHourGlyph">✣</span>
+      <span>
+        <span class="hourMini">Prayer Hour</span>
+        <strong class="hourCurrent" id="currentHourLabel">First Hour</strong>
+      </span>
+    </span>
+    <span class="hourChev" id="hourChev">⌄</span>
+  </button>
+
+  <div class="hourMenu hide" id="hourMenu">
+    <button class="hourOption" data-hour="first" onclick="chooseHour('first')"><span class="icon">☼</span><span><strong>First Hour</strong><small>Prime • Morning</small></span><span class="state"></span></button>
+    <button class="hourOption" data-hour="third" onclick="chooseHour('third')"><span class="icon">✣</span><span><strong>Third Hour</strong><small>Prayer of the Holy Spirit</small></span><span class="state"></span></button>
+    <button class="hourOption" data-hour="sixth" onclick="chooseHour('sixth')"><span class="icon">✝</span><span><strong>Sixth Hour</strong><small>Sext • The Cross</small></span><span class="state"></span></button>
+    <button class="hourOption" data-hour="ninth" onclick="chooseHour('ninth')"><span class="icon">✥</span><span><strong>Ninth Hour</strong><small>Nones • Salvation</small></span><span class="state"></span></button>
+    <button class="hourOption" data-hour="eleventh" onclick="chooseHour('eleventh')"><span class="icon">☾</span><span><strong>Eleventh Hour</strong><small>Vespers • Evening</small></span><span class="state"></span></button>
+    <button class="hourOption" data-hour="compline" onclick="chooseHour('compline')"><span class="icon">◒</span><span><strong>Twelfth Hour</strong><small>Compline • Before Sleep</small></span><span class="state"></span></button>
+    <button class="hourOption" data-hour="midnight" onclick="chooseHour('midnight')"><span class="icon">✦</span><span><strong>Midnight Prayer</strong><small>Three Watches</small></span><span class="state"></span></button>
+  </div>
+</div>
+
+<div class="fatherTop" id="fatherTop">
+  <div class="fatherEyebrow">A Word from the Fathers</div>
+  <div class="fatherQuote" id="fatherTopQuote"></div>
+  <div class="fatherAttribution" id="fatherTopName"></div>
+  <div class="fatherSource" id="fatherTopWork"></div>
+  <button class="selahBtn" onclick="enterSelah()">Selah</button>
+</div>
+
+<div class="quickActions">
+  <button class="quickAction" onclick="continuePrayer()">
+    <span class="qaIcon">↻</span>
+    <strong>Continue Prayer</strong>
+    <small id="continueText">Return to where you left off.</small>
+  </button>
+  <button class="quickAction" onclick="openJournal()">
+    <span class="qaIcon">✎</span>
+    <strong>Journal</strong>
+    <small>Private notes for today.</small>
+  </button>
+</div>
+
 <div class="card">
  <div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><span class="tag" id="stepLabel"></span><span class="sub" id="pct"></span></div>
  <div class="progress" style="margin:12px 0 18px"><div id="bar"></div></div>
@@ -108,6 +235,80 @@ const hourConfig={
   midnight:{sections:midnightSections,title:'Midnight Prayer',sub:'Three Watches • Watchfulness and Readiness',fatherSection:'First Watch Troparia'}
 };
 
+
+const hourVisuals={
+  first:{glyph:'☼'}, third:{glyph:'✣'}, sixth:{glyph:'✝'},
+  ninth:{glyph:'✥'}, eleventh:{glyph:'☾'}, compline:{glyph:'◒'}, midnight:{glyph:'✦'}
+};
+
+function toggleHourMenu(){
+  const menu=document.getElementById('hourMenu');
+  const btn=document.getElementById('changeHourBtn');
+  const chev=document.getElementById('hourChev');
+  const open=menu.classList.toggle('hide')===false;
+  btn.setAttribute('aria-expanded',open?'true':'false');
+  chev.textContent=open?'⌃':'⌄';
+}
+function chooseHour(hour){
+  selectHour(hour);
+  const menu=document.getElementById('hourMenu');
+  if(menu) menu.classList.add('hide');
+  const btn=document.getElementById('changeHourBtn');
+  if(btn) btn.setAttribute('aria-expanded','false');
+  const chev=document.getElementById('hourChev');
+  if(chev) chev.textContent='⌄';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function updateHourChooser(){
+  const cfg=hourConfig[currentHour];
+  const label=document.getElementById('currentHourLabel');
+  const glyph=document.getElementById('currentHourGlyph');
+  if(label) label.textContent=cfg.title;
+  if(glyph) glyph.textContent=(hourVisuals[currentHour]||{glyph:'✣'}).glyph;
+  document.querySelectorAll('.hourOption').forEach(b=>{
+    const active=b.dataset.hour===currentHour;
+    b.classList.toggle('active',active);
+    const state=b.querySelector('.state');
+    if(state) state.textContent=active?'Current':'';
+  });
+}
+function todaysFather(){
+  const list=fatherLibraries[currentHour]||fatherLibraries.first||[];
+  if(!list.length) return null;
+  const now=new Date();
+  const key=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())/86400000;
+  return list[Math.abs(Math.floor(key))%list.length];
+}
+function updateFatherTop(){
+  const f=todaysFather();
+  const card=document.getElementById('fatherTop');
+  if(!card) return;
+  if(!f){card.style.display='none';return}
+  card.style.display='';
+  document.getElementById('fatherTopQuote').textContent=f.quote;
+  document.getElementById('fatherTopName').textContent=f.name;
+  document.getElementById('fatherTopWork').textContent=f.work;
+}
+function enterSelah(){document.getElementById('selahOverlay').classList.remove('hide')}
+function exitSelah(){document.getElementById('selahOverlay').classList.add('hide')}
+function continuePrayer(){
+  const key='agpeya_'+currentHour+'_step';
+  const saved=parseInt(localStorage.getItem(key)||'0');
+  i=Number.isFinite(saved)?Math.max(0,Math.min(saved,sections.length-1)):0;
+  render();
+  document.querySelector('.card')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function openJournal(){
+  const j=document.getElementById('journal');
+  if(j){j.classList.remove('hide');j.scrollIntoView({behavior:'smooth',block:'center'});}
+}
+function updateContinueText(){
+  const el=document.getElementById('continueText');
+  if(!el) return;
+  const saved=parseInt(localStorage.getItem('agpeya_'+currentHour+'_step')||'0');
+  el.textContent=saved>0 ? 'Resume at section '+(saved+1)+' of '+sections.length+'.' : 'Begin '+hourConfig[currentHour].title+'.';
+}
+
 function selectHour(hour){
   currentHour=hour;
   const cfg=hourConfig[hour]||hourConfig.first;
@@ -120,6 +321,9 @@ function selectHour(hour){
   document.querySelector('.top .sub').textContent=cfg.sub;
   const c=document.querySelector('#completionCard .eyebrow'); if(c)c.textContent=cfg.title;
   renderDailyFather();
+  updateHourChooser();
+  updateFatherTop();
+  updateContinueText();
   render();
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -154,6 +358,20 @@ function prev(){if(i>0){i--;render();window.scrollTo({top:0,behavior:'smooth'});
 function mercy(){if(count<41){count++;localStorage.setItem('agpeya_'+currentHour+'_kyrie_'+i,count);renderCount();if(navigator.vibrate)navigator.vibrate(10)}}
 function renderCount(){document.getElementById('count').textContent=count;document.getElementById('kbar').style.width=(count/41*100)+'%';document.getElementById('remain').textContent=count===41?'41 complete • continue when ready':(41-count)+' remaining'}
 function saveJournal(){let v=document.getElementById('journal').value;localStorage.setItem('m4_journal_'+new Date().toISOString().slice(0,10),v);document.getElementById('saved').textContent='Saved privately on this device.'}
-document.getElementById('journal').value=localStorage.getItem('m4_journal_'+new Date().toISOString().slice(0,10))||'';renderDailyFather();
+document.getElementById('journal').value=localStorage.getItem('m4_journal_'+new Date().toISOString().slice(0,10))||'';
+renderDailyFather();
+updateHourChooser();
+updateFatherTop();
+updateContinueText();
 render();
-</script></body></html>
+</script>
+<div class="selahOverlay hide" id="selahOverlay">
+  <div class="selahInner">
+    <div class="selahCross">✣</div>
+    <div class="selahWord">Selah</div>
+    <div class="selahText">Remain in silence as long as you wish.</div>
+    <button class="selahClose" onclick="exitSelah()">Continue in Prayer</button>
+  </div>
+</div>
+
+</body></html>
