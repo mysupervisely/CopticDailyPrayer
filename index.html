@@ -1877,15 +1877,6 @@ body{
   border-radius:16px!important;
   padding:10px 13px!important;
 }
-.hourDropdownCross{
-  width:34px;
-  height:34px;
-  display:grid;
-  place-items:center;
-  color:var(--wine);
-  flex:0 0 34px;
-}
-.hourDropdownCross svg{width:24px;height:24px}
 .hourDropdownText.simpleChoice strong{
   font-family:inherit!important;
   font-size:13px!important;
@@ -1958,6 +1949,278 @@ body{
 .askSuggestions button{
   background:#fff!important;
   border-color:rgba(67,49,35,.10)!important;
+}
+
+
+/* M65 - simplify Agpeya chooser and prayer header */
+.hourDropdownButton{
+  min-height:54px!important;
+  padding:10px 14px!important;
+  border-radius:14px!important;
+}
+.hourDropdownCross{
+  display:none!important;
+}
+.hourDropdownText{
+  margin-left:0!important;
+}
+.hourDropdownText.simpleChoice strong{
+  font-size:14px!important;
+  letter-spacing:0!important;
+}
+.hourDropdownText.simpleChoice small{
+  font-size:9px!important;
+  letter-spacing:.06em!important;
+  text-transform:uppercase;
+}
+.hourDropdownChevron{
+  margin-left:auto!important;
+  font-size:16px!important;
+}
+.prayerHeaderIcon,
+.hourIcon,
+.prayerTitleCross,
+.prayerHeaderCross{
+  display:none!important;
+}
+.prayerCard h2,
+.prayerCard h3,
+.prayerTitle{
+  margin-left:0!important;
+}
+.prayerCardHeader,
+.prayerHeader{
+  padding-top:2px!important;
+}
+.prayerHeaderLine,
+.prayerTitleLine{
+  border-top-color:rgba(67,49,35,.10)!important;
+}
+#appRuntimeError{
+  display:none!important;
+}
+
+
+/* M65b - exact Agpeya card cleanup */
+.prayerCardHead{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  gap:8px!important;
+  align-items:start!important;
+}
+.cardCross{
+  display:none!important;
+}
+.cardHour{
+  font-size:17px!important;
+  letter-spacing:.08em!important;
+}
+.cardSub{
+  font-size:9px!important;
+  letter-spacing:.10em!important;
+  margin-top:2px!important;
+}
+.cardStep{
+  font-size:12px!important;
+  padding-top:2px!important;
+}
+.divider{
+  margin:10px 0!important;
+}
+.divider b{
+  display:none!important;
+}
+.divider span{
+  background:rgba(67,49,35,.10)!important;
+}
+.prayerCard{
+  border-color:rgba(67,49,35,.10)!important;
+  box-shadow:none!important;
+  background:rgba(255,255,255,.40)!important;
+}
+
+
+/* M66 - Apple-inspired cleanup pass */
+:root{
+  --surface:#fffdf8;
+  --surfaceSoft:rgba(255,255,255,.46);
+  --hairline:rgba(67,49,35,.09);
+}
+body{
+  letter-spacing:0;
+}
+.hero{
+  padding-top:8px!important;
+}
+.hero h1{
+  letter-spacing:-.035em!important;
+  line-height:.96!important;
+}
+.hero .kicker,
+.hero .subhead{
+  letter-spacing:.16em!important;
+}
+.page{
+  padding-left:18px!important;
+  padding-right:18px!important;
+}
+.card,
+.dailyWordCard,
+.prayNowCard,
+.journeyCard,
+.resumeCard,
+.ruleCard,
+.prayerCard,
+.saintPanel{
+  border:1px solid var(--hairline)!important;
+  box-shadow:none!important;
+  background:var(--surfaceSoft)!important;
+}
+.ruleCard{
+  padding:18px!important;
+  border-radius:18px!important;
+}
+.ruleCard h3{
+  font-size:19px!important;
+  letter-spacing:-.02em!important;
+}
+.ruleTags{
+  gap:6px!important;
+}
+.ruleTag{
+  padding:6px 10px!important;
+  border-radius:999px!important;
+  background:rgba(96,72,54,.06)!important;
+  font-size:9px!important;
+  font-weight:600!important;
+}
+.ruleFatherRow{
+  margin-top:14px!important;
+  padding-top:14px!important;
+  border-top:1px solid var(--hairline)!important;
+}
+.hourDropdownWrap{
+  margin-top:14px!important;
+  margin-bottom:14px!important;
+}
+.hourDropdownButton{
+  min-height:50px!important;
+  background:rgba(255,255,255,.58)!important;
+  border-color:var(--hairline)!important;
+}
+.hourDropdownMenu{
+  padding:6px!important;
+}
+.hourDropItem{
+  min-height:52px!important;
+  padding:7px 9px!important;
+}
+.hourDropItem img{
+  width:38px!important;
+  height:38px!important;
+  border-radius:10px!important;
+}
+.hourDropItem strong{
+  font-size:11px!important;
+}
+.hourDropItem small{
+  font-size:8px!important;
+}
+.prayerCard{
+  padding:18px!important;
+  border-radius:20px!important;
+}
+.prayerCardHead{
+  margin-bottom:8px!important;
+}
+.cardHour{
+  font-size:16px!important;
+  letter-spacing:.05em!important;
+}
+.cardSub{
+  color:#777169!important;
+}
+.progressWrap{
+  margin:12px 0 14px!important;
+}
+.agpeyaJumpTools{
+  margin-top:12px!important;
+}
+.agpeyaJumpLabel{
+  font-size:8px!important;
+  letter-spacing:.11em!important;
+  color:#777169!important;
+}
+.agpeyaJumpRow{
+  gap:7px!important;
+}
+.agpeyaJumpSelect{
+  min-height:42px!important;
+  border:1px solid var(--hairline)!important;
+  border-radius:12px!important;
+  background:#fff!important;
+  font-size:10px!important;
+}
+.prayerComfortRow{
+  display:flex!important;
+  align-items:center!important;
+  flex-wrap:wrap!important;
+  gap:4px!important;
+  margin-top:7px!important;
+}
+.prayerComfortRow button{
+  border:0!important;
+  background:transparent!important;
+  padding:5px 6px!important;
+  color:#6f675e!important;
+  font-size:8px!important;
+  font-weight:600!important;
+}
+.prayerComfortRow button:hover,
+.prayerComfortRow button:focus{
+  color:var(--wine)!important;
+}
+.prayerText{
+  margin-top:18px!important;
+  line-height:1.72!important;
+}
+.prayerText h3{
+  margin-bottom:10px!important;
+  font-size:20px!important;
+  letter-spacing:-.02em!important;
+}
+.prayerActions{
+  border-top:1px solid var(--hairline)!important;
+  margin-top:22px!important;
+  padding-top:14px!important;
+}
+.prayerActions button{
+  box-shadow:none!important;
+}
+.bottomNav{
+  border-top:1px solid var(--hairline)!important;
+  background:rgba(251,248,241,.94)!important;
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+.bottomNav button{
+  font-size:9px!important;
+}
+.bottomNav button svg{
+  opacity:.82;
+}
+.todayChurchStrip{
+  border-top:1px solid var(--hairline)!important;
+  border-bottom:1px solid var(--hairline)!important;
+  padding:13px 0!important;
+}
+.todayChurchStrip strong{
+  font-size:9px!important;
+  letter-spacing:.13em!important;
+}
+.todayChurchStrip .churchDate{
+  font-size:15px!important;
+  letter-spacing:-.01em!important;
 }
 
 </style></head><body>
@@ -2185,14 +2448,8 @@ body{
 
 <section class="hourDropdownWrap">
   <button class="hourDropdownButton" id="hourDropdownButton" onclick="toggleHourDropdown()" aria-expanded="false">
-    <span class="hourDropdownCross" aria-hidden="true">
-      <svg viewBox="0 0 32 32" focusable="false">
-        <path d="M13.5 3h5v7h7v5h-7v14h-5V15h-7v-5h7V3Z" fill="currentColor"/>
-        <path d="M11 6h10M10 12h12" stroke="currentColor" stroke-width="1.2" opacity=".35"/>
-      </svg>
-    </span>
-    <span class="hourDropdownText simpleChoice">
-      <strong id="hourDropdownTitle">Choose Prayer Hour</strong>
+<span class="hourDropdownText simpleChoice">
+      <strong id="hourDropdownTitle">Choose Hour</strong>
       <small id="hourDropdownSelected">Select an Agpeya Hour</small>
     </span>
     <span class="hourDropdownChevron" id="hourDropdownChevron">⌄</span>
@@ -2254,7 +2511,7 @@ body{
         <button type="button" onclick="changePrayerTextSize(-1)" aria-label="Decrease prayer text size">A−</button>
         <button type="button" onclick="resetPrayerTextSize()" aria-label="Reset prayer text size">A</button>
         <button type="button" onclick="changePrayerTextSize(1)" aria-label="Increase prayer text size">A+</button>
-        <button type="button" id="keepAwakeBtn" onclick="toggleKeepAwake()" aria-pressed="false">Keep Awake</button>
+        <button type="button" id="keepAwakeBtn" onclick="toggleKeepAwake()" aria-pressed="false">Stay Awake</button>
         <button type="button" onclick="jumpToNextPsalm()" aria-label="Jump to the next Psalm in this Hour">Next Psalm</button>
         <button type="button" onclick="jumpToAgpeyaSection(0)" aria-label="Return to the beginning of this Hour">Start</button>
       </div>
@@ -2883,21 +3140,24 @@ function syncHourDropdown(){
   const title=hourDropdownMeta[currentHour]?.title||getCfg().title;
   const mainTitle=document.getElementById('hourDropdownTitle');
   const selectedLabel=document.getElementById('hourDropdownSelected');
-  if(mainTitle) mainTitle.textContent='Choose Prayer Hour';
-  if(selectedLabel) selectedLabel.textContent=title+' selected';
+  if(mainTitle) mainTitle.textContent='Choose Hour';
+  if(selectedLabel) selectedLabel.textContent=title;
 }
 function pickHour(hour){
   selectHour(hour);
   syncHourDropdown();
 
-  // Keep the chooser open after selection so users can move between Hours
-  // without reopening it each time. Tap "Choose Prayer Hour" again to close.
   const menu=document.getElementById('hourDropdownMenu');
   const btn=document.getElementById('hourDropdownButton');
   const chev=document.getElementById('hourDropdownChevron');
-  if(menu) menu.classList.remove('hide');
-  if(btn) btn.setAttribute('aria-expanded','true');
-  if(chev) chev.textContent='⌃';
+  if(menu) menu.classList.add('hide');
+  if(btn) btn.setAttribute('aria-expanded','false');
+  if(chev) chev.textContent='⌄';
+
+  // Keep the selected Hour visible in the compact chooser after the menu closes.
+  const selectedLabel=document.getElementById('hourDropdownSelected');
+  const title=hourDropdownMeta[hour]?.title||getCfg().title;
+  if(selectedLabel) selectedLabel.textContent=title;
 }
 
 function selectHour(hour){
@@ -4895,15 +5155,6 @@ function initializeApp(){
   });
 
   appStartupComplete=true;
-
-  const runtimeError=document.getElementById('appRuntimeError');
-  if(runtimeError){
-    runtimeError.classList.toggle('hide',prayerRendererOkay);
-    if(!prayerRendererOkay){
-      const label=runtimeError.querySelector('span');
-      if(label) label.textContent='Prayer text did not finish loading.';
-    }
-  }
 
   // Network Church data remains completely independent of prayer controls.
   Promise.resolve()
