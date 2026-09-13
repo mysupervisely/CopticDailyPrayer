@@ -1776,6 +1776,40 @@ body.prayerTextXL #prayerText{
   font-size:9px;
 }
 
+
+/* M57 - source-based Synaxarium life highlights */
+.saintLifeHighlights{
+  margin:8px 0 5px;
+  padding:0;
+  list-style:none;
+}
+.saintLifeHighlights li{
+  position:relative;
+  margin:5px 0;
+  padding-left:12px;
+  color:var(--ink);
+  font-size:10px;
+  line-height:1.45;
+}
+.saintLifeHighlights li::before{
+  content:"";
+  position:absolute;
+  left:1px;
+  top:.62em;
+  width:3px;
+  height:3px;
+  border-radius:50%;
+  background:#b18b5c;
+}
+.saintLifeLabel{
+  margin-top:8px;
+  color:var(--wine);
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
 </style></head><body>
 <div class="crossRail leftRail"></div><div class="crossRail rightRail"></div>
 
@@ -3199,7 +3233,7 @@ function renderLiveSaints(){
   }
   box.innerHTML=saints.slice(0,8).map(x=>{
     const summary=x.summary ? `<p>${escapeHtml(x.summary.length>320?x.summary.slice(0,317)+'…':x.summary)}</p>` : '';
-    return `<article class="saintItem"><strong>${escapeHtml(x.title)}</strong>${summary}</article>`;
+    return `<article class="saintItem"><strong>${escapeHtml(x.title)}</strong>${summary}${saintLifeHighlightsHtml(s)}</article>`;
   }).join('');
 }
 function toggleSaints(){
@@ -4498,5 +4532,82 @@ if(document.readyState==='loading'){
 }else{
   initializeApp();
 }
+
+
+// SOURCE-BASED SYNAXARIUM LIFE HIGHLIGHTS
+function synaxariumSentences(text){
+  return String(text||'')
+    .replace(/\s+/g,' ')
+    .split(/(?<=[.!?])\s+/)
+    .map(s=>s.trim())
+    .filter(Boolean);
+}
+
+function cleanSynaxariumFact(sentence){
+  return String(sentence||'')
+    .replace(/^On this day(?: also)?[,\s]*/i,'')
+    .replace(/\bMay (?:his|her|their) prayers? be with us\.?\s*Amen\.?/ig,'')
+    .replace(/\bGlory be to our God forever\.?\s*Amen\.?/ig,'')
+    .trim();
+}
+
+function lifeHighlightScore(sentence){
+  const s=sentence.toLowerCase();
+  let score=0;
+  const weighted=[
+    [/\bwas born\b|\bnative of\b|\bfrom the (?:city|village|town)\b/,10],
+    [/\bfather\b|\bmother\b|\bparents\b|\bbrother\b|\bsister\b/,7],
+    [/\bwhen (?:he|she) was \d+|\bat (?:the )?age of \d+|\byears old\b/,9],
+    [/\bdiocletian\b|\bmaximian\b|\bemperor\b|\bgovernor\b|\bking\b/,8],
+    [/\bmartyred\b|\bmartyrdom\b|\bbeheaded\b|\bkilled\b|\bburned\b|\barrows\b/,10],
+    [/\bmonk\b|\bmonastery\b|\bmonastic\b|\bhermit\b|\bascetic\b/,7],
+    [/\bbishop\b|\bpriest\b|\bpope\b|\bpatriarch\b|\bdeacon\b|\bordained\b/,7],
+    [/\bdeparted\b|\bdied\b/,8],
+    [/\bimprisoned\b|\btortur(?:e|ed|ing)\b|\bconfessed (?:his|her|the) faith\b/,8],
+    [/\bchurch\b|\brelics\b|\bbody\b/,4]
+  ];
+  weighted.forEach(([rx,w])=>{if(rx.test(s)) score+=w;});
+  if(sentence.length>220) score-=3;
+  if(sentence.length<35) score-=2;
+  return score;
+}
+
+function extractLifeHighlights(entry,maxItems=5){
+  const text=typeof entry==='string'
+    ? entry
+    : firstStringByKeys(entry,['text','content','description','story','body','summary'])||'';
+
+  const candidates=synaxariumSentences(text)
+    .map((sentence,index)=>({
+      sentence:cleanSynaxariumFact(sentence),
+      index,
+      score:lifeHighlightScore(sentence)
+    }))
+    .filter(x=>x.sentence && x.score>0);
+
+  candidates.sort((a,b)=>b.score-a.score || a.index-b.index);
+
+  const picked=[];
+  const seen=new Set();
+  for(const item of candidates){
+    const key=item.sentence.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+    if(!key || seen.has(key)) continue;
+    seen.add(key);
+    picked.push(item);
+    if(picked.length>=maxItems) break;
+  }
+
+  picked.sort((a,b)=>a.index-b.index);
+  return picked.map(x=>x.sentence);
+}
+
+function saintLifeHighlightsHtml(entry){
+  const facts=extractLifeHighlights(entry,5);
+  if(!facts.length) return '';
+  return `<div class="saintLifeLabel">Life Highlights</div><ul class="saintLifeHighlights">${
+    facts.map(f=>`<li>${escapeHtml(f)}</li>`).join('')
+  }</ul>`;
+}
+
 </script>
 </body></html>
