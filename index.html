@@ -1748,6 +1748,34 @@ body.prayerTextXL #prayerText{
   box-shadow:0 2px 12px rgba(65,36,25,.08);
 }
 
+
+/* M56 - startup/runtime safety */
+.appRuntimeError{
+  position:fixed;
+  left:12px;
+  right:12px;
+  bottom:76px;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:9px 11px;
+  border:1px solid #d8b9a9;
+  border-radius:12px;
+  background:#fffaf4;
+  color:var(--ink);
+  font-size:9px;
+  box-shadow:0 3px 16px rgba(65,36,25,.12);
+}
+.appRuntimeError button{
+  border:0;
+  background:transparent;
+  color:var(--wine);
+  font-weight:700;
+  font-size:9px;
+}
+
 </style></head><body>
 <div class="crossRail leftRail"></div><div class="crossRail rightRail"></div>
 
@@ -2313,6 +2341,11 @@ body.prayerTextXL #prayerText{
   </div>
 </section>
 
+<div class="appRuntimeError hide" id="appRuntimeError" role="alert">
+  <span>The app did not finish loading.</span>
+  <button type="button" onclick="location.reload()">Reload</button>
+</div>
+
 <button type="button" class="returnToPrayer hide" id="returnToPrayer" onclick="returnToPrayerSection()">Return to prayer</button>
 
 <nav class="bottomNav">
@@ -2340,6 +2373,16 @@ body.prayerTextXL #prayerText{
   </div>
 </div>
 <script>
+window.addEventListener('error',()=>{
+  const el=document.getElementById('appRuntimeError');
+  if(el) el.classList.remove('hide');
+});
+window.addEventListener('unhandledrejection',()=>{
+  const el=document.getElementById('appRuntimeError');
+  if(el) el.classList.remove('hide');
+});
+
+
 
 /*
   COPTIC LECTIONARY DATA CONTRACT
@@ -2700,14 +2743,6 @@ function prev(){if(i>0){i--;render();window.scrollTo({top:0,behavior:'smooth'});
 function mercy(){if(count<41){count++;localStorage.setItem('agpeya_'+currentHour+'_kyrie_'+i,count);renderCount();if(navigator.vibrate)navigator.vibrate(10)}}
 function renderCount(){document.getElementById('count').textContent=count;document.getElementById('kbar').style.width=(count/41*100)+'%';document.getElementById('remain').textContent=count===41?'41 complete • continue when ready':(41-count)+' remaining'}
 function saveJournal(){let v=document.getElementById('journal').value;localStorage.setItem('m4_journal_'+new Date().toISOString().slice(0,10),v);document.getElementById('saved').textContent='Saved privately on this device.'}
-const legacyJournal=document.getElementById('journal');
-if(legacyJournal) legacyJournal.value=localStorage.getItem('m4_journal_'+new Date().toISOString().slice(0,10))||'';
-renderDailyFather();
-syncHourDropdown();
-render();
-
-// Initial home-page lectionary render
-renderDailyWord();
 
 
 // PERSONAL PRAYER RULE
@@ -2839,8 +2874,6 @@ function savePrayerRule(){
   closePrayerRule();
 }
 
-renderPrayerRule();
-
 
 // DAILY FLOW + PRAY NOW
 const JESUS_COUNT_KEY='copticDailyPrayer_jesus_count_v1';
@@ -2942,9 +2975,6 @@ function resetJesusPrayer(){
   renderJesusCount();
 }
 
-
-renderPrayNow();
-renderJesusCount();
 
 
 // LIVE COPTIC CALENDAR + KATAMAROS + SYNAXARIUM
@@ -3275,8 +3305,6 @@ async function loadTodayFromCopticChurch(){
   }
 }
 
-loadTodayFromCopticChurch();
-
 
 // TODAY'S RHYTHM
 function minutesFromTime(value){const parts=String(value||'').split(':').map(Number);if(parts.length!==2||Number.isNaN(parts[0])||Number.isNaN(parts[1]))return null;return parts[0]*60+parts[1];}
@@ -3313,9 +3341,6 @@ function renderDailyJourney(){
   }).join('');
 }
 
-
-renderDailyJourney();
-setInterval(renderDailyJourney,60000);
 
 
 // REFINED DAILY READINGS
@@ -4013,8 +4038,6 @@ function shiftChurchMonth(offset){
 }
 
 
-renderMonthPicker();
-
 
 // SELECTED-DATE CONTINUITY BETWEEN CALENDAR + READINGS
 function selectedDateShortLabel(){
@@ -4239,8 +4262,6 @@ function resumeInProgressPrayer(){
 }
 
 
-renderPrayerResume();
-
 
 // AGPEYA SECTION JUMP NAVIGATION
 function buildAgpeyaJump(){
@@ -4303,9 +4324,6 @@ function jumpToAgpeyaSection(value){
   if(card) card.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-
-buildAgpeyaJump();
-syncAgpeyaJump();
 
 
 // PRAYER READING COMFORT
@@ -4375,9 +4393,6 @@ document.addEventListener('visibilitychange',()=>{
   }
 });
 
-applyPrayerTextSize();
-renderKeepAwakeButton();
-
 
 
 // PRAYER POSITION HELPER
@@ -4403,8 +4418,6 @@ window.addEventListener('scroll',()=>{
 window.addEventListener('resize',renderReturnToPrayer);
 
 
-renderReturnToPrayer();
-
 function jumpToNextPsalm(){
   if(!Array.isArray(sections) || !sections.length) return;
 
@@ -4423,6 +4436,67 @@ function jumpToNextPsalm(){
       return;
     }
   }
+}
+
+
+// SAFE CENTRALIZED STARTUP
+let appStartupComplete=false;
+let dailyJourneyTimer=null;
+
+function initializeApp(){
+  if(appStartupComplete) return;
+
+  try{
+    const legacyJournal=document.getElementById('journal');
+    if(legacyJournal){
+      legacyJournal.value=localStorage.getItem('m4_journal_'+new Date().toISOString().slice(0,10))||'';
+    }
+
+    renderDailyFather();
+    syncHourDropdown();
+
+    renderPrayerRule();
+    renderPrayNow();
+    renderJesusCount();
+    renderFatherRuleStatus();
+    renderConfessionStatus();
+
+    render();
+    buildAgpeyaJump();
+    syncAgpeyaJump();
+    renderPrayerResume();
+
+    applyPrayerTextSize();
+    renderKeepAwakeButton();
+
+    renderDailyWord();
+    renderDailyJourney();
+    if(!dailyJourneyTimer) dailyJourneyTimer=setInterval(renderDailyJourney,60000);
+
+    renderMonthPicker();
+    updateSelectedDateLabels();
+    renderHourCompletionState();
+    renderReadingCompletionState();
+    renderReturnToPrayer();
+
+    appStartupComplete=true;
+
+    const runtimeError=document.getElementById('appRuntimeError');
+    if(runtimeError) runtimeError.classList.add('hide');
+
+    // Network-backed Church data starts only after the local UI is usable.
+    loadTodayFromCopticChurch();
+  }catch(err){
+    console.error('Coptic Daily Prayer startup failed:',err);
+    const runtimeError=document.getElementById('appRuntimeError');
+    if(runtimeError) runtimeError.classList.remove('hide');
+  }
+}
+
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',initializeApp,{once:true});
+}else{
+  initializeApp();
 }
 </script>
 </body></html>
