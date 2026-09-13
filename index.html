@@ -4702,22 +4702,27 @@ function safeStartupStep(name,fn){
 function initializeApp(){
   if(appStartupComplete) return;
 
-  // Make the core prayer controls usable first. Optional modules are isolated,
-  // so one problem can no longer disable every button on the page.
-  const coreOkay=safeStartupStep('core prayer',()=>{
-    const legacyJournal=document.getElementById('journal');
-    if(legacyJournal){
-      legacyJournal.value=localStorage.getItem('m4_journal_'+new Date().toISOString().slice(0,10))||'';
-    }
-    renderDailyFather();
-    syncHourDropdown();
+  // M63: only the actual prayer renderer can trigger the prayer-controls warning.
+  // Convenience features are isolated and can never make the whole app look broken.
+  let prayerRendererOkay=true;
+
+  safeStartupStep('Father meditation',()=>renderDailyFather());
+  safeStartupStep('Hour selector',()=>syncHourDropdown());
+
+  try{
     render();
+  }catch(err){
+    prayerRendererOkay=false;
+    console.error('Core prayer renderer failed:',err);
+  }
+
+  safeStartupStep('Agpeya jump',()=>{
     buildAgpeyaJump();
     syncAgpeyaJump();
-    applyPrayerTextSize();
-    renderKeepAwakeButton();
-    renderReturnToPrayer();
   });
+  safeStartupStep('reading size',()=>applyPrayerTextSize());
+  safeStartupStep('keep awake',()=>renderKeepAwakeButton());
+  safeStartupStep('return to prayer',()=>renderReturnToPrayer());
 
   safeStartupStep('prayer rule',()=>renderPrayerRule());
   safeStartupStep('pray now',()=>renderPrayNow());
@@ -4743,15 +4748,14 @@ function initializeApp(){
 
   const runtimeError=document.getElementById('appRuntimeError');
   if(runtimeError){
-    // Only a failure of the core Agpeya UI should show the blocking warning.
-    runtimeError.classList.toggle('hide',coreOkay);
-    if(!coreOkay){
+    runtimeError.classList.toggle('hide',prayerRendererOkay);
+    if(!prayerRendererOkay){
       const label=runtimeError.querySelector('span');
-      if(label) label.textContent='Prayer controls did not finish loading.';
+      if(label) label.textContent='Prayer text did not finish loading.';
     }
   }
 
-  // Church data is network-backed and must never block the prayer UI.
+  // Network Church data remains completely independent of prayer controls.
   Promise.resolve()
     .then(()=>loadTodayFromCopticChurch())
     .catch(err=>console.warn('Church data refresh failed:',err));
