@@ -1810,6 +1810,23 @@ body.prayerTextXL #prayerText{
   text-transform:uppercase;
 }
 
+
+/* M61 - Ask a Coptic Question, SUSCopts-only beta */
+.copticAskCard{margin-top:10px}
+.copticAskSheet{max-height:82vh;overflow:auto}
+.askLabel{display:block;margin:12px 0 5px;font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--wine)}
+.askInput{box-sizing:border-box;width:100%;resize:vertical;border:1px solid rgba(95,43,49,.22);border-radius:12px;background:#fffdf8;padding:11px;font:inherit;font-size:12px;line-height:1.45;color:var(--ink);outline:none}
+.askInput:focus{border-color:rgba(95,43,49,.48)}
+.primaryQuietButton{margin-top:8px;border:0;border-radius:999px;background:var(--wine);color:#fff;padding:9px 16px;font-size:10px;font-weight:700}
+.askSuggestions{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0 2px}
+.askSuggestions button{border:1px solid rgba(95,43,49,.15);border-radius:999px;background:transparent;padding:6px 8px;color:var(--wine);font-size:8px}
+.copticAskAnswer{margin-top:13px;padding:12px;border-top:1px solid rgba(95,43,49,.13);border-bottom:1px solid rgba(95,43,49,.13)}
+.copticAskAnswer h4{margin:0 0 6px;font-size:13px}
+.copticAskAnswer p{margin:5px 0;font-size:10px;line-height:1.55}
+.copticAskAnswer .answerSource{margin-top:9px;font-size:8px;color:var(--muted)}
+.copticAskAnswer .answerSource a{color:var(--wine)}
+.askBoundary{margin:12px 0 5px;font-size:8px;line-height:1.45;color:var(--muted)}
+
 </style></head><body>
 <div class="crossRail leftRail"></div><div class="crossRail rightRail"></div>
 
@@ -2212,7 +2229,15 @@ body.prayerTextXL #prayerText{
 <section id="morePage" class="appPage hide appSectionPage">
   <div class="sectionPageHead">
     <div>
-      <div class="dailyWordEyebrow">MORE</div>
+      
+<div class="moreCard copticAskCard">
+  <div class="moreEyebrow">SOURCE-BASED Q&amp;A</div>
+  <h3>Ask a Coptic Question</h3>
+  <p class="pageQuiet">Ask naturally. This beta answers only when it finds a matching published SUSCopts answer.</p>
+  <button type="button" class="quietAction" onclick="openCopticAsk()">Have a question? <span>Ask →</span></button>
+</div>
+
+<div class="dailyWordEyebrow">MORE</div>
       <h2>Prayer & Settings</h2>
       <p>Keep the app simple and shape it around your prayer rule.</p>
     </div>
@@ -2382,6 +2407,32 @@ body.prayerTextXL #prayerText{
 
 <button type="button" class="returnToPrayer hide" id="returnToPrayer" onclick="returnToPrayerSection()">Return to prayer</button>
 
+
+<div class="modalShade hide" id="copticAskModal" onclick="if(event.target===this)closeCopticAsk()">
+  <section class="sheet copticAskSheet" role="dialog" aria-modal="true" aria-labelledby="copticAskTitle">
+    <button type="button" class="sheetClose" onclick="closeCopticAsk()" aria-label="Close">×</button>
+    <div class="moreEyebrow">SUSCOPTS ONLY</div>
+    <h3 id="copticAskTitle">Ask a Coptic Question</h3>
+    <p class="pageQuiet">Answers are based only on published material from the Coptic Orthodox Diocese of the Southern United States.</p>
+
+    <label class="askLabel" for="copticAskInput">Your question</label>
+    <textarea id="copticAskInput" class="askInput" rows="3" placeholder="For example: How often should I confess?"></textarea>
+    <button type="button" class="primaryQuietButton" onclick="answerCopticQuestion()">Ask</button>
+
+    <div class="askSuggestions">
+      <button type="button" onclick="askSuggestedQuestion('How often should I confess?')">How often should I confess?</button>
+      <button type="button" onclick="askSuggestedQuestion('What if I forget a sin in confession?')">What if I forget a sin?</button>
+      <button type="button" onclick="askSuggestedQuestion('At what age should confession begin?')">When should confession begin?</button>
+      <button type="button" onclick="askSuggestedQuestion('Why do we confess to a priest?')">Why confess to a priest?</button>
+    </div>
+
+    <div id="copticAskAnswer" class="copticAskAnswer hide" aria-live="polite"></div>
+
+    <p class="askBoundary">If a clear SUSCopts answer is not available in this beta, the app will not create a theological answer. This does not replace your father of confession.</p>
+    <a class="sourceLink" href="https://qa.suscopts.org/?runsearch=start" target="_blank" rel="noopener">Search the full SUSCopts Q&amp;A →</a>
+  </section>
+</div>
+
 <nav class="bottomNav">
     <button class="bottomItem active" data-page-nav="home" onclick="showAppPage('home')">
       <svg viewBox="0 0 32 32"><path d="M4 15 16 5l12 10v12h-8v-8h-8v8H4V15Z" fill="currentColor"/></svg><span>Home</span>
@@ -2407,17 +2458,6 @@ body.prayerTextXL #prayerText{
   </div>
 </div>
 <script>
-window.addEventListener('error',()=>{
-  const el=document.getElementById('appRuntimeError');
-  if(el) el.classList.remove('hide');
-});
-window.addEventListener('unhandledrejection',()=>{
-  const el=document.getElementById('appRuntimeError');
-  if(el) el.classList.remove('hide');
-});
-
-
-
 /*
   COPTIC LECTIONARY DATA CONTRACT
 
@@ -3232,8 +3272,9 @@ function renderLiveSaints(){
     return;
   }
   box.innerHTML=saints.slice(0,8).map(x=>{
+    const highlights=saintLifeHighlightsHtml(x);
     const summary=x.summary ? `<p>${escapeHtml(x.summary.length>320?x.summary.slice(0,317)+'…':x.summary)}</p>` : '';
-    return `<article class="saintItem"><strong>${escapeHtml(x.title)}</strong>${summary}${saintLifeHighlightsHtml(s)}</article>`;
+    return `<article class="saintItem"><strong>${escapeHtml(x.title)}</strong>${highlights}${summary}</article>`;
   }).join('');
 }
 function toggleSaints(){
@@ -3521,7 +3562,7 @@ function renderCalendarPage(){
 
 // DAY-TO-DAY COPTIC CHURCH NAVIGATION
 
-function cloneDate(d){ return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+function cloneDate(d){ return asLocalChurchDate(d); }
 function churchDateKey(d=selectedChurchDate){ return isoLocalDate(d); }
 function isSelectedToday(){
   const a=cloneDate(selectedChurchDate), b=cloneDate(new Date());
@@ -3537,7 +3578,7 @@ function updateChurchDateNavState(){
   document.querySelectorAll('.churchDateNav').forEach(el=>el.classList.toggle('isToday',isSelectedToday()));
 }
 async function loadChurchDate(dateObj){
-  selectedChurchDate=cloneDate(dateObj);
+  selectedChurchDate=asLocalChurchDate(dateObj);
   const date=churchDateKey();
   const cached=readChurchCache(date);
   const status=document.getElementById('churchDataStatus');
@@ -3610,30 +3651,12 @@ async function loadChurchDate(dateObj){
   }
 }
 function shiftChurchDay(days){
-  const d=cloneDate(selectedChurchDate);
-  d.setDate(d.getDate()+days);
+  const d=asLocalChurchDate(selectedChurchDate);
+  d.setDate(d.getDate()+Number(days||0));
   loadChurchDate(d);
 }
-function goChurchToday(){ loadChurchDate(new Date()); }
-
-
-
-// FEAST + FASTING CONTEXT
-function normalizeCelebrations(data){
-  let list=[];
-  if(Array.isArray(data)) list=data;
-  if(!list.length) list=arrayByLikelyKey(data,['celebrations','feasts','items','events']);
-  if(!list.length && data && typeof data==='object'){
-    const title=firstStringByKeys(data,['name','title','celebration','feast']);
-    if(title) list=[data];
-  }
-  return list.map(x=>{
-    if(typeof x==='string') return {name:x,type:''};
-    return {
-      name:firstStringByKeys(x,['name','title','celebration','feast','event']),
-      type:firstStringByKeys(x,['type','rank','category'])
-    };
-  }).filter(x=>x.name);
+function goChurchToday(){
+  loadChurchDate(new Date());
 }
 function fastingLabel(data){
   if(!data) return '';
@@ -4473,68 +4496,8 @@ function jumpToNextPsalm(){
 }
 
 
-// SAFE CENTRALIZED STARTUP
-let appStartupComplete=false;
-let dailyJourneyTimer=null;
 
-function initializeApp(){
-  if(appStartupComplete) return;
-
-  try{
-    const legacyJournal=document.getElementById('journal');
-    if(legacyJournal){
-      legacyJournal.value=localStorage.getItem('m4_journal_'+new Date().toISOString().slice(0,10))||'';
-    }
-
-    renderDailyFather();
-    syncHourDropdown();
-
-    renderPrayerRule();
-    renderPrayNow();
-    renderJesusCount();
-    renderFatherRuleStatus();
-    renderConfessionStatus();
-
-    render();
-    buildAgpeyaJump();
-    syncAgpeyaJump();
-    renderPrayerResume();
-
-    applyPrayerTextSize();
-    renderKeepAwakeButton();
-
-    renderDailyWord();
-    renderDailyJourney();
-    if(!dailyJourneyTimer) dailyJourneyTimer=setInterval(renderDailyJourney,60000);
-
-    renderMonthPicker();
-    updateSelectedDateLabels();
-    renderHourCompletionState();
-    renderReadingCompletionState();
-    renderReturnToPrayer();
-
-    appStartupComplete=true;
-
-    const runtimeError=document.getElementById('appRuntimeError');
-    if(runtimeError) runtimeError.classList.add('hide');
-
-    // Network-backed Church data starts only after the local UI is usable.
-    loadTodayFromCopticChurch();
-  }catch(err){
-    console.error('Coptic Daily Prayer startup failed:',err);
-    const runtimeError=document.getElementById('appRuntimeError');
-    if(runtimeError) runtimeError.classList.remove('hide');
-  }
-}
-
-if(document.readyState==='loading'){
-  document.addEventListener('DOMContentLoaded',initializeApp,{once:true});
-}else{
-  initializeApp();
-}
-
-
-// SOURCE-BASED SYNAXARIUM LIFE HIGHLIGHTS
+// M60 - SOURCE-BASED SYNAXARIUM LIFE HIGHLIGHTS
 function synaxariumSentences(text){
   return String(text||'')
     .replace(/\s+/g,' ')
@@ -4552,30 +4515,30 @@ function cleanSynaxariumFact(sentence){
 }
 
 function lifeHighlightScore(sentence){
-  const s=sentence.toLowerCase();
+  const s=String(sentence||'').toLowerCase();
   let score=0;
   const weighted=[
-    [/\bwas born\b|\bnative of\b|\bfrom the (?:city|village|town)\b/,10],
+    [/\bwas born\b|\bnative of\b|\bfrom the (?:city|village|town)\b|\bborn in\b/,12],
     [/\bfather\b|\bmother\b|\bparents\b|\bbrother\b|\bsister\b/,7],
     [/\bwhen (?:he|she) was \d+|\bat (?:the )?age of \d+|\byears old\b/,9],
     [/\bdiocletian\b|\bmaximian\b|\bemperor\b|\bgovernor\b|\bking\b/,8],
-    [/\bmartyred\b|\bmartyrdom\b|\bbeheaded\b|\bkilled\b|\bburned\b|\barrows\b/,10],
+    [/\bmartyred\b|\bmartyrdom\b|\bbeheaded\b|\bkilled\b|\bburned\b|\barrows\b|\bsword\b/,12],
     [/\bmonk\b|\bmonastery\b|\bmonastic\b|\bhermit\b|\bascetic\b/,7],
     [/\bbishop\b|\bpriest\b|\bpope\b|\bpatriarch\b|\bdeacon\b|\bordained\b/,7],
-    [/\bdeparted\b|\bdied\b/,8],
-    [/\bimprisoned\b|\btortur(?:e|ed|ing)\b|\bconfessed (?:his|her|the) faith\b/,8],
-    [/\bchurch\b|\brelics\b|\bbody\b/,4]
+    [/\bdeparted\b|\bdied\b|\breposed\b/,9],
+    [/\bimprisoned\b|\bprison\b|\btortur(?:e|ed|ing)\b|\bconfessed\b|\brefused\b/,8],
+    [/\bchurch\b|\brelics\b|\bbody\b|\btranslated\b/,4]
   ];
-  weighted.forEach(([rx,w])=>{if(rx.test(s)) score+=w;});
-  if(sentence.length>220) score-=3;
-  if(sentence.length<35) score-=2;
+  weighted.forEach(([rx,w])=>{ if(rx.test(s)) score+=w; });
+  if(sentence.length>240) score-=4;
+  if(sentence.length<28) score-=2;
   return score;
 }
 
 function extractLifeHighlights(entry,maxItems=5){
   const text=typeof entry==='string'
     ? entry
-    : firstStringByKeys(entry,['text','content','description','story','body','summary'])||'';
+    : (entry && (entry.summary || entry.description || entry.text || entry.content)) || '';
 
   const candidates=synaxariumSentences(text)
     .map((sentence,index)=>({
@@ -4589,6 +4552,7 @@ function extractLifeHighlights(entry,maxItems=5){
 
   const picked=[];
   const seen=new Set();
+
   for(const item of candidates){
     const key=item.sentence.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
     if(!key || seen.has(key)) continue;
@@ -4609,5 +4573,194 @@ function saintLifeHighlightsHtml(entry){
   }</ul>`;
 }
 
+
+// M61 - curated SUSCopts-only Q&A beta.
+// These are concise summaries of the cited Diocese answers, not app-authored theology.
+const SUSCOPTS_QA_BETA=[
+  {
+    terms:['how often confess','how frequently confess','every forty days','40 days confession','when should i confess'],
+    question:'How often should I confess?',
+    answer:'SUSCopts states that one should confess at least every forty days, while emphasizing that the instruction of the spiritual father is important.',
+    source:'Coptic Orthodox Diocese of the Southern United States Q&A',
+    url:'https://qa.suscopts.org/index.php?catid=81&qid=61'
+  },
+  {
+    terms:['forget sin','forgot sin','forgotten sin','forget to confess','forgot to confess'],
+    question:'What if I forget a sin during confession?',
+    answer:'SUSCopts explains that if a sin is forgotten inadvertently, it is forgiven through the sacrament; if it is remembered later, it should then be confessed.',
+    source:'Coptic Orthodox Diocese of the Southern United States Q&A',
+    url:'https://qa.suscopts.org/index.php?catid=83&qid=73'
+  },
+  {
+    terms:['age confession','start confession','begin confession','child confession','children confession'],
+    question:'At what age should confession begin?',
+    answer:'SUSCopts says there is no general rule for a starting age. It encourages beginning Christian moral formation while children are young and notes that by about age seven children can understand rules and consequences and can benefit from the sacrament.',
+    source:'Coptic Orthodox Diocese of the Southern United States Q&A',
+    url:'https://qa.suscopts.org/index.php?catid=83&qid=2122'
+  },
+  {
+    terms:['why confess priest','confess to priest','confessing to priest','biblical confession','confession necessary'],
+    question:'Why do we confess to a priest?',
+    answer:'SUSCopts describes Confession as a holy sacrament in the Coptic Orthodox Church in which the person verbally confesses and repents before a confessor, and cites Christ giving the authority of binding and loosing.',
+    source:'Coptic Orthodox Diocese of the Southern United States Q&A',
+    url:'https://qa.suscopts.org/index.php?catid=83&qid=69'
+  },
+  {
+    terms:['keep falling','same sin','repeat sin','fall again','discouraged sin','repentance keep'],
+    question:'What if I keep falling into the same sin?',
+    answer:'SUSCopts teaches a continuing life of repentance and says that falling again does not mean giving up. It encourages continuing the struggle against temptation, not becoming discouraged, and confessing often.',
+    source:'Coptic Orthodox Diocese of the Southern United States Q&A',
+    url:'https://qa.suscopts.org/index.php?catid=323&qid=2029'
+  }
+];
+
+function normalizeAskText(value){
+  return String(value||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+}
+function copticAskMatch(question){
+  const q=normalizeAskText(question);
+  let best=null,bestScore=0;
+  for(const item of SUSCOPTS_QA_BETA){
+    let score=0;
+    for(const term of item.terms){
+      const t=normalizeAskText(term);
+      if(q.includes(t)) score+=10+t.split(' ').length;
+      else{
+        const words=t.split(' ').filter(w=>w.length>2);
+        score+=words.filter(w=>q.includes(w)).length;
+      }
+    }
+    if(score>bestScore){best=item;bestScore=score;}
+  }
+  return bestScore>=3 ? best : null;
+}
+function openCopticAsk(){
+  const modal=document.getElementById('copticAskModal');
+  if(modal) modal.classList.remove('hide');
+  setTimeout(()=>document.getElementById('copticAskInput')?.focus(),80);
+}
+function closeCopticAsk(){
+  document.getElementById('copticAskModal')?.classList.add('hide');
+}
+function askSuggestedQuestion(question){
+  const input=document.getElementById('copticAskInput');
+  if(input) input.value=question;
+  answerCopticQuestion();
+}
+function answerCopticQuestion(){
+  const input=document.getElementById('copticAskInput');
+  const answerBox=document.getElementById('copticAskAnswer');
+  if(!input||!answerBox) return;
+  const question=input.value.trim();
+  if(!question){
+    answerBox.innerHTML='<p>Please enter a question first.</p>';
+    answerBox.classList.remove('hide');
+    return;
+  }
+  const match=copticAskMatch(question);
+  if(!match){
+    answerBox.innerHTML=`<h4>No clear source match yet</h4>
+      <p>I could not find a sufficiently clear answer in the SUSCopts material currently indexed in this beta, so I will not create a theological answer.</p>
+      <p class="answerSource"><a href="https://qa.suscopts.org/?runsearch=start" target="_blank" rel="noopener">Search the full SUSCopts Q&amp;A →</a></p>`;
+    answerBox.classList.remove('hide');
+    return;
+  }
+  answerBox.innerHTML=`<h4>${escapeHtml(match.question)}</h4>
+    <p>${escapeHtml(match.answer)}</p>
+    <p class="answerSource">Source: ${escapeHtml(match.source)}<br><a href="${match.url}" target="_blank" rel="noopener">Read the original SUSCopts answer →</a></p>`;
+  answerBox.classList.remove('hide');
+}
+
+
+// M62 - robust shared date navigation
+function asLocalChurchDate(value){
+  if(value instanceof Date && !isNaN(value)) return new Date(value.getFullYear(),value.getMonth(),value.getDate());
+  if(typeof value==='string'){
+    const parts=value.slice(0,10).split('-').map(Number);
+    if(parts.length===3 && parts.every(Number.isFinite)){
+      return new Date(parts[0],parts[1]-1,parts[2]);
+    }
+  }
+  const d=new Date(value);
+  return isNaN(d) ? new Date() : new Date(d.getFullYear(),d.getMonth(),d.getDate());
+}
+
+// SAFE CENTRALIZED STARTUP - M59 fault-isolated
+let appStartupComplete=false;
+let dailyJourneyTimer=null;
+
+function safeStartupStep(name,fn){
+  try{
+    fn();
+    return true;
+  }catch(err){
+    console.warn('Optional startup step failed:',name,err);
+    return false;
+  }
+}
+
+function initializeApp(){
+  if(appStartupComplete) return;
+
+  // Make the core prayer controls usable first. Optional modules are isolated,
+  // so one problem can no longer disable every button on the page.
+  const coreOkay=safeStartupStep('core prayer',()=>{
+    const legacyJournal=document.getElementById('journal');
+    if(legacyJournal){
+      legacyJournal.value=localStorage.getItem('m4_journal_'+new Date().toISOString().slice(0,10))||'';
+    }
+    renderDailyFather();
+    syncHourDropdown();
+    render();
+    buildAgpeyaJump();
+    syncAgpeyaJump();
+    applyPrayerTextSize();
+    renderKeepAwakeButton();
+    renderReturnToPrayer();
+  });
+
+  safeStartupStep('prayer rule',()=>renderPrayerRule());
+  safeStartupStep('pray now',()=>renderPrayNow());
+  safeStartupStep('Jesus Prayer',()=>renderJesusCount());
+  safeStartupStep('Father of Confession',()=>renderFatherRuleStatus());
+  safeStartupStep('confession',()=>renderConfessionStatus());
+  safeStartupStep('resume prayer',()=>renderPrayerResume());
+  safeStartupStep('daily word',()=>renderDailyWord());
+  safeStartupStep('daily rhythm',()=>{
+    renderDailyJourney();
+    if(!dailyJourneyTimer) dailyJourneyTimer=setInterval(renderDailyJourney,60000);
+  });
+  safeStartupStep('calendar',()=>{
+    renderMonthPicker();
+    updateSelectedDateLabels();
+  });
+  safeStartupStep('completion state',()=>{
+    renderHourCompletionState();
+    renderReadingCompletionState();
+  });
+
+  appStartupComplete=true;
+
+  const runtimeError=document.getElementById('appRuntimeError');
+  if(runtimeError){
+    // Only a failure of the core Agpeya UI should show the blocking warning.
+    runtimeError.classList.toggle('hide',coreOkay);
+    if(!coreOkay){
+      const label=runtimeError.querySelector('span');
+      if(label) label.textContent='Prayer controls did not finish loading.';
+    }
+  }
+
+  // Church data is network-backed and must never block the prayer UI.
+  Promise.resolve()
+    .then(()=>loadTodayFromCopticChurch())
+    .catch(err=>console.warn('Church data refresh failed:',err));
+}
+
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',initializeApp,{once:true});
+}else{
+  initializeApp();
+}
 </script>
 </body></html>
