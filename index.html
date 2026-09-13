@@ -1589,6 +1589,165 @@ button{font:inherit}.mockApp{max-width:520px;margin:auto;min-height:100vh;paddin
   font-weight:700;
 }
 
+
+/* M49 - father-of-confession guided prayer rule */
+.fatherRuleTogether{
+  display:block;
+  width:100%;
+  margin:12px 0 4px;
+  padding:11px 12px;
+  border:1px solid #dec9aa;
+  border-radius:12px;
+  background:#fffaf2;
+  color:var(--wine);
+  font-family:Georgia,serif;
+  font-size:11px;
+  font-weight:600;
+}
+.ruleTogetherNote{
+  margin:0 0 12px;
+  padding:9px 10px;
+  border-left:2px solid #c9a96d;
+  background:#fffaf2;
+  border-radius:0 10px 10px 0;
+}
+.ruleTogetherNote strong{
+  display:block;
+  font-size:10px;
+  color:var(--wine);
+  margin-bottom:2px;
+}
+.ruleTogetherNote span{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.45;
+}
+
+
+/* M50 - quiet resume of an unfinished Agpeya Hour */
+.prayerResume{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin:8px 0 0;
+  padding:10px 12px;
+  border-top:1px solid #eadcc5;
+  border-bottom:1px solid #eadcc5;
+}
+.prayerResume > div{
+  min-width:0;
+}
+.prayerResumeText{
+  margin-top:2px;
+  font-family:Georgia,serif;
+  font-size:11px;
+  line-height:1.35;
+  color:var(--ink);
+}
+.prayerResume button{
+  flex:0 0 auto;
+  border:0;
+  background:transparent;
+  color:var(--wine);
+  padding:5px 0;
+  font-size:9px;
+  font-weight:700;
+}
+
+
+/* M51 - compact Agpeya Psalm/prayer jump navigation */
+.agpeyaJump{
+  margin:5px auto 14px;
+  max-width:310px;
+  text-align:left;
+}
+.agpeyaJump label{
+  display:block;
+  margin:0 0 4px 3px;
+  color:var(--muted);
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.agpeyaJumpSelectWrap{
+  position:relative;
+}
+.agpeyaJump select{
+  width:100%;
+  min-height:38px;
+  appearance:none;
+  -webkit-appearance:none;
+  border:1px solid #e3d2b7;
+  border-radius:12px;
+  background:#fffdf8;
+  color:var(--ink);
+  padding:8px 30px 8px 11px;
+  font-family:Georgia,serif;
+  font-size:11px;
+  line-height:1.2;
+}
+.agpeyaJumpSelectWrap > span{
+  position:absolute;
+  right:11px;
+  top:50%;
+  transform:translateY(-52%);
+  color:var(--wine);
+  font-size:12px;
+  pointer-events:none;
+}
+
+
+/* M52 - quiet reading comfort controls */
+.agpeyaReadingTools{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:9px;
+  margin-top:6px;
+}
+.agpeyaReadingTools button{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  padding:2px 0;
+  font-size:8px;
+  font-weight:700;
+}
+.agpeyaReadingTools button[aria-pressed="true"]{
+  color:var(--wine);
+}
+body.prayerTextSmall #prayerText{
+  font-size:15px;
+}
+body.prayerTextLarge #prayerText{
+  font-size:19px;
+  line-height:1.7;
+}
+body.prayerTextXL #prayerText{
+  font-size:22px;
+  line-height:1.75;
+}
+
+
+/* M53 - prayer position helper */
+.returnToPrayer{
+  position:fixed;
+  right:14px;
+  bottom:74px;
+  z-index:30;
+  border:1px solid #dcc7a8;
+  border-radius:999px;
+  background:rgba(255,252,246,.96);
+  color:var(--wine);
+  padding:7px 10px;
+  font-size:8px;
+  font-weight:700;
+  box-shadow:0 2px 12px rgba(65,36,25,.08);
+}
+
 </style></head><body>
 <div class="crossRail leftRail"></div><div class="crossRail rightRail"></div>
 
@@ -1704,6 +1863,14 @@ button{font:inherit}.mockApp{max-width:520px;margin:auto;min-height:100vh;paddin
   </div>
 </section>
 
+<section class="prayerResume hide" id="prayerResume">
+  <div>
+    <div class="dailyWordEyebrow">CONTINUE PRAYER</div>
+    <div class="prayerResumeText" id="prayerResumeText"></div>
+  </div>
+  <button type="button" onclick="resumeInProgressPrayer()">Continue</button>
+</section>
+
 <section class="jesusPrayerPanel hide" id="jesusPrayerPanel">
   <button type="button" class="todayReadingClose jesusClose" onclick="closeJesusPrayer()" aria-label="Close">×</button>
   <div class="dailyWordEyebrow">THE JESUS PRAYER</div>
@@ -1755,6 +1922,10 @@ button{font:inherit}.mockApp{max-width:520px;margin:auto;min-height:100vh;paddin
   </div>
 
   <p class="ruleIntro">Choose only what belongs in your prayer rule. Everything can be changed later.</p>
+  <div class="ruleTogetherNote hide" id="ruleTogetherNote">
+    <strong>Setting this prayer rule together</strong>
+    <span id="ruleTogetherText">Use this screen while speaking with your father of confession. Nothing is sent to him.</span>
+  </div>
 
   <div class="ruleOptions">
     <label class="ruleOption"><input type="checkbox" data-rule="first"><span><strong>Morning</strong><small>First Hour</small></span></label>
@@ -1854,6 +2025,23 @@ button{font:inherit}.mockApp{max-width:520px;margin:auto;min-height:100vh;paddin
     <div class="divider"><span></span><b><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M27 4h10v14h14v10H37v32H27V28H13V18h14V4Z" fill="currentColor"/><path d="M22 9h20M22 55h20M18 13v20M46 13v20" fill="none" stroke="currentColor" stroke-width="2" opacity=".45"/></svg></b><span></span></div>
     <div class="progress mockProgress"><div id="bar"></div></div>
     <div class="percent" id="pct"></div>
+
+    <div class="agpeyaJump">
+      <label for="agpeyaJumpSelect">Jump to Psalm or Prayer</label>
+      <div class="agpeyaJumpSelectWrap">
+        <select id="agpeyaJumpSelect" onchange="jumpToAgpeyaSection(this.value)" aria-label="Jump to a Psalm or prayer in this Hour"></select>
+        <span aria-hidden="true">⌄</span>
+      </div>
+      <div class="agpeyaReadingTools">
+        <button type="button" onclick="changePrayerTextSize(-1)" aria-label="Decrease prayer text size">A−</button>
+        <button type="button" onclick="resetPrayerTextSize()" aria-label="Reset prayer text size">A</button>
+        <button type="button" onclick="changePrayerTextSize(1)" aria-label="Increase prayer text size">A+</button>
+        <button type="button" id="keepAwakeBtn" onclick="toggleKeepAwake()" aria-pressed="false">Keep Awake</button>
+        <button type="button" onclick="jumpToNextPsalm()" aria-label="Jump to the next Psalm in this Hour">Next Psalm</button>
+        <button type="button" onclick="jumpToAgpeyaSection(0)" aria-label="Return to the beginning of this Hour">Start</button>
+      </div>
+    </div>
+
     <h2 id="title">Opening Prayers</h2>
     <div class="prayer" id="text"></div>
 
@@ -2015,6 +2203,7 @@ button{font:inherit}.mockApp{max-width:520px;margin:auto;min-height:100vh;paddin
     <p>Your prayer rule and prayer activity stay on this device. This version does not send activity to a priest or create a priest dashboard.</p>
   </div>
 
+  <button type="button" class="fatherRuleTogether" onclick="configureRuleTogether()">Configure Prayer Rule Together</button>
   <button type="button" class="ruleSaveButton" onclick="saveFatherRuleSetup()">Save</button>
   <button type="button" class="fatherRuleClear" onclick="clearFatherRuleSetup()">Clear</button>
 </section>
@@ -2123,6 +2312,8 @@ button{font:inherit}.mockApp{max-width:520px;margin:auto;min-height:100vh;paddin
     <span>The app helps you live it throughout the day.</span>
   </div>
 </section>
+
+<button type="button" class="returnToPrayer hide" id="returnToPrayer" onclick="returnToPrayerSection()">Return to prayer</button>
 
 <nav class="bottomNav">
     <button class="bottomItem active" data-page-nav="home" onclick="showAppPage('home')">
@@ -2469,6 +2660,7 @@ function selectHour(hour){
   const c=document.querySelector('#completionCard .eyebrow'); if(c)c.textContent=cfg.title;
   renderDailyFather();
   syncHourDropdown();
+  buildAgpeyaJump();
   render();
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -2479,6 +2671,7 @@ function render(){
   document.getElementById('title').textContent=s.title;
   document.getElementById('text').textContent=s.text;
   document.getElementById('stepLabel').textContent=(i+1)+' of '+sections.length;
+  syncAgpeyaJump();
   const p=Math.round((i+1)/sections.length*100);
   document.getElementById('pct').textContent=p+'%';
   document.getElementById('bar').style.width=p+'%';
@@ -2497,6 +2690,7 @@ function render(){
   renderHourCompletionState();
   renderCount();
   localStorage.setItem('agpeya_'+currentHour+'_step',i);
+  renderPrayerResume();
 }
 function next(){
   if(i<sections.length-1){i++;render();window.scrollTo({top:0,behavior:'smooth'});}
@@ -2506,7 +2700,9 @@ function prev(){if(i>0){i--;render();window.scrollTo({top:0,behavior:'smooth'});
 function mercy(){if(count<41){count++;localStorage.setItem('agpeya_'+currentHour+'_kyrie_'+i,count);renderCount();if(navigator.vibrate)navigator.vibrate(10)}}
 function renderCount(){document.getElementById('count').textContent=count;document.getElementById('kbar').style.width=(count/41*100)+'%';document.getElementById('remain').textContent=count===41?'41 complete • continue when ready':(41-count)+' remaining'}
 function saveJournal(){let v=document.getElementById('journal').value;localStorage.setItem('m4_journal_'+new Date().toISOString().slice(0,10),v);document.getElementById('saved').textContent='Saved privately on this device.'}
-document.getElementById('journal').value=localStorage.getItem('m4_journal_'+new Date().toISOString().slice(0,10))||'';renderDailyFather();
+const legacyJournal=document.getElementById('journal');
+if(legacyJournal) legacyJournal.value=localStorage.getItem('m4_journal_'+new Date().toISOString().slice(0,10))||'';
+renderDailyFather();
 syncHourDropdown();
 render();
 
@@ -2592,11 +2788,13 @@ function openPrayerRule(){
   renderNotificationStatus();
   const editor=document.getElementById('prayerRuleEditor');
   editor.classList.remove('hide');
+  renderPrayerRuleTogetherMode();
   editor.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function closePrayerRule(){
   const editor=document.getElementById('prayerRuleEditor');
   if(editor) editor.classList.add('hide');
+  finishPrayerRuleTogetherMode();
 }
 function savePrayerRuleFromForm(){
   const current=getPrayerRule();
@@ -3173,6 +3371,7 @@ function showAppPage(name){
   if(name==='readings') renderReadingsPage();
   if(name==='calendar') renderCalendarPage();
   window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(renderReturnToPrayer,0);
 }
 function quietExcerpt(text,max=190){
   const clean=String(text||'').replace(/\s+/g,' ').trim();
@@ -3486,6 +3685,7 @@ function setCompleted(key,value=true){
   renderDailyJourney();
   renderHourCompletionState();
   renderReadingCompletionState();
+  renderPrayerResume();
 }
 function markCurrentHourPrayed(){
   setCompleted(currentHour,true);
@@ -3934,5 +4134,295 @@ function retryChurchData(){
   else loadChurchDate(selectedChurchDate);
 }
 
+
+
+let prayerRuleTogetherMode=false;
+
+function renderPrayerRuleTogetherMode(){
+  const note=document.getElementById('ruleTogetherNote');
+  const text=document.getElementById('ruleTogetherText');
+  if(!note) return;
+
+  note.classList.toggle('hide',!prayerRuleTogetherMode);
+  if(prayerRuleTogetherMode && text){
+    const data=getFatherRuleSetup();
+    const who=data.name ? data.name : 'your father of confession';
+    const parish=data.parish ? ` at ${data.parish}` : '';
+    text.textContent=`Use this screen while speaking with ${who}${parish}. Nothing is sent to him.`;
+  }
+}
+
+function configureRuleTogether(){
+  const name=(document.getElementById('fatherRuleName')?.value||'').trim();
+  const parish=(document.getElementById('fatherRuleParish')?.value||'').trim();
+
+  const existing=getFatherRuleSetup();
+  existing.enabled=true;
+  existing.name=name;
+  existing.parish=parish;
+  existing.savedAt=new Date().toISOString();
+  localStorage.setItem(FATHER_RULE_KEY,JSON.stringify(existing));
+
+  const rule=getPrayerRule();
+  rule.withFather=true;
+  localStorage.setItem(PRAYER_RULE_KEY,JSON.stringify(rule));
+
+  prayerRuleTogetherMode=true;
+  renderFatherRuleStatus();
+  renderPrayerRule();
+  closeFatherRuleSetup();
+  openPrayerRule();
+  renderPrayerRuleTogetherMode();
+}
+
+function finishPrayerRuleTogetherMode(){
+  prayerRuleTogetherMode=false;
+  renderPrayerRuleTogetherMode();
+}
+
+
+
+// QUIET RESUME FOR AN UNFINISHED AGPEYA HOUR
+var resumePrayerHour=null;
+
+function prayerProgressForHour(hour){
+  const cfg=hourConfig[hour];
+  if(!cfg || !Array.isArray(cfg.sections) || !cfg.sections.length) return null;
+  const saved=parseInt(localStorage.getItem('agpeya_'+hour+'_step')||'0');
+  if(!Number.isFinite(saved) || saved<=0 || saved>=cfg.sections.length) return null;
+  if(isCompleted(hour)) return null;
+  return {
+    hour,
+    title:cfg.title,
+    step:saved,
+    total:cfg.sections.length
+  };
+}
+
+function findPrayerInProgress(){
+  const rule=getPrayerRule();
+  const preferred=hourSuggestionForNow().hour;
+  const order=[preferred,'first','third','sixth','ninth','eleventh','compline','midnight'];
+  const seen=new Set();
+
+  for(const hour of order){
+    if(seen.has(hour)) continue;
+    seen.add(hour);
+    if(!ruleAllowsHour(rule,hour)) continue;
+    const progress=prayerProgressForHour(hour);
+    if(progress) return progress;
+  }
+  return null;
+}
+
+function renderPrayerResume(){
+  const card=document.getElementById('prayerResume');
+  const text=document.getElementById('prayerResumeText');
+  if(!card || !text) return;
+
+  const progress=findPrayerInProgress();
+  resumePrayerHour=progress ? progress.hour : null;
+  card.classList.toggle('hide',!progress);
+
+  if(progress){
+    text.textContent=`${progress.title} · section ${progress.step+1} of ${progress.total}`;
+  }else{
+    text.textContent='';
+  }
+}
+
+function resumeInProgressPrayer(){
+  if(!resumePrayerHour) return;
+  selectHour(resumePrayerHour);
+  const prayer=document.querySelector('.prayerCard');
+  if(prayer) prayer.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+
+renderPrayerResume();
+
+
+// AGPEYA SECTION JUMP NAVIGATION
+function buildAgpeyaJump(){
+  const select=document.getElementById('agpeyaJumpSelect');
+  if(!select) return;
+
+  select.innerHTML='';
+
+  const groups={
+    psalms:document.createElement('optgroup'),
+    gospel:document.createElement('optgroup'),
+    prayers:document.createElement('optgroup'),
+    other:document.createElement('optgroup')
+  };
+  groups.psalms.label='Psalms';
+  groups.gospel.label='Gospel & Readings';
+  groups.prayers.label='Prayers';
+  groups.other.label='Other';
+
+  const counts={psalms:0,gospel:0,prayers:0,other:0};
+
+  sections.forEach((section,index)=>{
+    const title=String(section.title||`Section ${index+1}`).trim();
+    const low=title.toLowerCase();
+
+    let group='prayers';
+    if(/psalm/.test(low)) group='psalms';
+    else if(/gospel|reading|scripture/.test(low)) group='gospel';
+    else if(/watch|meditation|kyrie|lord have mercy/.test(low)) group='other';
+
+    const option=document.createElement('option');
+    option.value=String(index);
+    option.textContent=title;
+    groups[group].appendChild(option);
+    counts[group]++;
+  });
+
+  ['psalms','gospel','prayers','other'].forEach(key=>{
+    if(counts[key]) select.appendChild(groups[key]);
+  });
+
+  select.value=String(i);
+}
+
+function syncAgpeyaJump(){
+  const select=document.getElementById('agpeyaJumpSelect');
+  if(!select) return;
+  if(select.options.length!==sections.length) buildAgpeyaJump();
+  select.value=String(i);
+}
+
+function jumpToAgpeyaSection(value){
+  const target=parseInt(value,10);
+  if(!Number.isFinite(target) || target<0 || target>=sections.length) return;
+
+  i=target;
+  render();
+
+  const card=document.querySelector('.prayerCard');
+  if(card) card.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+
+buildAgpeyaJump();
+syncAgpeyaJump();
+
+
+// PRAYER READING COMFORT
+const PRAYER_TEXT_SIZE_KEY='copticDailyPrayer_prayerTextSize_v1';
+const prayerTextSizeClasses=['prayerTextSmall','','prayerTextLarge','prayerTextXL'];
+
+function getPrayerTextSizeIndex(){
+  const saved=parseInt(localStorage.getItem(PRAYER_TEXT_SIZE_KEY)||'1',10);
+  return Number.isFinite(saved) ? Math.max(0,Math.min(3,saved)) : 1;
+}
+
+function applyPrayerTextSize(){
+  document.body.classList.remove('prayerTextSmall','prayerTextLarge','prayerTextXL');
+  const cls=prayerTextSizeClasses[getPrayerTextSizeIndex()];
+  if(cls) document.body.classList.add(cls);
+}
+
+function changePrayerTextSize(delta){
+  const next=Math.max(0,Math.min(3,getPrayerTextSizeIndex()+delta));
+  localStorage.setItem(PRAYER_TEXT_SIZE_KEY,String(next));
+  applyPrayerTextSize();
+}
+
+function resetPrayerTextSize(){
+  localStorage.setItem(PRAYER_TEXT_SIZE_KEY,'1');
+  applyPrayerTextSize();
+}
+
+let prayerWakeLock=null;
+let keepAwakeRequested=false;
+
+function renderKeepAwakeButton(){
+  const btn=document.getElementById('keepAwakeBtn');
+  if(!btn) return;
+  btn.setAttribute('aria-pressed',keepAwakeRequested?'true':'false');
+  btn.textContent=keepAwakeRequested?'Awake On':'Keep Awake';
+}
+
+async function requestPrayerWakeLock(){
+  if(!keepAwakeRequested || !('wakeLock' in navigator) || document.visibilityState!=='visible') return;
+  try{
+    prayerWakeLock=await navigator.wakeLock.request('screen');
+    prayerWakeLock.addEventListener('release',()=>{
+      prayerWakeLock=null;
+      renderKeepAwakeButton();
+    });
+  }catch(e){
+    prayerWakeLock=null;
+  }
+}
+
+async function toggleKeepAwake(){
+  keepAwakeRequested=!keepAwakeRequested;
+
+  if(!keepAwakeRequested && prayerWakeLock){
+    try{ await prayerWakeLock.release(); }catch(e){}
+    prayerWakeLock=null;
+  }else if(keepAwakeRequested){
+    await requestPrayerWakeLock();
+  }
+  renderKeepAwakeButton();
+}
+
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible' && keepAwakeRequested && !prayerWakeLock){
+    requestPrayerWakeLock();
+  }
+});
+
+applyPrayerTextSize();
+renderKeepAwakeButton();
+
+
+
+// PRAYER POSITION HELPER
+function prayerCardInView(){
+  const card=document.querySelector('.prayerCard');
+  if(!card) return true;
+  const rect=card.getBoundingClientRect();
+  return rect.bottom>120 && rect.top<window.innerHeight-90;
+}
+function renderReturnToPrayer(){
+  const btn=document.getElementById('returnToPrayer');
+  if(!btn) return;
+  const homeVisible=!document.getElementById('homePage')?.classList.contains('hide');
+  btn.classList.toggle('hide',!homeVisible || prayerCardInView());
+}
+function returnToPrayerSection(){
+  const card=document.querySelector('.prayerCard');
+  if(card) card.scrollIntoView({behavior:'smooth',block:'start'});
+}
+window.addEventListener('scroll',()=>{
+  window.requestAnimationFrame(renderReturnToPrayer);
+},{passive:true});
+window.addEventListener('resize',renderReturnToPrayer);
+
+
+renderReturnToPrayer();
+
+function jumpToNextPsalm(){
+  if(!Array.isArray(sections) || !sections.length) return;
+
+  for(let idx=i+1; idx<sections.length; idx++){
+    const title=String(sections[idx]?.title||'').toLowerCase();
+    if(/\bpsalm\b/.test(title)){
+      jumpToAgpeyaSection(idx);
+      return;
+    }
+  }
+
+  for(let idx=0; idx<=i; idx++){
+    const title=String(sections[idx]?.title||'').toLowerCase();
+    if(/\bpsalm\b/.test(title)){
+      jumpToAgpeyaSection(idx);
+      return;
+    }
+  }
+}
 </script>
 </body></html>
