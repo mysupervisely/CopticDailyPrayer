@@ -2560,7 +2560,7 @@ body{
 
   <div class="ruleReminderSection">
     <h4>Gentle reminders</h4>
-    <p>Choose a preferred time. Phone push notifications will be connected in a later milestone.</p>
+    <p>Choose preferred times for your prayer rule. Scheduled phone reminder delivery is not configured in this release.</p>
     <div class="ruleTimes">
       <label>Morning <input type="time" id="ruleTimeMorning" value="07:00"></label>
       <label>Jesus Prayer <input type="time" id="ruleTimeJesus" value="14:00"></label>
@@ -3448,10 +3448,10 @@ function renderNotificationStatus(message){
 async function requestPrayerNotifications(){
   const env=notificationEnvironment();if(!env.supported||!env.standalone){renderNotificationStatus();return;}
   const payload=reminderPayload();if(!Object.values(payload.reminders).some(Boolean)){renderNotificationStatus('Choose at least one reminder first');return;}
-  try{const config=await fetch('/api/push-config').then(r=>r.json());if(!config.configured){renderNotificationStatus('Push delivery is not configured for this deployment yet');return;}
-    const permission=Notification.permission==='granted'?'granted':await Notification.requestPermission();if(permission!=='granted'){renderNotificationStatus();return;}
+  try{const permission=Notification.permission==='granted'?'granted':await Notification.requestPermission();if(permission!=='granted'){renderNotificationStatus();return;}
+    const config=await fetch('/api/push-config').then(r=>r.json());if(!config.scheduledDeliveryAvailable){renderNotificationStatus('Notifications are allowed; scheduled phone reminder delivery is not configured in this release');return;}
     const registration=await registerPrayerServiceWorker();const subscription=await registration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:base64UrlToUint8Array(config.publicKey)});
-    const response=await fetch('/api/push-subscription',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...payload,subscription})});if(!response.ok)throw new Error('Subscription could not be saved');renderNotificationStatus('Reminder subscription saved; delivery will begin when the scheduled server job is active');
+    const response=await fetch('/api/push-subscription',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...payload,subscription})});if(!response.ok)throw new Error('Subscription could not be saved');renderNotificationStatus('Reminder subscription saved; scheduled delivery must be configured separately');
   }catch(error){renderNotificationStatus('Could not enable reminders on this device');}
 }
 
