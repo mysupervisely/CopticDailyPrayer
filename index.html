@@ -3496,16 +3496,21 @@ function isoLocalDate(date=new Date()){
   const d=String(date.getDate()).padStart(2,'0');
   return `${y}-${m}-${d}`;
 }
-async function copticFetch(path,timeoutMs=7000){
+async function copticFetch(path,timeoutMs=9000){
   const controller=new AbortController();
   const timer=setTimeout(()=>controller.abort(),timeoutMs);
   try{
-    const res=await fetch(COPTIC_API_BASE+path,{
+    const url='/api/church?path='+encodeURIComponent(path);
+    const res=await fetch(url,{
       headers:{'Accept':'application/json'},
       signal:controller.signal,
       cache:'no-store'
     });
-    if(!res.ok) throw new Error(`Coptic API ${res.status}`);
+    if(!res.ok){
+      let detail='';
+      try{ detail=(await res.json())?.error||''; }catch(_){}
+      throw new Error(detail||`Church data ${res.status}`);
+    }
     return await res.json();
   }finally{
     clearTimeout(timer);
