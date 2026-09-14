@@ -2349,6 +2349,20 @@ body{
   }
 }
 
+
+/* M73 - clean hero artwork edge */
+.heroIcon:after{
+  content:""!important;
+  position:absolute!important;
+  z-index:8!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  height:42px!important;
+  background:var(--bg)!important;
+  pointer-events:none!important;
+}
+
 </style></head><body>
 <div class="crossRail leftRail"></div><div class="crossRail rightRail"></div>
 
@@ -3966,7 +3980,7 @@ async function loadTodayFromCopticChurch(){
 
   await Promise.all(endpointMap.map(async ([key,path])=>{
     try{
-      const value=await copticFetch(path,7000);
+      const value=await copticFetch(path,12000);
       if(value!=null){
         liveChurchData[key]=value;
         receivedAny=true;
@@ -3992,6 +4006,25 @@ async function loadTodayFromCopticChurch(){
       console.warn('Church endpoint unavailable:',key,err?.name||err);
     }
   }));
+
+  // Readings are the most important live payload. Give a Vercel cold start
+  // one additional chance before falling back to the saved/offline state.
+  if(!chooseReading(liveChurchData.readings,'gospel') && !chooseReading(liveChurchData.readings,'psalm')){
+    try{
+      await new Promise(resolve=>setTimeout(resolve,450));
+      const readingsRetry=await copticFetch('/readings/'+date+'?detailed=true',12000);
+      if(readingsRetry!=null){
+        liveChurchData.readings=readingsRetry;
+        receivedAny=true;
+        applyLiveReadings();
+        renderDailyWord();
+        renderReadingsPage();
+        refreshReadingTabsAvailability();
+      }
+    }catch(err){
+      console.warn('Church readings retry unavailable:',err?.name||err);
+    }
+  }
 
   if(receivedAny){
     saveChurchCache(date,liveChurchData);
