@@ -2358,7 +2358,10 @@ body{
   left:0!important;
   right:0!important;
   bottom:0!important;
-  height:42px!important;
+  /* The supplied artwork includes a rendered hour-picker beneath Christ.
+     Cover that embedded interface instead of altering, masking, or cropping
+     the Good Shepherd artwork itself. */
+  height:48px!important;
   background:var(--bg)!important;
   pointer-events:none!important;
 }
@@ -3785,8 +3788,10 @@ function readingCandidates(data){
   const out=[];
   Object.keys(labels).forEach(key=>{
     const value=data[key];
-    if(!Array.isArray(value) || !value.length) return;
-    value.forEach((reading,index)=>{
+    // Coptic.io's detailed endpoint returns each named reading as an object
+    // (older responses used a one-item array). Accept both wire formats.
+    const readings=Array.isArray(value) ? value : (value && typeof value==='object' ? [value] : []);
+    readings.forEach((reading,index)=>{
       if(!reading || typeof reading!=='object') return;
       const reference=readingReferenceFromCopticIo(reading);
       const text=readingTextFromCopticIo(reading);
