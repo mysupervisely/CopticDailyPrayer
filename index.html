@@ -2223,6 +2223,14 @@ body{
   letter-spacing:-.01em!important;
 }
 
+
+/* M67 - never leave live Church content stuck on Loading */
+.saintsEmpty{
+  color:#777169!important;
+  font-size:10px!important;
+  line-height:1.5!important;
+}
+
 </style></head><body>
 <div class="crossRail leftRail"></div><div class="crossRail rightRail"></div>
 
@@ -2902,6 +2910,10 @@ function registerLectionaryDay(dateKey, entry){
   if(dateKey===localDateKey()) renderDailyWord();
 }
 
+function getSelectedLectionary(){
+  return normalizeLectionaryEntry(LECTIONARY_BY_DATE[churchDateKey(selectedChurchDate)]);
+}
+
 function getTodayLectionary(){
   return normalizeLectionaryEntry(LECTIONARY_BY_DATE[localDateKey()]);
 }
@@ -3484,10 +3496,20 @@ function isoLocalDate(date=new Date()){
   const d=String(date.getDate()).padStart(2,'0');
   return `${y}-${m}-${d}`;
 }
-async function copticFetch(path){
-  const res=await fetch(COPTIC_API_BASE+path,{headers:{'Accept':'application/json'}});
-  if(!res.ok) throw new Error(`Coptic API ${res.status}`);
-  return res.json();
+async function copticFetch(path,timeoutMs=7000){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),timeoutMs);
+  try{
+    const res=await fetch(COPTIC_API_BASE+path,{
+      headers:{'Accept':'application/json'},
+      signal:controller.signal,
+      cache:'no-store'
+    });
+    if(!res.ok) throw new Error(`Coptic API ${res.status}`);
+    return await res.json();
+  }finally{
+    clearTimeout(timer);
+  }
 }
 function deepValues(obj, maxDepth=5, depth=0){
   if(depth>maxDepth || obj==null) return [];
@@ -3552,74 +3574,105 @@ function copticDateLabel(data){
 function seasonLabel(data){
   return firstStringByKeys(data,['name','season','title','displayName','liturgicalSeason']);
 }
+function readingReferenceFromCopticIo(reading){
+  if(!reading || typeof reading!=='object') return '';
+  const book=String(reading.bookName||'').trim();
+  const chapters=Array.isArray(reading.chapters)?reading.chapters:[];
+  const refs=chapters.map(ch=>{
+    const num=ch?.chapterNum;
+    const verses=Array.isArray(ch?.verses)?ch.verses:[];
+    const nums=verses.map(v=>Number(v?.num)).filter(Number.isFinite);
+    if(!num) return '';
+    if(!nums.length) return `${book} ${num}`;
+    const first=nums[0], last=nums[nums.length-1];
+    return `${book} ${num}:${first}${last!==first?`-${last}`:''}`;
+  }).filter(Boolean);
+  return refs.join('; ');
+}
+
+function readingTextFromCopticIo(reading){
+  if(!reading || typeof reading!=='object') return '';
+  const chapters=Array.isArray(reading.chapters)?reading.chapters:[];
+  return chapters.flatMap(ch=>
+    (Array.isArray(ch?.verses)?ch.verses:[])
+      .map(v=>String(v?.text||'').replace(/\s+/g,' ').trim())
+      .filter(Boolean)
+  ).join(' ');
+}
+
 function readingCandidates(data){
+  if(!data || typeof data!=='object') return [];
+
+  const labels={
+    LGospel:'Liturgy Gospel', LPsalm:'Liturgy Psalm',
+    MGospel:'Matins Gospel', MPsalm:'Matins Psalm',
+    VGospel:'Vespers Gospel', VPsalm:'Vespers Psalm',
+    EPGospel:'Evening Gospel', EPPsalm:'Evening Psalm',
+    Pauline:'Pauline Epistle', Catholic:'Catholic Epistle',
+    Acts:'Acts', Prophecies:'Prophecies'
+  };
+
   const out=[];
-  const seen=new Set();
-  function walk(v, path=''){
-    if(v==null) return;
-    if(Array.isArray(v)){v.forEach((x,i)=>walk(x,path+'/'+i));return}
-    if(typeof v==='object'){
-      const ref=firstStringByKeys(v,['reference','ref','citation','passage']);
-      const text=firstStringByKeys(v,['text','content','versesText','fullText']);
-      const type=firstStringByKeys(v,['type','kind','readingType','name','title']);
-      if(ref && !seen.has(path+ref)){
-        seen.add(path+ref);
-        out.push({reference:ref,text,type,path,raw:v});
-      }
-      Object.entries(v).forEach(([k,x])=>walk(x,path+'/'+k));
-    }
-  }
-  walk(data);
+  Object.keys(labels).forEach(key=>{
+    const value=data[key];
+    if(!Array.isArray(value) || !value.length) return;
+    value.forEach((reading,index)=>{
+      if(!reading || typeof reading!=='object') return;
+      const reference=readingReferenceFromCopticIo(reading);
+      const text=readingTextFromCopticIo(reading);
+      out.push({
+        key,
+        type:labels[key],
+        reference,
+        text,
+        path:'/'+key+'/'+index,
+        raw:reading
+      });
+    });
+  });
   return out;
 }
-function chooseReading(data, kind){
-  const c=readingCandidates(data);
-  const key=kind.toLowerCase();
-  return c.find(x=>(x.type||'').toLowerCase().includes(key) || x.path.toLowerCase().includes(key))
-      || c.find(x=>key==='gospel' ? /(matthew|mark|luke|john)/i.test(x.reference) : /psalm/i.test(x.reference))
-      || null;
+function chooseReading(data,kind){
+  const candidates=readingCandidates(data);
+  if(!candidates.length) return null;
+
+  // For the daily Readings experience, use the Divine Liturgy Gospel/Psalm first.
+  const priority=kind==='gospel'
+    ? ['LGospel','MGospel','VGospel','EPGospel']
+    : ['LPsalm','MPsalm','VPsalm','EPPsalm'];
+
+  for(const key of priority){
+    const found=candidates.find(x=>x.key===key);
+    if(found) return found;
+  }
+  return null;
 }
 function extractVerseText(reading){
   if(!reading) return '';
-  if(reading.text) return reading.text;
-  const verses=arrayByLikelyKey(reading.raw||{},['verses','items']);
-  if(verses.length){
-    return verses.map(v=>firstStringByKeys(v,['text','content','verseText'])).filter(Boolean).join(' ');
-  }
-  return '';
+  if(reading.text) return String(reading.text).trim();
+  return readingTextFromCopticIo(reading.raw||reading);
 }
 function verseObjectsFromReading(reading){
+  const raw=reading?.raw||reading;
+  if(!raw || typeof raw!=='object') return [];
+  const book=String(raw.bookName||'').trim();
+  const chapters=Array.isArray(raw.chapters)?raw.chapters:[];
   const out=[];
-  const seen=new Set();
 
-  function walk(v){
-    if(v==null) return;
-    if(Array.isArray(v)){v.forEach(walk);return;}
-    if(typeof v!=='object') return;
-
-    const text=firstStringByKeys(v,['text','content','verseText','value']);
-    const verse=firstStringByKeys(v,['verse','verseNumber','number','verseNo','id']);
-    const reference=firstStringByKeys(v,['reference','ref','citation']);
-
-    if(text && (verse || reference)){
-      const clean=String(text).replace(/\s+/g,' ').trim();
-      if(clean){
-        const key=(reference||verse||'')+'|'+clean;
-        if(!seen.has(key)){
-          seen.add(key);
-          out.push({
-            text:clean,
-            verse:String(verse||'').trim(),
-            reference:String(reference||'').trim()
-          });
-        }
-      }
-    }
-
-    Object.values(v).forEach(walk);
-  }
-
-  walk(reading?.raw||reading||{});
+  chapters.forEach(ch=>{
+    const chapter=ch?.chapterNum;
+    const verses=Array.isArray(ch?.verses)?ch.verses:[];
+    verses.forEach(v=>{
+      const text=String(v?.text||'').replace(/\s+/g,' ').trim();
+      if(!text) return;
+      const verse=v?.num;
+      out.push({
+        text,
+        verse:String(verse??''),
+        reference:(book&&chapter&&verse!=null)?`${book} ${chapter}:${verse}`:''
+      });
+    });
+  });
   return out;
 }
 function exactFeaturedVerse(reading){
@@ -3706,7 +3759,7 @@ function applyLiveReadings(){
 
   if(!featured || !featuredReference) return;
 
-  registerLectionaryDay(localDateKey(),{
+  registerLectionaryDay(churchDateKey(selectedChurchDate),{
     featured:{
       kind:gospel?'gospel':'psalm',
       text:featured,
@@ -3726,6 +3779,7 @@ async function loadTodayFromCopticChurch(){
   const date=isoLocalDate();
   const pending=document.getElementById('dailyWordPending');
   const status=document.getElementById('churchDataStatus');
+  const saintsBox=document.getElementById('saintsList');
   const cached=readChurchCache(date);
 
   if(cached&&hasChurchContent(cached.data)){
@@ -3738,37 +3792,52 @@ async function loadTodayFromCopticChurch(){
     applyLiveReadings();
     refreshReadingTabsAvailability();
     if(status) status.textContent=churchDataStatusText(true,cached.savedAt);
-  }else if(pending){
-    pending.textContent="Loading today's Coptic Lectionary…";
+  }else{
+    if(pending) pending.textContent="Loading today's Coptic Lectionary…";
     if(status) status.textContent='Loading Church data…';
   }
 
-  const tasks=await Promise.allSettled([
-    copticFetch('/calendar/'+date),
-    copticFetch('/season/'+date),
-    copticFetch('/readings/'+date+'?detailed=true'),
-    copticFetch('/synaxarium/'+date),
-    copticFetch('/celebrations/'+date),
-    copticFetch('/fasting/'+date)
-  ]);
+  const endpointMap=[
+    ['calendar','/calendar/'+date],
+    ['season','/season/'+date],
+    ['readings','/readings/'+date+'?detailed=true'],
+    ['saints','/synaxarium/'+date],
+    ['celebrations','/celebrations/'+date],
+    ['fasting','/fasting/'+date]
+  ];
 
-  const fresh={calendar:null,season:null,readings:null,saints:null,celebrations:null,fasting:null};
-  if(tasks[0].status==='fulfilled') fresh.calendar=tasks[0].value;
-  if(tasks[1].status==='fulfilled') fresh.season=tasks[1].value;
-  if(tasks[2].status==='fulfilled') fresh.readings=tasks[2].value;
-  if(tasks[3].status==='fulfilled') fresh.saints=tasks[3].value;
-  if(tasks[4].status==='fulfilled') fresh.celebrations=tasks[4].value;
-  if(tasks[5].status==='fulfilled') fresh.fasting=tasks[5].value;
+  let receivedAny=false;
 
-  if(hasChurchContent(fresh)){
-    liveChurchData={
-      calendar:fresh.calendar||liveChurchData.calendar,
-      season:fresh.season||liveChurchData.season,
-      readings:fresh.readings||liveChurchData.readings,
-      saints:fresh.saints||liveChurchData.saints,
-      celebrations:fresh.celebrations||liveChurchData.celebrations,
-      fasting:fresh.fasting||liveChurchData.fasting
-    };
+  await Promise.all(endpointMap.map(async ([key,path])=>{
+    try{
+      const value=await copticFetch(path,7000);
+      if(value!=null){
+        liveChurchData[key]=value;
+        receivedAny=true;
+
+        // Render immediately as each source arrives.
+        if(key==='calendar'||key==='season'||key==='celebrations'||key==='fasting'){
+          renderChurchToday();
+          renderDailyJourney();
+          renderCalendarPage();
+        }
+        if(key==='readings'){
+          applyLiveReadings();
+          renderDailyWord();
+          renderReadingsPage();
+          refreshReadingTabsAvailability();
+        }
+        if(key==='saints'){
+          renderLiveSaints();
+          renderCalendarPage();
+        }
+      }
+    }catch(err){
+      console.warn('Church endpoint unavailable:',key,err?.name||err);
+    }
+  }));
+
+  if(receivedAny){
     saveChurchCache(date,liveChurchData);
     if(status) status.textContent=churchDataStatusText(false);
     setChurchRetryVisible(false);
@@ -3776,18 +3845,24 @@ async function loadTodayFromCopticChurch(){
     setChurchRetryVisible(true);
   }
 
-  renderChurchToday();
-  renderDailyJourney();
-  renderLiveSaints();
-  renderReadingsPage();
-  renderCalendarPage();
-  applyLiveReadings();
-  refreshReadingTabsAvailability();
-  updateChurchDateNavState();
+  // Never leave indefinite loading copy on screen.
+  const saints=normalizeSaints(liveChurchData.saints);
+  if(!saints.length && saintsBox){
+    saintsBox.innerHTML='<p class="saintsEmpty">The Synaxarium could not be loaded right now.</p>';
+  }
 
   if(!getTodayLectionary()&&pending){
-    pending.textContent=cached?"Showing saved Church data. Live readings are temporarily unavailable.":"Today's Coptic Lectionary could not be loaded. Please try again later.";
+    pending.textContent=cached
+      ? "Live readings are temporarily unavailable. Saved Church data is shown where available."
+      : "Today's Coptic Lectionary could not be loaded right now.";
   }
+
+  renderChurchToday();
+  renderDailyJourney();
+  renderReadingsPage();
+  renderCalendarPage();
+  refreshReadingTabsAvailability();
+  updateChurchDateNavState();
 }
 
 
@@ -3902,7 +3977,7 @@ function renderReadingsPage(){
     dateEl.textContent=c ? `${greg} · ${c}` : greg;
   }
   const sourceEl=document.getElementById('readingsPageSource');
-  if(sourceEl) sourceEl.textContent=liveChurchData.readings ? 'Coptic Lectionary source: Coptic.io' : '';
+  if(sourceEl) sourceEl.textContent=liveChurchData.readings ? 'Coptic Lectionary · Coptic.io' : '';
   if(!body) return;
   if(!liveChurchData.readings){
     body.innerHTML='<p class="pageQuiet">Today\'s Coptic Lectionary is still loading.</p>';
@@ -4600,7 +4675,7 @@ async function copyCurrentReading(){
   const ref=reading.reference||'';
   const text=extractVerseText(reading)||'';
   if(!text) return;
-  const source='Coptic Lectionary source: Coptic.io';
+  const source='Coptic Lectionary · Coptic.io';
   const copy=[ref,text,source].filter(Boolean).join('\n\n');
   const ok=await copyTextQuietly(copy,'readingReadStatus');
   if(ok){
