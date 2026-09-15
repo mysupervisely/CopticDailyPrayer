@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#651b23"><title>Coptic Orthodox Daily Prayer</title>
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#651b23"><link rel="manifest" href="/manifest.webmanifest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="apple-touch-icon" href="/icon.svg"><title>Coptic Orthodox Daily Prayer</title>
 <style>
 :root{--bg:#f7f0e5;--paper:#fffaf2;--ink:#30261f;--muted:#78695c;--wine:#651b23;--gold:#ad8546;--line:#e2d2bb;--soft:#efe2d0}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,textarea{font:inherit}.app{max-width:520px;margin:auto;min-height:100vh;padding:calc(20px + env(safe-area-inset-top)) 16px calc(34px + env(safe-area-inset-bottom))}.cross{text-align:center;color:var(--wine);font-size:42px}h1,h2,h3{font-family:Georgia,serif;margin:0}h1{font-size:30px}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:800}.sub{color:var(--muted);line-height:1.5;font-size:14px}.card{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:19px;box-shadow:0 12px 35px rgba(66,43,24,.08)}.orn{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:16px 0}.progress{height:7px;background:#e9dece;border-radius:99px;overflow:hidden}.progress div{height:100%;background:var(--wine)}.prayer{font-family:Georgia,serif;font-size:20px;line-height:1.72;white-space:pre-line}.btn{border:0;background:var(--wine);color:#fff;border-radius:16px;min-height:52px;padding:0 15px;font-weight:750}.secondary{background:var(--soft);color:var(--ink);border:1px solid var(--line)}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.father{background:#f3e7d5;border:1px solid #d8c19f;border-radius:20px;padding:16px;margin:14px 0}.journal{width:100%;min-height:130px;border:1px solid var(--line);background:#fffdf9;border-radius:15px;padding:13px;color:var(--ink)}.count{font:700 68px Georgia,serif;color:var(--wine);text-align:center}.tap{width:100%;min-height:92px;font-size:18px}.top{text-align:center}.tag{display:inline-block;background:var(--soft);padding:7px 10px;border-radius:999px;color:var(--muted);font-size:12px;font-weight:700}.hide{display:none}.source{font-size:12px;color:var(--muted);border-left:3px solid var(--gold);padding-left:10px}
@@ -1095,6 +1095,7 @@ button{font:inherit}.mockApp{max-width:520px;margin:auto;min-height:100vh;paddin
 .readingQuietRef{font-family:Georgia,serif;font-size:17px;margin:3px 0}
 .readingQuietExcerpt{font-family:Georgia,serif;font-size:13px;line-height:1.55;color:var(--ink);margin:3px 0 6px}
 .readingQuietAction{border:0;background:transparent;color:var(--wine);padding:2px 0;font-size:10px;font-weight:700}
+.readingFullText{font-family:Georgia,serif;font-size:14px;line-height:1.65;white-space:pre-wrap;color:var(--ink);margin-top:7px}
 .calendarQuietCard{padding:10px 0;border-top:1px solid #eadcc5;border-bottom:1px solid #eadcc5}
 .calendarMeta{display:grid;gap:5px;font-size:11px;color:var(--muted)}
 .calendarMeta strong{color:var(--ink);font-family:Georgia,serif;font-size:14px;font-weight:600}
@@ -2351,17 +2352,21 @@ body{
 
 
 /* M73 - clean hero artwork edge */
-.heroIcon:after{
-  content:""!important;
-  position:absolute!important;
-  z-index:8!important;
-  left:0!important;
-  right:0!important;
-  bottom:0!important;
-  height:42px!important;
-  background:var(--bg)!important;
-  pointer-events:none!important;
+.heroIcon{
+  /* The embedded source is 494 × 573px; its hour-picker begins below the
+     460px artwork boundary. Clip it structurally, rather than covering it. */
+  height:207px!important;
+  display:block!important;
+  overflow:hidden!important;
 }
+.heroIcon img{
+  display:block!important;
+  height:258px!important;
+  width:auto!important;
+  margin:0 auto!important;
+  max-width:82%!important;
+}
+.heroIcon:after{display:none!important;}
 
 </style></head><body>
 <div class="crossRail leftRail"></div><div class="crossRail rightRail"></div>
@@ -2555,7 +2560,7 @@ body{
 
   <div class="ruleReminderSection">
     <h4>Gentle reminders</h4>
-    <p>Choose a preferred time. Phone push notifications will be connected in a later milestone.</p>
+    <p>Choose preferred times for your prayer rule. Scheduled phone reminder delivery is not configured in this release.</p>
     <div class="ruleTimes">
       <label>Morning <input type="time" id="ruleTimeMorning" value="07:00"></label>
       <label>Jesus Prayer <input type="time" id="ruleTimeJesus" value="14:00"></label>
@@ -3120,45 +3125,43 @@ window.CopticDailyPrayerLectionary={
 
 
 
-function dailyFatherIndex(len) {
-  const now = new Date();
-  const dayKey = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 86400000;
-  return Math.floor(dayKey) % len;
-}
-
 const FATHER_ICON_IMAGES={
   'st. cyril of alexandria':'https://i.etsystatic.com/23754934/r/il/05b14f/3805439267/il_794xN.3805439267_i1ye.jpg',
-  'st. athanasius':'https://images.squarespace-cdn.com/content/v1/5a5bec942aeba5215247d5f3/1517049290688-C4GR5JBK6V7G23XNWF20/stathanasius_cropped.jpg'
+  'st. athanasius the apostolic':'https://images.squarespace-cdn.com/content/v1/5a5bec942aeba5215247d5f3/1517049290688-C4GR5JBK6V7G23XNWF20/stathanasius_cropped.jpg'
 };
-
+const fatherSelections=Object.create(null);
 function fatherIconUrl(name){
   const n=String(name||'').toLowerCase();
   if(n.includes('cyril')) return FATHER_ICON_IMAGES['st. cyril of alexandria'];
-  if(n.includes('athanasius')) return FATHER_ICON_IMAGES['st. athanasius'];
+  if(n.includes('athanasius')) return FATHER_ICON_IMAGES['st. athanasius the apostolic'];
   return '';
 }
-
+function fatherForHour(hour){
+  const lib=fatherLibraries[hour]||[];
+  if(!lib.length) return null;
+  if(fatherSelections[hour]!==undefined) return lib[fatherSelections[hour]];
+  const key='copticDailyPrayer_father_rotation_'+hour;
+  const last=Number(localStorage.getItem(key)||'-1');
+  const next=(Number.isInteger(last)?last+1:0)%lib.length;
+  localStorage.setItem(key,String(next));
+  fatherSelections[hour]=next;
+  return lib[next];
+}
 function renderFatherIcon(name){
   const el=document.getElementById('fatherIcon');
   if(!el) return;
   const url=fatherIconUrl(name);
-  if(!url){
-    el.innerHTML='';
-    el.style.display='none';
-    return;
-  }
+  if(!url){ el.innerHTML=''; el.style.display='none'; return; }
   el.style.display='';
   el.innerHTML=`<img src="${url}" alt="Coptic icon of ${String(name||'Church Father').replace(/"/g,'&quot;')}" loading="lazy" referrerpolicy="no-referrer">`;
   el.setAttribute('title',String(name||'Church Father'));
 }
-
-function renderDailyFather() {
-  const lib = fatherLibraries[currentHour] || [];
-  if(!lib.length) return;
-  const f = lib[dailyFatherIndex(lib.length)];
-  const q=document.getElementById("fatherQuote"), n=document.getElementById("fatherName"), w=document.getElementById("fatherWork");
+function renderDailyFather(){
+  const f=fatherForHour(currentHour);
+  if(!f) return;
+  const q=document.getElementById('fatherQuote'),n=document.getElementById('fatherName'),w=document.getElementById('fatherWork');
   if(q&&n&&w){q.textContent=f.quote;n.textContent=f.name;w.textContent=f.work;}
-  const tq=document.getElementById('fatherTopQuote'), tn=document.getElementById('fatherTopName'), tw=document.getElementById('fatherTopWork');
+  const tq=document.getElementById('fatherTopQuote'),tn=document.getElementById('fatherTopName'),tw=document.getElementById('fatherTopWork');
   if(tq&&tn&&tw){tq.textContent=f.quote;tn.textContent=f.name;tw.textContent=f.work;renderFatherIcon(f.name);}
 }
 
@@ -3248,23 +3251,9 @@ function updateHourChooser(){
     if(state) state.textContent=active?'Current':'';
   });
 }
-function todaysFather(){
-  const list=fatherQuotes[currentHour]||fatherQuotes.first||[];
-  if(!list.length) return null;
-  const now=new Date();
-  const key=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())/86400000;
-  return list[Math.abs(Math.floor(key))%list.length];
-}
-function updateFatherTop(){
-  const f=todaysFather();
-  const card=document.getElementById('fatherTop');
-  if(!card) return;
-  if(!f){card.style.display='none';return}
-  card.style.display='';
-  document.getElementById('fatherTopQuote').textContent=f.quote;
-  document.getElementById('fatherTopName').textContent=f.name;
-  document.getElementById('fatherTopWork').textContent=f.work;
-}
+function todaysFather(){ return fatherForHour(currentHour); }
+function updateFatherTop(){ renderDailyFather(); }
+
 function enterSelah(){document.getElementById('selahOverlay').classList.remove('hide')}
 function exitSelah(){document.getElementById('selahOverlay').classList.add('hide')}
 function continuePrayer(){
@@ -3434,27 +3423,36 @@ function renderPrayerRule(){
   if(father) father.checked=!!rule.withFather;
 }
 
+let prayerServiceWorker=null;
 function notificationEnvironment(){
-  const supported='Notification' in window;
-  const standalone=window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
+  const supported='Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
+  const standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true;
   return {supported,standalone,permission:supported?Notification.permission:'unsupported'};
 }
-function renderNotificationStatus(){
-  const status=document.getElementById('notificationStatus');
-  const button=document.getElementById('notificationPermissionButton');
-  if(!status||!button) return;
-  const env=notificationEnvironment();
-  if(!env.supported){status.textContent='Not supported in this browser';button.textContent='Unavailable';button.disabled=true;return;}
-  if(env.permission==='granted'){status.textContent='Allowed on this device';button.textContent='Enabled';button.disabled=true;return;}
-  if(env.permission==='denied'){status.textContent='Blocked in device settings';button.textContent='Blocked';button.disabled=true;return;}
-  status.textContent=env.standalone?'Ready to enable':'On iPhone, add this app to the Home Screen first';
-  button.textContent='Enable';
-  button.disabled=false;
+async function registerPrayerServiceWorker(){
+  if(!('serviceWorker' in navigator)) return null;
+  prayerServiceWorker=await navigator.serviceWorker.register('/sw.js');
+  return navigator.serviceWorker.ready;
+}
+function base64UrlToUint8Array(value){const padded=value+'='.repeat((4-value.length%4)%4);const raw=atob(padded.replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from(raw,c=>c.charCodeAt(0));}
+function reminderPayload(){const rule=getPrayerRule();return {reminders:{morning:rule.notifications.morning?rule.times.morning:null,jesus:rule.notifications.jesus?rule.times.jesus:null,evening:rule.notifications.evening?rule.times.evening:null},timeZone:Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC'};}
+function renderNotificationStatus(message){
+  const status=document.getElementById('notificationStatus'),button=document.getElementById('notificationPermissionButton');if(!status||!button)return;
+  const env=notificationEnvironment();if(message){status.textContent=message;return;}
+  if(!env.supported){status.textContent='Push notifications are not supported in this browser';button.textContent='Unavailable';button.disabled=true;return;}
+  if(!env.standalone){status.textContent='On iPhone: Share → Add to Home Screen, then open the app there';button.textContent='Home Screen required';button.disabled=true;return;}
+  if(env.permission==='denied'){status.textContent='Notifications are blocked in device settings';button.textContent='Blocked';button.disabled=true;return;}
+  if(env.permission==='granted'){status.textContent='Permission granted; tap Enable to save this device and reminder times';button.textContent='Enable reminders';button.disabled=false;return;}
+  status.textContent='Enable after selecting one or more reminder times';button.textContent='Enable reminders';button.disabled=false;
 }
 async function requestPrayerNotifications(){
-  if(!('Notification' in window)){renderNotificationStatus();return;}
-  try{await Notification.requestPermission();}catch(e){}
-  renderNotificationStatus();
+  const env=notificationEnvironment();if(!env.supported||!env.standalone){renderNotificationStatus();return;}
+  const payload=reminderPayload();if(!Object.values(payload.reminders).some(Boolean)){renderNotificationStatus('Choose at least one reminder first');return;}
+  try{const permission=Notification.permission==='granted'?'granted':await Notification.requestPermission();if(permission!=='granted'){renderNotificationStatus();return;}
+    const config=await fetch('/api/push-config').then(r=>r.json());if(!config.scheduledDeliveryAvailable){renderNotificationStatus('Notifications are allowed; scheduled phone reminder delivery is not configured in this release');return;}
+    const registration=await registerPrayerServiceWorker();const subscription=await registration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:base64UrlToUint8Array(config.publicKey)});
+    const response=await fetch('/api/push-subscription',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...payload,subscription})});if(!response.ok)throw new Error('Subscription could not be saved');renderNotificationStatus('Reminder subscription saved; scheduled delivery must be configured separately');
+  }catch(error){renderNotificationStatus('Could not enable reminders on this device');}
 }
 
 function openPrayerRule(){
@@ -3774,7 +3772,7 @@ function readingCandidates(data){
   if(!data || typeof data!=='object') return [];
 
   const labels={
-    LGospel:'Liturgy Gospel', LPsalm:'Liturgy Psalm',
+    LGospel:'Liturgy Gospel', Gospel:'Gospel', LPsalm:'Liturgy Psalm', Psalm:'Psalm',
     MGospel:'Matins Gospel', MPsalm:'Matins Psalm',
     VGospel:'Vespers Gospel', VPsalm:'Vespers Psalm',
     EPGospel:'Evening Gospel', EPPsalm:'Evening Psalm',
@@ -3785,8 +3783,10 @@ function readingCandidates(data){
   const out=[];
   Object.keys(labels).forEach(key=>{
     const value=data[key];
-    if(!Array.isArray(value) || !value.length) return;
-    value.forEach((reading,index)=>{
+    // Coptic.io's detailed endpoint returns each named reading as an object
+    // (older responses used a one-item array). Accept both wire formats.
+    const readings=Array.isArray(value) ? value : (value && typeof value==='object' ? [value] : []);
+    readings.forEach((reading,index)=>{
       if(!reading || typeof reading!=='object') return;
       const reference=readingReferenceFromCopticIo(reading);
       const text=readingTextFromCopticIo(reading);
@@ -3808,8 +3808,8 @@ function chooseReading(data,kind){
 
   // For the daily Readings experience, use the Divine Liturgy Gospel/Psalm first.
   const priority=kind==='gospel'
-    ? ['LGospel','MGospel','VGospel','EPGospel']
-    : ['LPsalm','MPsalm','VPsalm','EPPsalm'];
+    ? ['LGospel','Gospel','MGospel','VGospel','EPGospel']
+    : ['LPsalm','Psalm','MPsalm','VPsalm','EPPsalm'];
 
   for(const key of priority){
     const found=candidates.find(x=>x.key===key);
@@ -4172,20 +4172,26 @@ function renderReadingsPage(){
     body.innerHTML='<p class="pageQuiet">Today\'s Coptic Lectionary is still loading.</p>';
     return;
   }
-  const kinds=['gospel','psalm'];
-  const cards=kinds.map(kind=>{
-    const r=liveReadingByKind(kind);
-    if(!r) return '';
-    const text=extractVerseText(r);
-    const excerpt=quietExcerpt(text);
-    return `<article class="readingQuietCard">
-      <div class="readingQuietKind">${kind}</div>
-      <div class="readingQuietRef">${escapeHtml(r.reference||'')}</div>
-      ${excerpt?`<div class="readingQuietExcerpt">${escapeHtml(excerpt)}</div>`:''}
-      <button type="button" class="readingQuietAction" onclick="openReadingFromPage('${kind}')">Read full ${kind}</button>
-    </article>`;
+  const groups=[
+    {label:'Psalm',keys:['LPsalm','Psalm','MPsalm','VPsalm','EPPsalm']},
+    {label:'Gospel',keys:['LGospel','Gospel','MGospel','VGospel','EPGospel']},
+    {label:'Pauline Epistle',keys:['Pauline']},
+    {label:'Catholic Epistle',keys:['Catholic']},
+    {label:'Acts',keys:['Acts']}
+  ];
+  const candidates=readingCandidates(liveChurchData.readings);
+  const cards=groups.map(group=>{
+    const readings=group.keys.flatMap(key=>candidates.filter(reading=>reading.key===key));
+    return readings.map(reading=>{
+      const text=extractVerseText(reading);
+      return `<article class="readingQuietCard">
+        <div class="readingQuietKind">${escapeHtml(group.label)}</div>
+        <div class="readingQuietRef">${escapeHtml(reading.reference||'')}</div>
+        ${text?`<div class="readingFullText">${escapeHtml(text)}</div>`:''}
+      </article>`;
+    }).join('');
   }).join('');
-  body.innerHTML=cards||'<p class="pageQuiet">No Gospel or Psalm reading is available right now.</p>';
+  body.innerHTML=cards||'<p class="pageQuiet">No readings are available right now.</p>';
 }
 function calendarStatusLines(){
   const lines=[];
@@ -5404,6 +5410,7 @@ function initializeApp(){
   safeStartupStep('Father of Confession',()=>renderFatherRuleStatus());
   safeStartupStep('confession',()=>renderConfessionStatus());
   safeStartupStep('resume prayer',()=>renderPrayerResume());
+  safeStartupStep('service worker',()=>{registerPrayerServiceWorker().catch(()=>null);});
   safeStartupStep('daily word',()=>renderDailyWord());
   safeStartupStep('daily rhythm',()=>{
     renderDailyJourney();
