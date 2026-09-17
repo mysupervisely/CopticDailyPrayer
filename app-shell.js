@@ -1,18 +1,76 @@
-const screens=[...document.querySelectorAll('.screen')],nav=[...document.querySelectorAll('.navItem')];let suggestedPrayerKey='first',prayerHour='first',prayerStep=0,agpeya=null;
+(()=>{
+'use strict';
 const hourNames={first:'First Hour',third:'Third Hour',sixth:'Sixth Hour',ninth:'Ninth Hour',eleventh:'Eleventh Hour',compline:'Compline',midnight:'Midnight Prayer'};
-function openScreen(name){screens.forEach(s=>s.classList.toggle('active',s.dataset.screen===name));nav.forEach(b=>b.classList.toggle('active',b.dataset.target===name));window.scrollTo({top:0,behavior:'instant'});history.replaceState(null,'','#'+name);if(name==='prayer')openPrayerShell()}
-nav.forEach(b=>b.onclick=()=>openScreen(b.dataset.target));document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openScreen(b.dataset.open));
+let suggestedPrayerKey='first',prayerHour='first',prayerStep=0,agpeya=null;
+function screens(){return Array.from(document.querySelectorAll('.screen'))}
+function nav(){return Array.from(document.querySelectorAll('.navItem'))}
+function openScreen(name){
+  if(!['home','prayer','readings','calendar','more'].includes(name))name='home';
+  screens().forEach(s=>s.classList.toggle('active',s.dataset.screen===name));
+  nav().forEach(b=>b.classList.toggle('active',b.dataset.target===name));
+  try{window.scrollTo(0,0)}catch(_){document.documentElement.scrollTop=0;document.body.scrollTop=0}
+  try{history.replaceState(null,'','#'+name)}catch(_){}
+  if(name==='prayer')openPrayerShell();
+}
+window.copticOpenScreen=openScreen;
+function bindNavigation(){
+  document.addEventListener('click',e=>{
+    const target=e.target.closest('[data-target],[data-open]');
+    if(!target)return;
+    const name=target.dataset.target||target.dataset.open;
+    if(!name)return;
+    e.preventDefault();
+    openScreen(name);
+  });
+}
 function localDateKey(d=new Date()){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
-function setSuggestedPrayer(){const h=new Date().getHours();let title='First Hour',meta='Agpeya · Morning prayer';suggestedPrayerKey='first';if(h>=9&&h<12){title='Third Hour';meta='Agpeya · Third Hour';suggestedPrayerKey='third'}else if(h>=12&&h<15){title='Sixth Hour';meta='Agpeya · Sixth Hour';suggestedPrayerKey='sixth'}else if(h>=15&&h<17){title='Ninth Hour';meta='Agpeya · Ninth Hour';suggestedPrayerKey='ninth'}else if(h>=17&&h<21){title='Eleventh Hour';meta='Agpeya · Evening prayer';suggestedPrayerKey='eleventh'}else if(h>=21||h<5){title='Compline';meta='Agpeya · Prayer before sleep';suggestedPrayerKey='compline'}document.getElementById('suggestedHour').textContent=title;document.getElementById('suggestedMeta').textContent=meta}
-function entries(v){return !v?[]:Array.isArray(v)?v:typeof v==='object'?[v]:[]}function flatten(r){return(r?.chapters||[]).flatMap(c=>(c.verses||[]).map(v=>v.text||'')).filter(Boolean).join(' ')}function firstReading(data,names){for(const n of names)for(const r of entries(data?.[n])){const text=flatten(r);if(text)return{text,ref:r.bookName||n}}return null}
-async function loadChurchDay(){const label=document.getElementById('churchDay'),greg=document.getElementById('gregorianDay'),excerpt=document.getElementById('wordExcerpt'),ref=document.getElementById('wordRef');greg.textContent=new Intl.DateTimeFormat(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'}).format(new Date());try{const key=localDateKey(),[cr,rr]=await Promise.all([fetch('/api/church?path='+encodeURIComponent('/calendar/'+key)).then(r=>r.json()),fetch('/api/church?path='+encodeURIComponent('/readings/'+key+'?detailed=true')).then(r=>r.json())]);const c=cr.data||cr,parts=[c.copticDate||c.coptic_date||c.date,c.season||c.seasonName,c.feast||c.celebration].filter(v=>typeof v==='string'&&v.trim());if(parts.length)label.textContent=parts.join(' · ');const selected=firstReading(rr.data||rr,['MGospel','VGospel','LGospel','EPGospel','Gospel']);if(selected){const clean=selected.text.replace(/\s+/g,' ').trim();excerpt.textContent='“'+(clean.length>180?clean.slice(0,177).replace(/\s+\S*$/,'')+'…':clean)+'”';ref.textContent=selected.ref}}catch(e){excerpt.textContent='Today’s sourced reading is available in Readings.';ref.textContent=''}}
+function setSuggestedPrayer(){
+  const h=new Date().getHours();let title='First Hour',meta='Agpeya · Morning prayer';suggestedPrayerKey='first';
+  if(h>=9&&h<12){title='Third Hour';meta='Agpeya · Third Hour';suggestedPrayerKey='third'}
+  else if(h>=12&&h<15){title='Sixth Hour';meta='Agpeya · Sixth Hour';suggestedPrayerKey='sixth'}
+  else if(h>=15&&h<17){title='Ninth Hour';meta='Agpeya · Ninth Hour';suggestedPrayerKey='ninth'}
+  else if(h>=17&&h<21){title='Eleventh Hour';meta='Agpeya · Evening prayer';suggestedPrayerKey='eleventh'}
+  else if(h>=21||h<5){title='Compline';meta='Agpeya · Prayer before sleep';suggestedPrayerKey='compline'}
+  const a=document.getElementById('suggestedHour'),b=document.getElementById('suggestedMeta');if(a)a.textContent=title;if(b)b.textContent=meta;
+}
+function entries(v){return !v?[]:Array.isArray(v)?v:typeof v==='object'?[v]:[]}
+function flatten(r){return(r&&r.chapters||[]).flatMap(c=>(c.verses||[]).map(v=>v.text||'')).filter(Boolean).join(' ')}
+function firstReading(data,names){for(const n of names)for(const r of entries(data&&data[n])){const text=flatten(r);if(text)return{text,ref:r.bookName||n}}return null}
+async function loadChurchDay(){
+  const label=document.getElementById('churchDay'),greg=document.getElementById('gregorianDay'),excerpt=document.getElementById('wordExcerpt'),ref=document.getElementById('wordRef');
+  if(greg)greg.textContent=new Intl.DateTimeFormat(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'}).format(new Date());
+  try{
+    const key=localDateKey();
+    const [cr,rr]=await Promise.all([fetch('/api/church?path='+encodeURIComponent('/calendar/'+key)).then(r=>r.json()),fetch('/api/church?path='+encodeURIComponent('/readings/'+key+'?detailed=true')).then(r=>r.json())]);
+    const c=cr.data||cr,parts=[c.copticDate||c.coptic_date||c.date,c.season||c.seasonName,c.feast||c.celebration].filter(v=>typeof v==='string'&&v.trim());
+    if(label&&parts.length)label.textContent=parts.join(' · ');
+    const selected=firstReading(rr.data||rr,['MGospel','VGospel','LGospel','EPGospel','Gospel']);
+    if(selected&&excerpt){const clean=selected.text.replace(/\s+/g,' ').trim();excerpt.textContent='“'+(clean.length>180?clean.slice(0,177).replace(/\s+\S*$/,'')+'…':clean)+'”';if(ref)ref.textContent=selected.ref}
+  }catch(e){if(excerpt)excerpt.textContent='Today’s sourced reading is available in Readings.';if(ref)ref.textContent='';console.warn('Church day unavailable',e)}
+}
 function prayerMarkup(){return `<header class="prayerHeader"><button class="prayerBack">‹ Home</button><button class="prayerTools">Aa ···</button><div class="eyebrow" id="shellPrayerHour">AGPEYA</div><h1 id="shellPrayerTitle">Prayer</h1><div class="prayerStep" id="shellPrayerStep">Loading the Agpeya…</div><div class="progress"><i id="shellPrayerBar"></i></div></header><article class="prayerReading" id="shellPrayerReading"><h2 id="shellSectionTitle"></h2><div class="prayerText" id="shellPrayerText"></div></article><section class="kyrieShell hide" id="shellKyrie"><div class="eyebrow">Kyrie Eleison</div><h2>Lord, have mercy.</h2><div class="kyrieCount"><span id="shellKyrieCount">0</span><small>/ 41</small></div><button id="shellMercy" class="mercyButton">LORD, HAVE MERCY</button><div id="shellKyrieRemain" class="kyrieRemain">41 remaining</div><button id="shellKyrieReset" class="resetLink">Reset</button></section><div class="prayerControls"><button id="shellPrev">Previous</button><button class="selah" id="shellSelah">Selah</button><button id="shellNext">Next</button></div><div class="prayerSheet hide" id="shellPrayerSheet"><button class="sheetClose" id="shellSheetClose">Done</button><h2>Prayer</h2><label>Text Size</label><div class="sizeRow"><button data-size="20">A−</button><button data-size="23">A</button><button data-size="27">A+</button></div><label>Choose Hour</label><div class="hourList">${Object.entries(hourNames).map(([k,t])=>`<button data-hour="${k}">${t}<span>›</span></button>`).join('')}</div></div><div class="selahShell hide" id="shellSelahOverlay"><div class="selahWord">Selah</div><button id="shellContinue">Continue in Prayer</button></div>`}
-function initPrayerShell(){const stage=document.querySelector('[data-screen="prayer"] .prayerStage');if(stage.dataset.ready)return;stage.dataset.ready='1';stage.innerHTML=prayerMarkup();document.querySelector('.prayerBack').onclick=()=>openScreen('home');document.querySelector('.prayerTools').onclick=()=>document.getElementById('shellPrayerSheet').classList.remove('hide');document.getElementById('shellSheetClose').onclick=()=>document.getElementById('shellPrayerSheet').classList.add('hide');document.getElementById('shellPrev').onclick=()=>movePrayer(-1);document.getElementById('shellNext').onclick=()=>movePrayer(1);document.getElementById('shellMercy').onclick=countMercy;document.getElementById('shellKyrieReset').onclick=()=>setMercy(0);document.getElementById('shellSelah').onclick=()=>document.getElementById('shellSelahOverlay').classList.remove('hide');document.getElementById('shellContinue').onclick=()=>document.getElementById('shellSelahOverlay').classList.add('hide');document.querySelectorAll('[data-hour]').forEach(b=>b.onclick=()=>{selectPrayerHour(b.dataset.hour);document.getElementById('shellPrayerSheet').classList.add('hide')});document.querySelectorAll('[data-size]').forEach(b=>b.onclick=()=>{document.getElementById('shellPrayerText').style.fontSize=b.dataset.size+'px';localStorage.setItem('copticDailyPrayer_shellTextSize',b.dataset.size)});const size=localStorage.getItem('copticDailyPrayer_shellTextSize');if(size)document.getElementById('shellPrayerText').style.fontSize=size+'px'}
-async function ensureAgpeya(){if(agpeya)return agpeya;agpeya=await window.loadCanonicalAgpeya();return agpeya}
-async function openPrayerShell(){initPrayerShell();try{await ensureAgpeya();const saved=Object.keys(hourNames).find(h=>Number(localStorage.getItem('agpeya_'+h+'_step')||0)>0);selectPrayerHour(saved||suggestedPrayerKey)}catch(e){document.getElementById('shellPrayerStep').textContent='Unable to open the Agpeya';document.getElementById('shellPrayerText').textContent='Please refresh this preview and try again.';console.error(e)}}
-function selectPrayerHour(hour){if(!agpeya?.[hour]?.length)return;prayerHour=hour;prayerStep=Number(localStorage.getItem('agpeya_'+hour+'_step')||0);if(prayerStep<0||prayerStep>=agpeya[hour].length)prayerStep=0;renderPrayer()}
-function movePrayer(delta){if(!agpeya)return;prayerStep=Math.max(0,Math.min(prayerStep+delta,agpeya[prayerHour].length-1));localStorage.setItem('agpeya_'+prayerHour+'_step',String(prayerStep));renderPrayer();window.scrollTo({top:0,behavior:'smooth'})}
-function mercyKey(){return 'agpeya_'+prayerHour+'_kyrie_'+prayerStep}function mercyCount(){return Math.max(0,Math.min(41,Number(localStorage.getItem(mercyKey())||0)))}function setMercy(n){localStorage.setItem(mercyKey(),String(n));renderKyrie()}function countMercy(){setMercy(Math.min(41,mercyCount()+1))}
-function renderKyrie(){const n=mercyCount();document.getElementById('shellKyrieCount').textContent=n;document.getElementById('shellKyrieRemain').textContent=(41-n)+' remaining'}
-function renderPrayer(){const list=agpeya[prayerHour],s=list[prayerStep],kyrie=String(s.title||'').includes('41');document.getElementById('shellPrayerHour').textContent=hourNames[prayerHour];document.getElementById('shellPrayerTitle').textContent=s.title||hourNames[prayerHour];document.getElementById('shellPrayerStep').textContent=`Section ${prayerStep+1} of ${list.length}`;document.getElementById('shellPrayerBar').style.width=Math.round((prayerStep+1)/list.length*100)+'%';document.getElementById('shellSectionTitle').textContent=s.title||'';document.getElementById('shellPrayerText').textContent=s.text||'';document.getElementById('shellKyrie').classList.toggle('hide',!kyrie);document.getElementById('shellPrayerReading').classList.toggle('hide',kyrie);document.getElementById('shellPrev').disabled=prayerStep===0;document.getElementById('shellNext').disabled=prayerStep===list.length-1;if(kyrie)renderKyrie()}
-setSuggestedPrayer();loadChurchDay();initPrayerShell();const initial=location.hash.replace('#','');openScreen(['home','prayer','readings','calendar','more'].includes(initial)?initial:'home');
+function initPrayerShell(){
+  const stage=document.querySelector('[data-screen="prayer"] .prayerStage');if(!stage||stage.dataset.ready)return;stage.dataset.ready='1';stage.innerHTML=prayerMarkup();
+  const q=s=>document.querySelector(s),id=s=>document.getElementById(s);
+  q('.prayerBack').addEventListener('click',()=>openScreen('home'));q('.prayerTools').addEventListener('click',()=>id('shellPrayerSheet').classList.remove('hide'));id('shellSheetClose').addEventListener('click',()=>id('shellPrayerSheet').classList.add('hide'));id('shellPrev').addEventListener('click',()=>movePrayer(-1));id('shellNext').addEventListener('click',()=>movePrayer(1));id('shellMercy').addEventListener('click',countMercy);id('shellKyrieReset').addEventListener('click',()=>setMercy(0));id('shellSelah').addEventListener('click',()=>id('shellSelahOverlay').classList.remove('hide'));id('shellContinue').addEventListener('click',()=>id('shellSelahOverlay').classList.add('hide'));
+  document.querySelectorAll('[data-hour]').forEach(b=>b.addEventListener('click',()=>{selectPrayerHour(b.dataset.hour);id('shellPrayerSheet').classList.add('hide')}));
+  document.querySelectorAll('[data-size]').forEach(b=>b.addEventListener('click',()=>{id('shellPrayerText').style.fontSize=b.dataset.size+'px';localStorage.setItem('copticDailyPrayer_prayerTextSize_v1',b.dataset.size)}));
+  const size=localStorage.getItem('copticDailyPrayer_prayerTextSize_v1')||localStorage.getItem('copticDailyPrayer_shellTextSize');if(size)id('shellPrayerText').style.fontSize=size+'px';
+}
+async function ensureAgpeya(){if(agpeya)return agpeya;if(typeof window.loadCanonicalAgpeya!=='function')throw new Error('Agpeya data did not load');agpeya=await window.loadCanonicalAgpeya();return agpeya}
+async function openPrayerShell(){initPrayerShell();try{await ensureAgpeya();const saved=Object.keys(hourNames).find(h=>Number(localStorage.getItem('agpeya_'+h+'_step')||0)>0);selectPrayerHour(saved||suggestedPrayerKey)}catch(e){const a=document.getElementById('shellPrayerStep'),b=document.getElementById('shellPrayerText');if(a)a.textContent='Unable to open the Agpeya';if(b)b.textContent='Please refresh and try again.';console.error(e)}}
+function selectPrayerHour(hour){if(!agpeya||!agpeya[hour]||!agpeya[hour].length)return;prayerHour=hour;prayerStep=Number(localStorage.getItem('agpeya_'+hour+'_step')||0);if(prayerStep<0||prayerStep>=agpeya[hour].length)prayerStep=0;renderPrayer()}
+function movePrayer(delta){if(!agpeya||!agpeya[prayerHour])return;prayerStep=Math.max(0,Math.min(prayerStep+delta,agpeya[prayerHour].length-1));localStorage.setItem('agpeya_'+prayerHour+'_step',String(prayerStep));renderPrayer();try{window.scrollTo({top:0,behavior:'smooth'})}catch(_){window.scrollTo(0,0)}}
+function mercyKey(){return'agpeya_'+prayerHour+'_kyrie_'+prayerStep}function mercyCount(){return Math.max(0,Math.min(41,Number(localStorage.getItem(mercyKey())||0)))}function setMercy(n){localStorage.setItem(mercyKey(),String(n));renderKyrie()}function countMercy(){setMercy(Math.min(41,mercyCount()+1))}
+function renderKyrie(){const n=mercyCount(),a=document.getElementById('shellKyrieCount'),b=document.getElementById('shellKyrieRemain');if(a)a.textContent=n;if(b)b.textContent=(41-n)+' remaining'}
+function renderPrayer(){
+  const list=agpeya[prayerHour],s=list[prayerStep],kyrie=String(s.title||'').includes('41');
+  document.getElementById('shellPrayerHour').textContent=hourNames[prayerHour];document.getElementById('shellPrayerTitle').textContent=s.title||hourNames[prayerHour];document.getElementById('shellPrayerStep').textContent=`Section ${prayerStep+1} of ${list.length}`;document.getElementById('shellPrayerBar').style.width=Math.round((prayerStep+1)/list.length*100)+'%';document.getElementById('shellSectionTitle').textContent=s.title||'';document.getElementById('shellPrayerText').textContent=s.text||'';document.getElementById('shellKyrie').classList.toggle('hide',!kyrie);document.getElementById('shellPrayerReading').classList.toggle('hide',kyrie);document.getElementById('shellPrev').disabled=prayerStep===0;document.getElementById('shellNext').disabled=prayerStep===list.length-1;if(kyrie)renderKyrie();
+}
+function boot(){
+  bindNavigation();setSuggestedPrayer();initPrayerShell();loadChurchDay();
+  const initial=location.hash.replace('#','');openScreen(['home','prayer','readings','calendar','more'].includes(initial)?initial:'home');
+  document.documentElement.dataset.appReady='1';
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();
