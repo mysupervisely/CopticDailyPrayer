@@ -30,3 +30,6 @@ body{background:radial-gradient(circle at 50% -8%,#fffaf1 0,#f8f3eb 34%,#f5eee5 
 
 /* Prayer nav polish v6 */
 .bottomNav a[href="#prayer"] svg{width:28px;height:28px}.bottomNav a[href="#prayer"] svg path{stroke-width:1.55}.prayerHeader{padding-top:52px}.prayerHeaderMenus button{position:static!important;min-height:38px;border:1px solid var(--line)!important;border-radius:999px!important;background:var(--paper)!important;color:var(--wine)!important;display:flex!important;align-items:center!important;gap:5px!important;font-weight:800!important}.prayerHeaderMenus .prayerJump{padding:0 11px!important}.prayerHeaderMenus .prayerHourPicker{padding:0 11px!important}.prayerHeaderMenus b{font-size:13px;font-weight:700}@media(max-width:390px){.prayerHeader{padding-top:50px}.prayerHeaderMenus .prayerJump,.prayerHeaderMenus .prayerHourPicker{padding:0 8px!important;font-size:9.5px!important}}
+
+/* Prayer tab icon final refinement */
+.bottomNav a[href="#prayer"] svg{width:25px;height:28px;stroke-width:1.55}.bottomNav a[href="#readings"] svg{width:29px}.bottomNav a[href="#calendar"] svg{width:28px}.bottomNav a[href="#home"] svg{width:27px}
