@@ -21,3 +21,6 @@ body{background:radial-gradient(circle at 50% -8%,#fffaf1 0,#f8f3eb 34%,#f5eee5 
 
 /* Reliable Good Shepherd render v5 */
 .goodShepherdLockup{height:190px;grid-template-columns:1fr 150px 1fr;overflow:visible}.shepherdImage{display:block;width:150px;height:184px;object-fit:cover;object-position:center 28%;border:0;background:transparent;mix-blend-mode:multiply}.christogram{align-self:center}.copticHomeHead .churchDay{margin-top:7px}@media(max-width:390px){.goodShepherdLockup{grid-template-columns:1fr 140px 1fr;height:180px}.shepherdImage{width:140px;height:174px}}
+
+/* Fail-safe Shepherd mark: never show a broken-image placeholder */
+.shepherdFallback{width:142px;height:166px;margin:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;background:transparent;color:var(--wine)}.shepherdFallback span{font:400 58px/1 Georgia,serif;color:var(--wine)}.shepherdFallback small{margin-top:12px;font:800 7px/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#8a7562}.goodShepherdLockup{grid-template-columns:1fr 142px 1fr;height:174px}.shepherdImage{display:none!important}@media(max-width:390px){.goodShepherdLockup{grid-template-columns:1fr 132px 1fr;height:164px}.shepherdFallback{width:132px;height:156px}}
