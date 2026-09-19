@@ -32,3 +32,22 @@ Before merging calendar changes, manually inspect at least one date from every r
 4. Synaxarium availability.
 5. Appointed readings and service grouping.
 6. Home and Calendar show the same Church-day status.
+
+## Verified SUSCopts reference rules
+
+These rules are validation references, not a replacement for date-specific authoritative data.
+
+- Weekly fasting: Wednesday and Friday are ordinarily fasting days. SUSCopts identifies exceptions including the Holy Fifty after Resurrection and Major Feasts.
+- Holy Fifty: fasting is not permitted during the fifty-day period from Resurrection through Pentecost, including Wednesdays and Fridays.
+- Nayrouz: the joyful Nayrouz rite begins on 1 Tout and continues through the Feast of the Cross on 17 Tout. Do not render "Nayrouz" as though it applies only to 1 Tout.
+- Feast of the Cross: begins on 17 Tout. Calendar UI must distinguish the season/rite from the specific feast day.
+- Fixed fasts: St. Mary's Fast begins 1 Mesori and the Nativity Fast begins 16 Hathor; date conversion and leap-year handling must still be validated for each Gregorian year.
+- Paramoun: date and duration can vary and must come from authoritative calendar data rather than a simple weekday rule.
+
+### Source hierarchy
+1. SUSCopts date-specific calendar/readings where available.
+2. Other verified Coptic Orthodox diocesan sources only when SUSCopts does not cover the datum.
+3. Coptic.io may provide application data, but the UI must identify it honestly and validation must not silently treat it as SUSCopts.
+
+### Release checks
+For each representative date, compare Gregorian date, Coptic date, season/rite, feast, fasting status, Synaxarium, and appointed readings against SUSCopts before production release.
