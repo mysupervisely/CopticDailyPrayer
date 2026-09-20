@@ -1,15 +1,9 @@
 window.loadCanonicalAgpeya=async function(){
  if(window.AGPEYA_DATA)return window.AGPEYA_DATA;
- const urls=['/?agpeya-source=1'];
  let lastError=null;
- for(const url of urls){
-  try{
-   const html=await fetch(url,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('source '+r.status);return r.text()});
-   const start=html.indexOf('const firstHourSections='),end=html.indexOf('const fatherLibraries=',start);
-   if(start<0||end<0)throw new Error('Canonical Agpeya data not found at '+url);
-   let source=html.slice(start,end).replace(/let currentHour='first';\s*let sections=firstHourSections;?/g,'');
-   const factory=new Function(source+'; return {first:firstHourSections,third:thirdHourSections,sixth:sixthHourSections,ninth:ninthHourSections,eleventh:eleventhHourSections,compline:complineSections,midnight:midnightSections};');
-   const data=factory();
+ try{
+   if(!window.COPTIC_LOCAL_AGPEYA)throw new Error('Local Agpeya source unavailable');
+   const data=JSON.parse(JSON.stringify(window.COPTIC_LOCAL_AGPEYA));
 
    // Preferred wording supplied by the user. Keep this override local so the
    // reader remains stable while each Hour is transcribed and verified.
@@ -266,6 +260,5 @@ Guard us from every bad thing, from every sin, and from every adversative power,
    window.AGPEYA_DATA=data;
    return data;
   }catch(e){lastError=e}
- }
- throw lastError||new Error('Unable to load canonical Agpeya');
+ throw lastError||new Error('Unable to load local Agpeya');
 };
