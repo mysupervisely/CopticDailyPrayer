@@ -201,6 +201,28 @@ Guard us from every bad thing, from every sin, and from every adversative power,
     else if(t.includes('third watch'))section.title='Third Watch';
     else if(t.includes('gospel')&&gospelIndex<gospelRefs.length)section.title='Gospel ('+gospelRefs[gospelIndex++]+')';
    });
+   // Reconcile section names/references against the supplied Agpeya screenshots.
+   const relabel=(sections,from,to)=>{const s=(sections||[]).find(x=>String(x.title||'').toLowerCase().includes(from.toLowerCase()));if(s)s.title=to};
+   relabel(data.first,'Opening Prayers','Introduction of Every Hour');
+   relabel(data.first,'Holy Gospel','Gospel (John 1:1-17)');
+   relabel(data.first,'Morning Psali','Litanies');
+   relabel(data.first,'Prayer of the Hours','Conclusion of Every Hour');
+   relabel(data.third,'Opening Prayers','Introduction of Every Hour');
+   relabel(data.third,'Holy Gospel','Gospel (John 14:26-15:4)');
+   relabel(data.third,'Prayer of the Hours','Conclusion of Every Hour');
+   relabel(data.sixth,'Opening Prayers','Introduction of Every Hour');
+   relabel(data.sixth,'Prayer of the Hours','Conclusion of Every Hour');
+   relabel(data.ninth,'Opening Prayers','Introduction of Every Hour');
+   relabel(data.ninth,'Prayer of the Hours','Conclusion of Every Hour');
+   relabel(data.eleventh,'Opening Prayers','Introduction of Every Hour');
+   relabel(data.eleventh,'Prayer of the Hours','Conclusion of Every Hour');
+   relabel(data.compline,'Opening Prayers','Introduction of Every Hour');
+   relabel(data.compline,'Prayer for the Night','Graciously Accord, O Lord');
+   relabel(data.compline,'The Trisagion','Trisagion');
+   relabel(data.compline,'Prayer of the Hours','Conclusion of Every Hour');
+   relabel(data.midnight,'Opening Prayers','Introduction of Every Hour');
+   relabel(data.midnight,'Concluding Gospel','Gospel (Luke 2:29-32)');
+   relabel(data.midnight,'Prayer of the Hours','Conclusion of Every Hour');
    // Normalize student-facing section names to the supplied Agpeya edition.
    const renameTroparia=(sections,label)=>{(sections||[]).forEach(s=>{if(/troparia/i.test(String(s.title||'')))s.title=label||'Litanies'})};
    renameTroparia(data.first,'Litanies');
