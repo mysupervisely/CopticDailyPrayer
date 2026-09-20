@@ -51,3 +51,36 @@ body{background:radial-gradient(circle at 50% -8%,#fffaf1 0,#f8f3eb 34%,#f5eee5 
 
 /* Unified editorial system across secondary screens v10 */
 .pageHead{padding:8px 2px 15px}.pageHead .eyebrow{font-size:9px;letter-spacing:.24em}.pageHead h1{font-size:34px;letter-spacing:-.035em;margin:5px 0}.pageHead .subtitle{font-size:12px;line-height:1.45;max-width:360px}.serviceTabs{background:transparent!important;border-bottom:1px solid var(--line);border-radius:0!important;padding:0!important;gap:18px!important;margin:2px 0 13px!important}.serviceTabs button{border-radius:0!important;min-height:40px!important;padding:0!important;font-size:11px!important}.serviceTabs button.active{background:transparent!important;box-shadow:none!important;border-bottom:2px solid var(--wine)!important}.readingReference{font-size:27px!important;margin-bottom:16px!important}.readingVerses{font-size:20px!important;line-height:1.62!important}.readingDateNote,.readingProgress{font-size:10.5px!important}.calendarCard,.churchDayCard,.lifeGroup{border-radius:17px!important;box-shadow:none!important}.calendarCard{padding:15px!important}.churchDayCard{padding:19px!important}.churchDayCard h2{font-size:25px!important}.churchBadge{background:transparent!important;border:1px solid var(--line);font-size:10px!important;padding:6px 8px!important}.lifeGroup{margin:8px 0 15px!important}.lifeGroup button{min-height:58px!important;padding:10px 14px!important;grid-template-columns:30px 1fr 16px!important}.lifeIcon{font-size:17px!important}.lifeGroup b{font-size:15px!important}.lifeGroup small{font-size:10px!important}.prayerReading{max-width:680px;margin-left:auto;margin-right:auto}.prayerText{font-size:21px;line-height:1.72}.prayerControls button{border-radius:13px}.prayerHeader h1{letter-spacing:-.035em}.prayerHeaderMenus button{background:transparent!important;border-color:var(--line)!important}.prayerHourPicker,.prayerJump{min-height:36px!important}.prayerSheet{border-radius:22px 22px 0 0!important}
+
+
+/* Prayer reader mobile polish v11 */
+#prayer .prayerStage{max-width:760px;margin:0 auto}
+#prayer .prayerHeader{position:relative;padding-top:52px!important}
+#prayer .prayerHeaderMenus{top:4px!important;left:2px!important;right:2px!important}
+#prayer .prayerHourPicker,#prayer .prayerJump{min-height:38px!important;padding:0 10px!important;border:1px solid rgba(41,35,31,.08)!important;border-radius:999px!important;background:rgba(255,255,255,.58)!important}
+#prayer .prayerContext{margin-top:2px;color:var(--muted)}
+#prayer #shellPrayerTitle{font-size:31px;line-height:1.12;letter-spacing:-.04em}
+#prayer .prayerStep{font-size:10.5px;color:var(--muted)}
+#prayer .progress{height:3px!important;background:rgba(41,35,31,.07)!important;border-radius:999px;overflow:hidden}
+#prayer .progress i{border-radius:999px}
+#prayer .prayerReading{border:0!important;box-shadow:none!important;background:transparent!important;padding-top:24px!important;padding-bottom:26px!important}
+#prayer .prayerReading>h2{font-size:12px!important;letter-spacing:.055em;text-transform:uppercase;color:var(--wine);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;font-weight:700}
+#prayer .prayerText{font-family:Georgia,"Times New Roman",serif;color:var(--ink)}
+#prayer .prayerControls{position:sticky;bottom:calc(72px + env(safe-area-inset-bottom));z-index:8;padding:8px;background:rgba(250,247,242,.92);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(41,35,31,.07);border-radius:17px;box-shadow:0 8px 24px rgba(35,27,22,.08)}
+#prayer .prayerControls button{min-height:44px!important;border-radius:11px!important}
+#prayer .prayerControls .selah{background:transparent!important;color:var(--muted)!important}
+#prayer .prayerSheet{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+#prayer .hourList{border-radius:15px;overflow:hidden;border:1px solid var(--line)}
+#prayer .hourList button{min-height:54px;border-bottom:1px solid var(--line);background:var(--paper)}
+#prayer .hourList button:last-child{border-bottom:0}
+#prayer .hourList button.current{background:var(--soft)}
+#prayer .sheetSectionLabel{display:block;margin:18px 2px 8px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+#prayer .jumpList{border-color:var(--line)!important}
+@media(max-width:430px){
+ #prayer .prayerHeader{padding-top:48px!important}
+ #prayer #shellPrayerTitle{font-size:28px}
+ #prayer .prayerReading{padding:22px 20px 30px!important}
+ #prayer .prayerText{font-size:21px!important;line-height:1.76!important;letter-spacing:-.008em}
+ #prayer .prayerControls{margin-left:8px;margin-right:8px;bottom:calc(70px + env(safe-area-inset-bottom))}
+ #prayer .prayerHourPicker,#prayer .prayerJump{font-size:10px!important;padding:0 9px!important}
+}
