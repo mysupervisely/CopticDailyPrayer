@@ -128,6 +128,44 @@ We ask and entreat You, O Lover of Mankind, accept our prayers and forgive our s
 Change us into a spiritual manner of life, that we may walk in the Spirit and not fulfill the lusts of the flesh. And make us worthy to serve You with purity and righteousness all the days of our life.
 
 For unto You is due glory, honor, and dominion, with Your good Father and the Holy Spirit, now and ever and unto the ages of all ages. Amen.`);
+   // First Hour closing prayers, transcribed from the supplied preferred wording.
+   replace('Hail to You',`Hail to you. We ask you, O saint full of glory, the ever-virgin, the Theotokos, the Mother of Christ, lift up our prayers unto your beloved Son, that He may forgive us our sins.
+
+Hail to the holy Virgin, who has brought forth unto us the true Light, Christ our God. Ask the Lord on our behalf that He may have mercy on our souls and forgive us our sins.
+
+O Virgin Mary, the holy Theotokos, the faithful advocate for all mankind, intercede on our behalf before Christ whom you bore, that He may grant us the forgiveness of our sins.
+
+Hail to you, O Virgin, the right and true Queen. Hail to the pride of our race, who bore to us Immanuel.
+
+We ask you to remember us, O our faithful advocate, before our Lord Jesus Christ, that He may forgive us our sins.`);
+   replace('Introduction to Creed',`We exalt you, the Mother of the true Light. We glorify you, O saint, the Theotokos, for you have brought forth unto us the Savior of the whole world. He came and saved our souls.
+
+Glory be to You, our Master, our King, Christ, the pride of the apostles, the crown of the martyrs, the joy of the righteous, the firmness of the churches, the forgiveness of sins.
+
+We proclaim the Holy Trinity in one Godhead. We worship Him. We glorify Him. Lord have mercy. Lord have mercy. Lord bless us. Amen.`);
+   replace('Orthodox Creed',`We believe in one God, God the Father, the Pantocrator, Creator of heaven and earth, and of all things seen and unseen.
+
+We believe in one Lord, Jesus Christ, the only-begotten Son of God, begotten of the Father before all ages.
+
+Light of Light, true God of true God, begotten, not created; of one essence with the Father; by whom all things were made.
+
+Who for us men and for our salvation came down from heaven, was incarnate of the Holy Spirit and of the Virgin Mary, and became man.
+
+And He was crucified for us under Pontius Pilate, suffered and was buried, and on the third day He rose from the dead according to the Scriptures.
+
+Ascended into the heavens; He sits at the right hand of His Father, and He is coming again in His glory to judge the living and the dead, whose Kingdom shall have no end.
+
+Yes, we believe in the Holy Spirit, the Lord, the Giver of Life, who proceeds from the Father, who with the Father and the Son, is worshiped and glorified, who spoke by the prophets.
+
+And in one holy, catholic (universal), and apostolic Church. We confess one baptism for the remission of sins.
+
+We look for the resurrection of the dead, and the life of the age to come. Amen.`);
+   replace('First Absolution',`O Lord, God of hosts, who is existing before all ages and abides forever, who created the sun for daylight, and the night as rest for all men; we thank You, O King of ages, for You have let us pass through the night in peace, and brought us to the daybreak.
+
+Therefore, we ask You, O our Master, the King of all ages, let Your face shine upon us and the light of Your divine knowledge enlighten us. Grant us, O our Master, to be sons of light and sons of day, to pass this day in righteousness, chastity and good conduct, that we may complete all the rest of the days of our life without offense; through the grace, the compassion and the love of mankind of Your only-begotten Son, Jesus Christ, and the gift of Your Holy Spirit, now and at all times and forever. Amen.`);
+   replace('Second Absolution',`O God who causes the light to burst forth, who lets His sun shine upon the righteous and the wicked, who created the light which illuminates the whole world, enlighten our minds, our hearts and our understandings, O Master of all, and grant us to please You this present day.
+
+Guard us from every bad thing, from every sin, and from every adversative power, through Christ Jesus our Lord, with whom You are blessed, with the Holy Spirit, the Life-Giver, who is of one essence with You, now and at all times and unto the ages of all ages. Amen.`);
    window.AGPEYA_DATA=data;
    return data;
   }catch(e){lastError=e}
