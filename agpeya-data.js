@@ -201,6 +201,33 @@ Guard us from every bad thing, from every sin, and from every adversative power,
     else if(t.includes('third watch'))section.title='Third Watch';
     else if(t.includes('gospel')&&gospelIndex<gospelRefs.length)section.title='Gospel ('+gospelRefs[gospelIndex++]+')';
    });
+   // Prayer of the Veil, kept separate from the seven daily Hours.
+   // Structure and wording follow the user's supplied Agpeya screenshots.
+   const allDaily=[data.first,data.third,data.sixth,data.ninth,data.eleventh,data.compline,data.midnight].flat().filter(Boolean);
+   const copyMatch=(test,newTitle)=>{const s=allDaily.find(x=>test(String(x.title||'')));return s?{title:newTitle||s.title,text:s.text}:null};
+   const psalm=(n)=>copyMatch(t=>new RegExp('^Psalm\\\\s+'+String(n).replace(/[()]/g,'\\\\   window.AGPEYA_DATA=data;')+'(?:\\\\s|\\\\-|$)','i').test(t));
+   const veil=[];
+   const push=x=>{if(x)veil.push(x)};
+   push({title:'The Prayer of the Veil',text:'This prayer concerns monks, yet it is suitable for individual meditation. It is prayed daily in monasteries.'});
+   push(copyMatch(t=>/Introduction of Every Hour/i.test(t),'Introduction of Every Hour'));
+   push(copyMatch(t=>/^Our Father$/i.test(t),'Our Father'));
+   push(copyMatch(t=>/Prayer of Thanksgiving/i.test(t),'The Prayer of Thanksgiving'));
+   push(copyMatch(t=>/^Psalm 50/i.test(t),'Psalm 50'));
+   push({title:'Introduction',text:'The blessed prayer of the veil, we offer to Christ our King and our God, beseeching Him to forgive us our sins.\n\nFrom the Psalms of our teacher David the prophet. May his blessings be upon us all. Amen.\n\nThe following psalms are reserved to be prayed by the priest: Psalms 4, 131, and Psalm 118 (20), (21), and (22).'});
+   ['4','6','12','15','24','26','66','69','22','29','42','56','85','96','109','114','115','120','128','129','130','131','132','133','136','140','145','118 (20)','118 (21)','118 (22)'].forEach(n=>push(psalm(n)));
+   push({title:'Gospel (John 6:15-23)',text:'Holy, holy, holy. A reading from the Holy Gospel according to our teacher Saint John. May his blessings be with us all. Amen.\n\nWhen Jesus therefore perceived that they would come and take Him by force to make Him a king, He departed again into a mountain by Himself alone.\n\nAnd when evening came, His disciples went down to the sea, and entered into a boat, and went over the sea toward Capernaum. And it was now dark, and Jesus had not come to them. And the sea arose by reason of a great wind that blew. So when they had rowed about three or four miles, they saw Jesus walking on the sea, and drawing near to the boat, and they were afraid. But He said to them, "It is I; do not be afraid." Then they willingly received Him into the boat: and immediately the boat was at the land where they were going.\n\nOn the following day, the people who stood on the other side of the sea saw that there was no other boat there, except that one which His disciples had entered, and that Jesus had not entered the boat with His disciples, but that His disciples had gone away alone. However, there came other boats from Tiberias near the place where they ate bread, after the Lord had given thanks.\n\nGlory be to God forever. Amen.\n\nMay the sayings of God be fulfilled in peace.\n\nOn joyful days: We worship You, O Christ, with Your good Father, and the Holy Spirit, for You have risen and saved us. Have mercy on us.'});
+   push({title:'Litanies',text:'1. Lord, You know the alertness of my enemies; and as for my weakness, You are aware of it, my Creator. Therefore, I, hereby, place my soul into Your hands. So cover me with the wings of Your goodness, lest I might sleep till death. Enlighten my eyes by the greatness of Your sayings, and raise me up at all times for Your glorification, for You alone are Good and Lover of Mankind.\n\nGlory to the Father, and to the Son, and to the Holy Spirit.\n\n2. Lord, Your judgment is dreadful; when men shall be rushed, the angels shall stand, the books shall be opened, the deeds shall be revealed, and the thoughts examined. What a judgment mine will be, I who am entangled by sin?! Who would quench the flames of fire about me?! Who would enlighten my darkness, other than You, O Lord?! Have mercy on me, for You are compassionate to mankind.\n\nNow and ever and unto the ages of the ages. Amen.\n\n3. O Theotokos, because we have put our trust in you, we shall not be put to shame, but shall be saved. And because we have attained your help and intercession, O holy and perfect one, we shall not fear, but shall drive out our enemies and shall disperse them. And, in everything, we take your great help to protect us as if with a shield. We ask and entreat you, crying, O Theotokos, to save us by your intercessions, and raise us up from the dark sleep, in order to powerfully glorify God who took flesh from you.'});
+   push(copyMatch(t=>/^Trisagion$/i.test(t),'Trisagion'));
+   push(copyMatch(t=>/^Our Father$/i.test(t),'Our Father'));
+   push(copyMatch(t=>/Hail to You/i.test(t),'Hail to You'));
+   push(copyMatch(t=>/Introduction to Creed/i.test(t),'Introduction to the Creed'));
+   push(copyMatch(t=>/Orthodox Creed/i.test(t),'The Orthodox Creed'));
+   push(copyMatch(t=>/41/.test(t),'Lord Have Mercy (41)'));
+   push(copyMatch(t=>/Holy, Holy, Holy/i.test(t),'Holy, Holy, Holy'));
+   push(copyMatch(t=>/^Our Father$/i.test(t),'Our Father'));
+   push({title:'Absolution',text:'O Lord and Master, Jesus Christ our God, grant us rest in our sleep, repose of our bodies, and purity of our souls, and protect us from the darkness of devastating sin. May the pangs of pain subside, and the heat of the flesh calm down, and the turmoil of the body come to an end. Grant us an alert mind, a humble thought, a life full of virtue, and a pure and undefiled bed. Raise us up for the night and morning praises, steadfast in Your commandments, keeping in ourselves, at all times, the thought of Your judgments. Grant us to praise You the whole night, blessing Your holy name full of glory and splendor, with Your good Father, and the Holy Spirit, the Life-Giver, now and at all times and unto the ages of all ages. Amen.'});
+   push(copyMatch(t=>/Conclusion of Every Hour/i.test(t),'Conclusion of Every Hour'));
+   data.veil=veil;
    window.AGPEYA_DATA=data;
    return data;
   }catch(e){lastError=e}
