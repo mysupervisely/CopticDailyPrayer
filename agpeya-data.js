@@ -178,6 +178,12 @@ Guard us from every bad thing, from every sin, and from every adversative power,
    if(ninthGospel)ninthGospel.title='Gospel (Luke 9:10-17)';
    const ninthAbsolution=ninth.find(s=>String(s.title||'').toLowerCase().includes('absolution'));
    if(ninthAbsolution)ninthAbsolution.title='Absolution';
+   // Eleventh Hour (Vespers): align section identity with the supplied edition.
+   const eleventh=data.eleventh||[];
+   const eleventhGospel=eleventh.find(s=>String(s.title||'').toLowerCase().includes('gospel'));
+   if(eleventhGospel)eleventhGospel.title='Gospel (Luke 4:38-41)';
+   const eleventhAbsolution=eleventh.find(s=>String(s.title||'').toLowerCase().includes('absolution'));
+   if(eleventhAbsolution)eleventhAbsolution.title='Absolution';
    window.AGPEYA_DATA=data;
    return data;
   }catch(e){lastError=e}
