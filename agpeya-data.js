@@ -166,6 +166,12 @@ Therefore, we ask You, O our Master, the King of all ages, let Your face shine u
    replace('Second Absolution',`O God who causes the light to burst forth, who lets His sun shine upon the righteous and the wicked, who created the light which illuminates the whole world, enlighten our minds, our hearts and our understandings, O Master of all, and grant us to please You this present day.
 
 Guard us from every bad thing, from every sin, and from every adversative power, through Christ Jesus our Lord, with whom You are blessed, with the Holy Spirit, the Life-Giver, who is of one essence with You, now and at all times and unto the ages of all ages. Amen.`);
+   // Sixth Hour: preserve the supplied edition's structure and identify its Gospel explicitly.
+   const sixth=data.sixth||[];
+   const sixthGospel=sixth.find(s=>String(s.title||'').toLowerCase().includes('gospel'));
+   if(sixthGospel)sixthGospel.title='Gospel (Matthew 5:1-16)';
+   const sixthAbsolution=sixth.find(s=>String(s.title||'').toLowerCase().includes('absolution'));
+   if(sixthAbsolution)sixthAbsolution.title='Absolution';
    window.AGPEYA_DATA=data;
    return data;
   }catch(e){lastError=e}
