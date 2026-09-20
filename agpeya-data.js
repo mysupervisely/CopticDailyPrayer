@@ -201,6 +201,19 @@ Guard us from every bad thing, from every sin, and from every adversative power,
     else if(t.includes('third watch'))section.title='Third Watch';
     else if(t.includes('gospel')&&gospelIndex<gospelRefs.length)section.title='Gospel ('+gospelRefs[gospelIndex++]+')';
    });
+   // Normalize student-facing section names to the supplied Agpeya edition.
+   const renameTroparia=(sections,label)=>{(sections||[]).forEach(s=>{if(/troparia/i.test(String(s.title||'')))s.title=label||'Litanies'})};
+   renameTroparia(data.first,'Litanies');
+   renameTroparia(data.third,'Litanies');
+   renameTroparia(data.sixth,'Litanies');
+   renameTroparia(data.ninth,'Litanies');
+   renameTroparia(data.eleventh,'Litanies');
+   renameTroparia(data.compline,'Litanies');
+   renameTroparia(data.midnight,'Litanies');
+   // Preserve Midnight as one Hour, but make its internal Watches easy to identify.
+   const watchNames=['First Watch','Second Watch','Third Watch'];
+   let watchIndex=0;
+   (data.midnight||[]).forEach(s=>{const t=String(s.title||'');if(/watch/i.test(t)&&watchIndex<watchNames.length)s.title=watchNames[watchIndex++]});
    // Prayer of the Veil, kept separate from the seven daily Hours.
    // Structure and wording follow the user's supplied Agpeya screenshots.
    const allDaily=[data.first,data.third,data.sixth,data.ninth,data.eleventh,data.compline,data.midnight].flat().filter(Boolean);
