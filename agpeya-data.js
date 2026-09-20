@@ -172,6 +172,12 @@ Guard us from every bad thing, from every sin, and from every adversative power,
    if(sixthGospel)sixthGospel.title='Gospel (Matthew 5:1-16)';
    const sixthAbsolution=sixth.find(s=>String(s.title||'').toLowerCase().includes('absolution'));
    if(sixthAbsolution)sixthAbsolution.title='Absolution';
+   // Ninth Hour: align section identity with the supplied edition.
+   const ninth=data.ninth||[];
+   const ninthGospel=ninth.find(s=>String(s.title||'').toLowerCase().includes('gospel'));
+   if(ninthGospel)ninthGospel.title='Gospel (Luke 9:10-17)';
+   const ninthAbsolution=ninth.find(s=>String(s.title||'').toLowerCase().includes('absolution'));
+   if(ninthAbsolution)ninthAbsolution.title='Absolution';
    window.AGPEYA_DATA=data;
    return data;
   }catch(e){lastError=e}
