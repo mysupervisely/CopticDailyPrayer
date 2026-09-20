@@ -16,7 +16,8 @@ module.exports = async function handler(req, res) {
   }
 
   const path = typeof req.query.path === 'string' ? req.query.path : '';
-  if (!ALLOWED.some(rx => rx.test(path))) {
+  const upstreamPath = path.replace(/%3F/ig, '?').replace(/%3D/ig, '=');
+  if (!ALLOWED.some(rx => rx.test(upstreamPath))) {
     return res.status(400).json({error:'Unsupported Church-data request'});
   }
 
@@ -24,7 +25,7 @@ module.exports = async function handler(req, res) {
   const timer = setTimeout(() => controller.abort(), 8000);
 
   try {
-    const upstream = await fetch('https://api.coptic.io/api' + path, {
+    const upstream = await fetch('https://api.coptic.io/api' + upstreamPath, {
       headers: {'Accept':'application/json'},
       signal: controller.signal
     });
