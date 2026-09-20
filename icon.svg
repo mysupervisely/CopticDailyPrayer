@@ -1,1 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Coptic Prayer"><rect width="512" height="512" rx="112" fill="#781d28"/><g fill="#fff8ef"><circle cx="256" cy="106" r="26"/><circle cx="256" cy="406" r="26"/><circle cx="106" cy="256" r="26"/><circle cx="406" cy="256" r="26"/><circle cx="150" cy="150" r="22"/><circle cx="362" cy="150" r="22"/><circle cx="150" cy="362" r="22"/><circle cx="362" cy="362" r="22"/><path d="M232 94h48v114h114v48h-114v162h-48V256H118v-48h114z"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Coptic Prayer">
+<rect width="512" height="512" rx="92" fill="#8d1725"/>
+<g fill="#fff5df">
+<path d="M244 68h24v78h78v24h-78v132h-24V170h-78v-24h78z"/>
+<circle cx="256" cy="68" r="22"/><circle cx="234" cy="90" r="22"/><circle cx="278" cy="90" r="22"/>
+<circle cx="166" cy="158" r="22"/><circle cx="188" cy="136" r="22"/><circle cx="188" cy="180" r="22"/>
+<circle cx="346" cy="158" r="22"/><circle cx="324" cy="136" r="22"/><circle cx="324" cy="180" r="22"/>
+<circle cx="256" cy="302" r="22"/><circle cx="234" cy="280" r="22"/><circle cx="278" cy="280" r="22"/>
+</g>
+<text x="256" y="407" fill="#fff5df" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="55" font-weight="500">Coptic Prayer</text>
+</svg>
