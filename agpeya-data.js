@@ -190,6 +190,17 @@ Guard us from every bad thing, from every sin, and from every adversative power,
    if(complineGospel)complineGospel.title='Gospel (Luke 2:25-32)';
    const complineAbsolution=compline.find(s=>String(s.title||'').toLowerCase().includes('absolution'));
    if(complineAbsolution)complineAbsolution.title='Absolution';
+   // Midnight Prayer remains one Hour. The three Watches stay inside this sequence.
+   const midnight=data.midnight||[];
+   const gospelRefs=['Matthew 25:1-13','Luke 7:36-50','Luke 12:32-46'];
+   let gospelIndex=0;
+   midnight.forEach(section=>{
+    const t=String(section.title||'').toLowerCase();
+    if(t.includes('first watch'))section.title='First Watch';
+    else if(t.includes('second watch'))section.title='Second Watch';
+    else if(t.includes('third watch'))section.title='Third Watch';
+    else if(t.includes('gospel')&&gospelIndex<gospelRefs.length)section.title='Gospel ('+gospelRefs[gospelIndex++]+')';
+   });
    window.AGPEYA_DATA=data;
    return data;
   }catch(e){lastError=e}
