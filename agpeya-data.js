@@ -88,6 +88,46 @@ The night has passed; we thank You, O Lord, and we ask You to keep us this day a
    replace('Conclusion of Every Hour',`Have mercy on us, O God, and have mercy on us, who at all times and in every hour, in heaven and on earth, is worshipped and glorified; Christ our God, the good, the long suffering, the abundant in mercy, and the great in compassion, who loves the righteous and has mercy on the sinners of whom I am chief, who does not wish the death of the sinner but rather that he returns and lives, who calls all to salvation for the promise of the good things to come.
 
 Lord receive from us our prayers in this hour and in every hour. Ease our life and guide us to fulfill Your commandments. Sanctify our spirits. Cleanse our bodies. Conduct our thoughts. Purify our intentions. Heal our diseases. Forgive our sins. Deliver us from every evil grief and distress of heart. Surround us by Your holy angels, that, by their camp, we may be guarded and guided, and attain the unity of faith, and the knowledge of Your imperceptible and infinite glory. For You are blessed forever. Amen.`);
+   // Common prayers use the same supplied wording in each Hour.
+   const preferredIntro=first.find(s=>String(s.title||'').toLowerCase().includes('introduction of every hour'));
+   const preferredOurFather=first.find(s=>String(s.title||'').toLowerCase().includes('our father'));
+   const preferredThanksgiving=first.find(s=>String(s.title||'').toLowerCase().includes('thanksgiving'));
+   const preferredPsalm50=first.find(s=>String(s.title||'').toLowerCase().includes('psalm 50'));
+   const preferredConclusion=first.find(s=>String(s.title||'').toLowerCase().includes('conclusion of every hour'));
+   [data.third,data.sixth,data.ninth,data.eleventh,data.compline,data.midnight].forEach(hourSections=>{
+    if(!hourSections)return;
+    hourSections.forEach(section=>{
+     const t=String(section.title||'').toLowerCase();
+     if(preferredIntro&&t.includes('introduction of every hour'))section.text=preferredIntro.text;
+     else if(preferredOurFather&&t.includes('our father'))section.text=preferredOurFather.text;
+     else if(preferredThanksgiving&&t.includes('thanksgiving'))section.text=preferredThanksgiving.text;
+     else if(preferredPsalm50&&t.includes('psalm 50'))section.text=preferredPsalm50.text;
+     else if(preferredConclusion&&t.includes('conclusion of every hour'))section.text=preferredConclusion.text;
+    });
+   });
+
+   // Third Hour wording verified from the supplied screenshots.
+   const third=data.third||[];
+   const replaceThird=(title,text)=>{
+    const item=third.find(s=>String(s.title||'').toLowerCase().includes(title.toLowerCase()));
+    if(item)item.text=text;
+   };
+   replaceThird('Gospel',`When the Comforter, the Holy Spirit, whom the Father will send in My name, has come, He shall teach you all things, and bring to your remembrance all things that I have said to you. My peace I leave with you, My peace I give unto you; not as the world gives do I give unto you. Let not your heart be troubled, neither let it be afraid.
+
+You have heard Me say to you, "I am going away, and coming back to you." If you loved Me, you would rejoice, because I said, "I am going to the Father," for My Father is greater than I. And now I have told you before it comes, that when it does come to pass, you may believe.
+
+I will no longer talk much with you, for the prince of this world comes, and has nothing in Me. But that the world may know that I love the Father, and as the Father gave Me commandment, so I do.
+
+I am the true vine, and My Father is the vinedresser. Every branch in Me that does not bear fruit He takes away; and every branch that bears fruit He prunes, that it may bear more fruit. Now you are clean through the word which I have spoken unto you. Abide in Me, and I in you.
+
+Glory be to God forever. Amen.`);
+   replaceThird('Absolution',`O God of compassion, the Lord of all comfort, who comforted us at all times with the comfort of Your Holy Spirit, we thank You for raising us for prayer in this holy hour, in which You abundantly poured the grace of Your Holy Spirit upon Your holy disciples and honorable and blessed apostles, like tongues of fire.
+
+We ask and entreat You, O Lover of Mankind, accept our prayers and forgive our sins and send forth upon us the grace of Your Holy Spirit, and purify us from all defilement of body and spirit.
+
+Change us into a spiritual manner of life, that we may walk in the Spirit and not fulfill the lusts of the flesh. And make us worthy to serve You with purity and righteousness all the days of our life.
+
+For unto You is due glory, honor, and dominion, with Your good Father and the Holy Spirit, now and ever and unto the ages of all ages. Amen.`);
    window.AGPEYA_DATA=data;
    return data;
   }catch(e){lastError=e}
