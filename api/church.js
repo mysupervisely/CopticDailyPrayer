@@ -4,7 +4,7 @@ const ALLOWED = [
   /^\/calendar\/\d{4}-\d{2}-\d{2}$/,
   /^\/season\/\d{4}-\d{2}-\d{2}$/,
   /^\/readings\/\d{4}-\d{2}-\d{2}(\?detailed=true)?$/,
-  /^\/synaxarium\/\d{4}-\d{2}-\d{2}$/,
+  /^\/synaxarium\/\d{4}-\d{2}-\d{2}(\?detailed=true)?$/,
   /^\/celebrations\/\d{4}-\d{2}-\d{2}$/,
   /^\/fasting\/\d{4}-\d{2}-\d{2}$/
 ];
