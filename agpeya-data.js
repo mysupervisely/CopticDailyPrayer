@@ -184,6 +184,12 @@ Guard us from every bad thing, from every sin, and from every adversative power,
    if(eleventhGospel)eleventhGospel.title='Gospel (Luke 4:38-41)';
    const eleventhAbsolution=eleventh.find(s=>String(s.title||'').toLowerCase().includes('absolution'));
    if(eleventhAbsolution)eleventhAbsolution.title='Absolution';
+   // Twelfth Hour (Compline): align section identity with the supplied edition.
+   const compline=data.compline||[];
+   const complineGospel=compline.find(s=>String(s.title||'').toLowerCase().includes('gospel'));
+   if(complineGospel)complineGospel.title='Gospel (Luke 2:25-32)';
+   const complineAbsolution=compline.find(s=>String(s.title||'').toLowerCase().includes('absolution'));
+   if(complineAbsolution)complineAbsolution.title='Absolution';
    window.AGPEYA_DATA=data;
    return data;
   }catch(e){lastError=e}
