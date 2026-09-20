@@ -205,7 +205,7 @@ Guard us from every bad thing, from every sin, and from every adversative power,
    // Structure and wording follow the user's supplied Agpeya screenshots.
    const allDaily=[data.first,data.third,data.sixth,data.ninth,data.eleventh,data.compline,data.midnight].flat().filter(Boolean);
    const copyMatch=(test,newTitle)=>{const s=allDaily.find(x=>test(String(x.title||'')));return s?{title:newTitle||s.title,text:s.text}:null};
-   const psalm=(n)=>copyMatch(t=>new RegExp('^Psalm\\\\s+'+String(n).replace(/[()]/g,'\\\\   window.AGPEYA_DATA=data;')+'(?:\\\\s|\\\\-|$)','i').test(t));
+   const psalm=(n)=>copyMatch(t=>{const label=String(n),base=label.replace(/\s*\([^)]*\)\s*$/,'');const re=new RegExp('^Psalm\\s+'+base+'(?:\\s|\\-|$)','i');return re.test(t)},'Psalm '+n);
    const veil=[];
    const push=x=>{if(x)veil.push(x)};
    push({title:'The Prayer of the Veil',text:'This prayer concerns monks, yet it is suitable for individual meditation. It is prayed daily in monasteries.'});
