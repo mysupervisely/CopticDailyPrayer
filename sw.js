@@ -1,4 +1,4 @@
-const CACHE='coptic-daily-prayer-v5';
+const CACHE='coptic-daily-prayer-v6';
 const CORE=['/app.html','/app-shell.css','/agpeya-local-source.js','/agpeya-data.js','/prayer-native.js','/readings-native.js','/calendar-native.js','/prayer-life-native.js','/home-native.js',];
 self.addEventListener('install',event=>{self.skipWaiting();event.waitUntil(caches.open(CACHE).then(cache=>Promise.all(CORE.map(url=>fetch(url,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(url+' '+r.status);return cache.put(url,r.clone())}).catch(()=>null)))));});
 self.addEventListener('activate',event=>event.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))),self.clients.claim()])));
