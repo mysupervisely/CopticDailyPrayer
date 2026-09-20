@@ -3,15 +3,55 @@ var ACTIVE='copticDailyPrayer_activePrayerHour_v1',PERIOD={first:'Morning prayer
 function q(s){return document.querySelector(s)}function qa(s){return document.querySelectorAll(s)}function pad(n){return n<10?'0'+n:String(n)}function key(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}function get(path){return fetch('/api/church?path='+encodeURIComponent(path),{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(String(r.status));return r.json()})}function data(x){return x&&x.data?x.data:x}function arr(v){return !v?[]:(Array.isArray(v)?v:[v])}
 
 var FATHER_QUOTES=[
-{text:'He was made man that we might be gods.',author:'St. Athanasius the Apostolic',source:'On the Incarnation'},
-{text:'Our life and our death is with our neighbor.',author:'St. Anthony the Great',source:'Sayings of the Desert Fathers'},
-{text:'If you have a heart, you could be saved.',author:'St. Abba Pambo',source:'Sayings of the Desert Fathers'},
-{text:'Go, sit in your cell, and your cell will teach you everything.',author:'St. Moses the Strong',source:'Sayings of the Desert Fathers'},
-{text:'Be a lover of humility, and it will cover all your sins.',author:'St. Isaac the Syrian',source:'Ascetical Homilies'}
+{text:'If we want to understand those who wrote about God, we must begin by washing and cleansing our souls.',author:'St. Athanasius the Apostolic',source:'From your quote collection'},
+{text:'It does not become of us to be agitated because of the trials that befall us...but we should the more please God through these things.',author:'St. Athanasius the Apostolic',source:'From your quote collection'},
+{text:'The Lord did not come to make a display. He came to heal and to teach suffering men.',author:'St. Athanasius the Apostolic',source:'On the Incarnation'},
+{text:'One who knows oneself, knows God: and one who knows God is worthy to worship Him as is right.',author:'St. Anthony the Great',source:'From your quote collection'},
+{text:'Always have the fear of God before your eyes. Remember Him who gives death and lives.',author:'St. Anthony the Great',source:'From your quote collection'},
+{text:'The fruits of the earth are not brought to perfection immediately, but by time, rain and care; similarly, the fruits of men ripen through ascetic practice, time, perseverance, self control and patience.',author:'St. Anthony the Great',source:'From your quote collection'},
+{text:'He who sits in solitude and is quiet hath escaped from three wars: hearing, speaking, seeing; yet against one thing shall he continually battle: that is, his own heart.',author:'St. Anthony the Great',source:'From your quote collection'},
+{text:'For the wisdom that comes from above, from God, is an incomparable blessing.',author:'St. Cyril of Alexandria',source:'Commentary on Luke, Homily 133'},
+{text:'Christians are an army without weapons, war, bloodshed, anger, or defilement.',author:'St. Clement of Alexandria',source:'From your quote collection'},
+{text:'The rule of life for a perfect person is to be in the image and likeness of God.',author:'St. Clement of Alexandria',source:'From your quote collection'},
+{text:'Let your afflictions be books to admonish and teach you.',author:'St. Ephrem the Syrian',source:'From your quote collection'},
+{text:'Blessed is he who forces himself to perform all manner of good deeds, for the forceful shall capture the kingdom of heaven.',author:'St. Ephrem the Syrian',source:'From your quote collection'},
+{text:'Love is not puffed up... arrogance is like a very tall but rotten tree.',author:'St. Ephrem the Syrian',source:'From your quote collection'},
+{text:'Let them push you, but do not push; Let them crucify you, but do not crucify. Let them insult, but do not insult.',author:'St. Isaac the Syrian',source:'From your quote collection'},
+{text:'If God is slow in answering your request, or if you ask but do not promptly receive anything, do not be upset, for you are not wiser than God.',author:'St. Isaac the Syrian',source:'Wisdom of St. Isaac of Nineveh'},
+{text:'Abstinence of the tongue is better than abstinence of the mouth; and abstinence of the heart is better than both.',author:'St. Isaac the Syrian',source:'From your quote collection'},
+{text:'The soul that loves God has its rest in God and in God alone.',author:'St. Isaac the Syrian',source:'From your quote collection'},
+{text:'Do no harm to anyone, do not put confidence in him who does wrong to his neighbor, do not rejoice with him who injures his neighbor.',author:'St. Moses the Strong',source:'From your quote collection'},
+{text:'Love prayer at all time so that God enlightens your heart.',author:'St. Moses the Strong',source:'From your quote collection'},
+{text:'He who endures injustice for the sake of the Lord is considered a martyr.',author:'St. Moses the Strong',source:'From your quote collection'},
+{text:'My beloved, we ought to strive with everything we could in tears before our Lord to have mercy on us with his tenderness and compassion.',author:'St. Moses the Black',source:'From your quote collection'},
+{text:'It is patience that reveals every grace to you, and it is through patience that the saints received all that was promised to them.',author:'St. Pachomius',source:'From your quote collection'},
+{text:'Brethren, if we want to escape God’s punishment and find mercy in His eyes, let us sit every evening alone by ourselves and search our souls.',author:'St. Shenouda the Archimandrite',source:'Coptic Orthodox Book of Pascha'},
+{text:'If you have nothing to give people, give them a warm smile and a kind word, give them love, give them tenderness, give them a word of encouragement; give them your heart.',author:'H.H. Pope Shenouda III',source:'From your quote collection'},
+{text:'But God is the All in All for us. He is our Aim for Whom we were created.',author:'H.H. Pope Shenouda III',source:'From your quote collection'},
+{text:'When you examine yourself, beware of searching for excuses and justifications to cover your sins.',author:'H.H. Pope Shenouda III',source:'From your quote collection'},
+{text:'There are three on which hang the spiritual life: you learn, you do, and you teach.',author:'H.H. Pope Shenouda III',source:'From your quote collection'},
+{text:'Believe me, my brethren, if we really believed that God continually gives, the whole of life itself would not suffice to thank Him!',author:'H.H. Pope Shenouda III',source:'From your quote collection'},
+{text:'Your love for the Lord is reflected in your prayer, and your prayer reflects your love for the Lord.',author:'St. Pope Kyrillos VI',source:'From your quote collection'},
+{text:'I prayed for a pure heart, it took me a long time and a hard struggle to discover that prayer itself is the only road to a pure heart.',author:'St. Pope Kyrillos VI',source:'From your quote collection'},
+{text:'Do not think for a day that your sins are greater than the mercies of God.',author:'St. Pope Kyrillos VI',source:'From your quote collection'},
+{text:'A dog is better than I am, for he has love and does not judge.',author:'St. Xanthias',source:'Sayings of the Desert Fathers'},
+{text:'I have often repented of having spoken but never of been silent.',author:'Abba Arsenius',source:'From your quote collection'},
+{text:'Teach your heart to follow what your tongue is saying to others.',author:'Abba Poemen',source:'From your quote collection'}
 ];
-var fatherLast=-1;
-function showFatherQuote(forceNext){var t=q('#fatherQuoteText'),a=q('#fatherQuoteAuthor'),s=q('#fatherQuoteSource');if(!t||!a||!s)return;var n=FATHER_QUOTES.length,i;if(forceNext&&fatherLast>=0){i=(fatherLast+1+Math.floor(Math.random()*(n-1)))%n}else{i=Math.floor(Math.random()*n);if(n>1&&i===fatherLast)i=(i+1)%n}fatherLast=i;t.textContent=FATHER_QUOTES[i].text;a.textContent=FATHER_QUOTES[i].author;s.textContent=FATHER_QUOTES[i].source}
-function fatherQuotes(){showFatherQuote(false);var b=q('#fatherAnotherQuote');if(b)b.onclick=function(){showFatherQuote(true)}}
+var FATHER_BAG='copticDailyPrayer_fatherQuoteBag_v2',fatherLast=-1;
+function quoteText(x){return '“'+String(x||'').replace(/^[“"']+|[”"']+$/g,'')+'”'}
+function nextFatherIndex(){
+ var n=FATHER_QUOTES.length,bag=[];
+ try{bag=JSON.parse(sessionStorage.getItem(FATHER_BAG)||'[]')}catch(e){}
+ if(!Array.isArray(bag)||!bag.length){
+   for(var j=0;j<n;j++)bag.push(j);
+   for(var k=bag.length-1;k>0;k--){var p=Math.floor(Math.random()*(k+1)),tmp=bag[k];bag[k]=bag[p];bag[p]=tmp}
+   if(n>1&&bag[0]===fatherLast){tmp=bag[0];bag[0]=bag[1];bag[1]=tmp}
+ }
+ var i=bag.shift();try{sessionStorage.setItem(FATHER_BAG,JSON.stringify(bag))}catch(e){}return i
+}
+function showFatherQuote(){var t=q('#fatherQuoteText'),a=q('#fatherQuoteAuthor'),s=q('#fatherQuoteSource');if(!t||!a||!s)return;var i=nextFatherIndex();fatherLast=i;t.textContent=quoteText(FATHER_QUOTES[i].text);a.textContent=FATHER_QUOTES[i].author;s.textContent=FATHER_QUOTES[i].source}
+function fatherQuotes(){showFatherQuote();var b=q('#fatherAnotherQuote');if(b)b.onclick=showFatherQuote}
 function suggested(){var h=(new Date()).getHours();if(h<9)return['first','Morning prayer'];if(h<12)return['third','Morning prayer'];if(h<15)return['sixth','Midday prayer'];if(h<18)return['ninth','Afternoon prayer'];if(h<21)return['eleventh','Evening prayer'];return['compline','Before sleep']}
 function active(){try{var h=localStorage.getItem(ACTIVE),d=new Date(),dk=key(d);if(NAMES[h]){var n=Number(localStorage.getItem('agpeya_'+dk+'_'+h+'_step')||0);return[h,n]}}catch(e){}return null}
 function completedToday(h){var d=completions();return !!d[h]}function prayerHero(){var a=active(),s=suggested();if(a&&completedToday(a[0]))a=null;var h=a?a[0]:s[0],title=q('#home .heroCopy h2'),sub=q('#home .heroCopy p'),ey=q('#home .heroCopy .eyebrow'),primary=q('#home .hero .primary');if(title)title.textContent=NAMES[h].replace(/ \([^)]*\)$/,'');if(a){if(ey)ey.textContent='Continue your prayer';if(sub)sub.textContent='Section '+(a[1]+1)+' · '+PERIOD[h];if(primary)primary.textContent='Continue Prayer'}else{if(ey)ey.textContent='Your next prayer';if(sub)sub.textContent=PERIOD[h];if(primary)primary.textContent='Begin Prayer'}}
