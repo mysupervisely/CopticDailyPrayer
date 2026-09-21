@@ -129,3 +129,6 @@ body{background:radial-gradient(circle at 50% -8%,#fffaf1 0,#f8f3eb 34%,#f5eee5 
 #readings .serviceTabs{border:1px solid var(--line)!important;border-radius:14px!important;padding:4px!important;background:#f3eee7!important;overflow:hidden}
 #readings .serviceTabs .serviceTab{border:1.5px solid transparent!important;border-radius:11px!important;padding:0 10px!important}
 #readings .serviceTabs .serviceTab.active{background:var(--paper)!important;color:var(--wine)!important;border:1.5px solid var(--wine)!important;box-shadow:none!important}
+
+/* Compact personal daily prayer plan */
+#home .homeDailyPlan{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;margin:15px 0 2px;padding-bottom:1px;-webkit-overflow-scrolling:touch}#home .homeDailyPlan::-webkit-scrollbar{display:none}#home .homeDailyPlan[hidden]{display:none}#home .homePlanItem{flex:0 0 auto;min-height:32px;padding:0 11px;border:1px solid rgba(120,29,40,.18);border-radius:999px;background:transparent;color:var(--wine);font:650 11px/1 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;white-space:nowrap}#home .homePlanItem.done{color:var(--muted);border-color:rgba(41,35,31,.10);background:rgba(41,35,31,.025)}#home .homePrayerActions{grid-template-columns:1fr!important}#home .homePrayerActions .primary{width:100%}
