@@ -121,3 +121,6 @@ body{background:radial-gradient(circle at 50% -8%,#fffaf1 0,#f8f3eb 34%,#f5eee5 
 
 /* Father quotes are displayed without decorative quotation marks */
 #home .fatherHomeCard:before{content:none!important;display:none!important}
+
+/* No quotation ornament in From the Fathers card */
+#home .fatherHomeCard::before,#home .fatherQuote::before,#fatherQuoteText::before{content:""!important;display:none!important}
