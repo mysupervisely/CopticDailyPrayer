@@ -124,3 +124,8 @@ body{background:radial-gradient(circle at 50% -8%,#fffaf1 0,#f8f3eb 34%,#f5eee5 
 
 /* No quotation ornament in From the Fathers card */
 #home .fatherHomeCard::before,#home .fatherQuote::before,#fatherQuoteText::before{content:""!important;display:none!important}
+
+/* Readings segmented control: selected service gets a complete outline */
+#readings .serviceTabs{border:1px solid var(--line)!important;border-radius:14px!important;padding:4px!important;background:#f3eee7!important;overflow:hidden}
+#readings .serviceTabs .serviceTab{border:1.5px solid transparent!important;border-radius:11px!important;padding:0 10px!important}
+#readings .serviceTabs .serviceTab.active{background:var(--paper)!important;color:var(--wine)!important;border:1.5px solid var(--wine)!important;box-shadow:none!important}
