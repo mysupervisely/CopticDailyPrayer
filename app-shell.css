@@ -102,3 +102,6 @@ body{background:radial-gradient(circle at 50% -8%,#fffaf1 0,#f8f3eb 34%,#f5eee5 
 
 /* Scripture deep-link affordances */
 #prayer .prayerReading>h2.scriptureLink{cursor:pointer;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;text-decoration-color:rgba(120,29,40,.28)}#prayer .prayerReading>h2.scriptureLink:after{content:"  ›";text-decoration:none}.readingBibleLink{display:block;width:100%;padding:0;border:0;background:transparent;text-align:left;color:var(--ink);cursor:pointer}.readingBibleLink span{color:var(--wine);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;font-size:.8em}
+
+/* Bible book search v4 */
+.bibleSearchWrap{margin:0 0 12px}.bibleBookSearch{width:100%;height:44px;border:1px solid rgba(41,35,31,.08);border-radius:13px;background:#fff;padding:0 14px;color:var(--ink);font-size:15px;outline:0}.bibleBookSearch:focus{border-color:rgba(120,29,40,.38);box-shadow:0 0 0 3px rgba(120,29,40,.07)}.bibleBook.hide{display:none}.srOnly{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
