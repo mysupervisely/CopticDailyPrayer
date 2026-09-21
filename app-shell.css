@@ -118,3 +118,6 @@ body{background:radial-gradient(circle at 50% -8%,#fffaf1 0,#f8f3eb 34%,#f5eee5 
 /* Bible chapter text begins directly under the reader header */
 #bible .bibleLicensePlaceholder{padding-top:22px}
 #bible .bibleLicensePlaceholder #bibleChapterText{margin-top:0}
+
+/* Father quotes are displayed without decorative quotation marks */
+#home .fatherHomeCard:before{content:none!important;display:none!important}
