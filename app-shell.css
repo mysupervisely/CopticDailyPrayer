@@ -105,3 +105,7 @@ body{background:radial-gradient(circle at 50% -8%,#fffaf1 0,#f8f3eb 34%,#f5eee5 
 
 /* Bible book search v4 */
 .bibleSearchWrap{margin:0 0 12px}.bibleBookSearch{width:100%;height:44px;border:1px solid rgba(41,35,31,.08);border-radius:13px;background:#fff;padding:0 14px;color:var(--ink);font-size:15px;outline:0}.bibleBookSearch:focus{border-color:rgba(120,29,40,.38);box-shadow:0 0 0 3px rgba(120,29,40,.07)}.bibleBook.hide{display:none}.srOnly{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* Bible reading size controls */
+#bibleChapterText{font:400 18px/1.68 Georgia,"Times New Roman",serif!important;color:var(--ink)!important;max-width:34em!important;text-align:left!important;white-space:pre-line}
+.bibleTextSize button[aria-pressed="true"]{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.06)}
