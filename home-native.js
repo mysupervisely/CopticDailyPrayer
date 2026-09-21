@@ -39,7 +39,7 @@ var FATHER_QUOTES=[
 {text:'Teach your heart to follow what your tongue is saying to others.',author:'Abba Poemen',source:'From your quote collection'}
 ];
 var FATHER_BAG='copticDailyPrayer_fatherQuoteBag_v2',fatherLast=-1;
-function quoteText(x){return String(x||'').replace(/[“”„‟«»‹›❝❞〝〞＂\"'‘’‚‛]/g,'').trim()}
+function quoteText(x){return String(x||'').replace(/^\s*[“”„‟«»‹›❝❞〝〞＂\"'‘’‚‛]+\s*/,'').replace(/\s*[“”„‟«»‹›❝❞〝〞＂\"'‘’‚‛]+\s*$/,'').trim()}
 function nextFatherIndex(){
  var n=FATHER_QUOTES.length,bag=[];
  try{bag=JSON.parse(sessionStorage.getItem(FATHER_BAG)||'[]')}catch(e){}
