@@ -147,3 +147,6 @@ body{background:radial-gradient(circle at 50% -8%,#fffaf1 0,#f8f3eb 34%,#f5eee5 
 
 /* Let longer personal prayer rules wrap naturally instead of horizontal scrolling */
 #home .homeDailyPlan{display:flex!important;flex-wrap:wrap!important;overflow:visible!important;justify-content:flex-start!important;row-gap:7px!important;column-gap:5px!important;white-space:normal!important}#home .homePlanItem{flex:0 0 auto!important}#home .homePlanArrow{flex:0 0 auto!important;align-self:center}
+
+/* Four-item prayer rule rows and lectionary subtitle */
+#home .homeDailyPlan{display:grid!important;grid-template-columns:repeat(7,max-content)!important;justify-content:space-between!important;align-items:center!important;row-gap:8px!important;column-gap:3px!important;overflow:visible!important}#home .homePlanItem{min-width:0!important;padding-left:4px!important;padding-right:4px!important;font-size:10.5px!important}#home .homePlanItem.current{padding-left:10px!important;padding-right:10px!important}#home .homePlanArrow{margin:0!important}#home .homeDailyPlan>.homePlanItem:nth-of-type(5){grid-column:1}#home .homeFirstLabel>span{display:flex;flex-direction:column;gap:3px}#home .homeFirstLabel small{font:600 10px/1.2 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;color:var(--muted);letter-spacing:.02em;text-transform:none}
