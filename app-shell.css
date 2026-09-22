@@ -144,3 +144,6 @@ body{background:radial-gradient(circle at 50% -8%,#fffaf1 0,#f8f3eb 34%,#f5eee5 
 
 /* Highlighted prayer is the Home rule action */
 #home .homeRuleActionRow,#home .homeRuleAction{display:none!important}#home .homeAgpeya{padding-bottom:20px!important}#home .homeDailyPlan{margin-bottom:0!important}
+
+/* Let longer personal prayer rules wrap naturally instead of horizontal scrolling */
+#home .homeDailyPlan{display:flex!important;flex-wrap:wrap!important;overflow:visible!important;justify-content:flex-start!important;row-gap:7px!important;column-gap:5px!important;white-space:normal!important}#home .homePlanItem{flex:0 0 auto!important}#home .homePlanArrow{flex:0 0 auto!important;align-self:center}
