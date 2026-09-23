@@ -150,3 +150,6 @@ body{background:radial-gradient(circle at 50% -8%,#fffaf1 0,#f8f3eb 34%,#f5eee5 
 
 /* Four-item prayer rule rows and lectionary subtitle */
 #home .homeDailyPlan{display:grid!important;grid-template-columns:repeat(7,max-content)!important;justify-content:space-between!important;align-items:center!important;row-gap:8px!important;column-gap:3px!important;overflow:visible!important}#home .homePlanItem{min-width:0!important;padding-left:4px!important;padding-right:4px!important;font-size:10.5px!important}#home .homePlanItem.current{padding-left:10px!important;padding-right:10px!important}#home .homePlanArrow{margin:0!important}#home .homeDailyPlan>.homePlanItem:nth-of-type(5){grid-column:1}#home .homeFirstLabel>span{display:flex;flex-direction:column;gap:3px}#home .homeFirstLabel small{font:600 10px/1.2 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;color:var(--muted);letter-spacing:.02em;text-transform:none}
+
+/* Prayer reader controls */
+#prayer .prayerText{font-size:var(--prayer-font-size,21px)!important}.kyrieQuick{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}.kyrieQuick button{min-height:46px;border:1px solid var(--line);border-radius:13px;background:var(--paper);color:var(--wine);font-weight:800}
