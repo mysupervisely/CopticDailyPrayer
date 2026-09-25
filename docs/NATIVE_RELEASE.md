@@ -20,7 +20,7 @@ iOS compilation and signing require a Mac with Xcode. Android compilation requir
 
 1. Clone this branch.
 2. Run npm install.
-3. Create the packaged web directory with npm run native:prepare.
+3. Set `COPTIC_NATIVE_API_ORIGIN` to the permanent HTTPS production origin (origin only, with no path), then create the packaged web directory with `npm run native:prepare`. Native packaging intentionally fails if this is missing or points to a `vercel.app` preview URL.
 4. Run `npm run native:init` once. This creates both native projects, syncs plugins/assets, and runs the verification gate.
 5. Run `npm run native:sync` after web changes. It now verifies the packaged app after every sync.
 6. Open Xcode with npm run native:ios.
@@ -41,4 +41,4 @@ First development builds, then device QA, native prayer reminders, icons and lau
 - `npm run native:verify` fails if core packaged assets, the Home shell, Prayer Life client, or native API configuration is missing.
 - The verifier warns until the generated `ios/` and `android/` projects exist.
 - Before store registration, confirm the final bundle/application ID. The current `org.copticdailyprayer.app` value is provisional.
-- Before production submission, replace the branch-preview API origin with the permanent production origin.
+- Native packaging requires the permanent production API origin and refuses Vercel preview URLs, preventing an accidental store build against a temporary deployment.
