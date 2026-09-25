@@ -3,12 +3,13 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "native:sync": "npm run native:prepare && npm run native:assets && npx cap sync",
+    "native:sync": "npm run native:prepare && npm run native:assets && npx cap sync && npm run native:verify",
     "native:ios": "npx cap open ios",
     "native:android": "npx cap open android",
     "native:prepare": "node native-prepare.js",
-    "native:init": "npm run native:prepare && npx cap add ios && npx cap add android",
-    "native:assets": "npx capacitor-assets generate --iconBackgroundColor '#f7f0e4' --iconBackgroundColorDark '#f7f0e4' --splashBackgroundColor '#f7f0e4' --splashBackgroundColorDark '#f7f0e4'"
+    "native:init": "npm run native:prepare && npx cap add ios && npx cap add android && npm run native:sync",
+    "native:assets": "npx capacitor-assets generate --iconBackgroundColor '#f7f0e4' --iconBackgroundColorDark '#f7f0e4' --splashBackgroundColor '#f7f0e4' --splashBackgroundColorDark '#f7f0e4'",
+    "native:verify": "node native-verify.js"
   },
   "dependencies": {
     "@capacitor/android": "^8.0.0",
