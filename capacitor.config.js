@@ -3,6 +3,10 @@ const config = {
   appName: 'Coptic Prayer',
   webDir: 'www',
   bundledWebRuntime: false,
+  server: {
+    hostname: 'copticdailyprayer.app',
+    androidScheme: 'https'
+  },
   ios: { contentInset: 'automatic' },
   android: { allowMixedContent: false }
 };
