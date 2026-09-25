@@ -6,7 +6,8 @@
     "native:sync": "npm run native:prepare && npx cap sync",
     "native:ios": "npx cap open ios",
     "native:android": "npx cap open android",
-    "native:prepare": "node native-prepare.js"
+    "native:prepare": "node native-prepare.js",
+    "native:init": "npm run native:prepare && npx cap add ios && npx cap add android"
   },
   "dependencies": {
     "@capacitor/android": "^8.0.0",
