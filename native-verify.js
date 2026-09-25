@@ -11,7 +11,9 @@ const requiredWeb = [
   'www/calendar-native.js',
   'www/bible-native.js',
   'www/prayer-life-native.js',
-  'www/home-native.js'
+  'www/home-native.js',
+  'www/agpeya-local-source.js',
+  'www/agpeya-data.js'
 ];
 
 for (const rel of requiredWeb) {
@@ -44,6 +46,9 @@ if (fs.existsSync(indexPath)) {
     }
   }
   if (!html.includes('prayer-life-native.js')) failures.push('Prayer Life client is missing from native index.');
+  if (!html.includes('agpeya-local-source.js')) failures.push('Agpeya source is missing from native index.');
+  if (!html.includes('agpeya-data.js')) failures.push('Agpeya correction layer is missing from native index.');
+  if (!html.includes('prayer-native.js')) failures.push('Agpeya reader is missing from native index.');
 }
 
 const config = require('./capacitor.config');
@@ -60,6 +65,14 @@ for (const name of ['home-native.js','calendar-native.js','readings-native.js'])
   }
   if (source.includes("fetch('/api/church")) {
     failures.push(name + ' contains a hard-coded same-origin Church API request.');
+  }
+}
+
+const prayerLifePath = path.join(root,'www','prayer-life-native.js');
+if (fs.existsSync(prayerLifePath)) {
+  const source = fs.readFileSync(prayerLifePath,'utf8');
+  for (const required of ['LocalNotifications','checkPermissions','requestPermissions','getPending','cancel','schedule']) {
+    if (!source.includes(required)) failures.push('Prayer reminder client is missing native notification support: ' + required);
   }
 }
 
