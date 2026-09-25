@@ -1,1 +1,20 @@
-{"private":true,"dependencies":{"web-push":"^3.6.7"}}
+{
+  "name": "coptic-daily-prayer",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "native:sync": "npx cap sync",
+    "native:ios": "npx cap open ios",
+    "native:android": "npx cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/core": "^8.0.0",
+    "@capacitor/ios": "^8.0.0",
+    "@capacitor/local-notifications": "^8.0.0",
+    "web-push": "^3.6.7"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.0.0"
+  }
+}
