@@ -3,11 +3,12 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "native:sync": "npm run native:prepare && npx cap sync",
+    "native:sync": "npm run native:prepare && npm run native:assets && npx cap sync",
     "native:ios": "npx cap open ios",
     "native:android": "npx cap open android",
     "native:prepare": "node native-prepare.js",
-    "native:init": "npm run native:prepare && npx cap add ios && npx cap add android"
+    "native:init": "npm run native:prepare && npx cap add ios && npx cap add android",
+    "native:assets": "npx capacitor-assets generate --iconBackgroundColor '#f7f0e4' --iconBackgroundColorDark '#f7f0e4' --splashBackgroundColor '#f7f0e4' --splashBackgroundColorDark '#f7f0e4'"
   },
   "dependencies": {
     "@capacitor/android": "^8.0.0",
@@ -17,6 +18,7 @@
     "web-push": "^3.6.7"
   },
   "devDependencies": {
-    "@capacitor/cli": "^8.0.0"
+    "@capacitor/cli": "^8.0.0",
+    "@capacitor/assets": "^3.0.5"
   }
 }
