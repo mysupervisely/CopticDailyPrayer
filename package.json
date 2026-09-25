@@ -3,9 +3,10 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "native:sync": "npx cap sync",
+    "native:sync": "npm run native:prepare && npx cap sync",
     "native:ios": "npx cap open ios",
-    "native:android": "npx cap open android"
+    "native:android": "npx cap open android",
+    "native:prepare": "node native-prepare.js"
   },
   "dependencies": {
     "@capacitor/android": "^8.0.0",
