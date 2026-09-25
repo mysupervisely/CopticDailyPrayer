@@ -156,7 +156,17 @@ Yes, we believe in the Holy Spirit, the Lord, the Giver of Life, who proceeds fr
 
 And in one holy, catholic (universal), and apostolic Church. We confess one baptism for the remission of sins.
 
-We look for the resurrection of the dead, and the life of the age to come. Amen.`);
+The people chant the last sentence in a loud voice.\n\nWe look for the resurrection of the dead, and the life of the age to come. Amen.`);
+   replace('Kyrie Eleison - 41',`Priest:
+
+O Lord hear us and have mercy on us and forgive us our sins. Amen.
+
+Lord have mercy (41)`);
+   replace('Holy, Holy, Holy',`Holy, holy, holy, Lord of Sabaoth. Heaven and earth are full of Your glory and honor. Have mercy on us, O God the Father, the Pantocrator. O Holy Trinity, have mercy on us. O Lord, God of hosts, be with us. For we have no helper in our hardships and tribulations but You.
+
+Absolve, forgive, and remit, O God, our transgressions; those which we have committed willingly and those which we have committed unwillingly, those which we have committed knowingly and those which we have committed unknowingly, the hidden and the manifest, O Lord forgive us, for the sake of Your holy name which is called upon us.
+
+Let it be according to Your mercy, O Lord, and not according to our sins.`);
    replace('First Morning Absolution',`O Lord, God of hosts, who is existing before all ages and abides forever, who created the sun for daylight, and the night as rest for all men; we thank You, O King of ages, for You have let us pass through the night in peace, and brought us to the daybreak.
 
 Therefore, we ask You, O our Master, the King of all ages, let Your face shine upon us and the light of Your divine knowledge enlighten us. Grant us, O our Master, to be sons of light and sons of day, to pass this day in righteousness, chastity and good conduct, that we may complete all the rest of the days of our life without offense; through the grace, the compassion and the love of mankind of Your only-begotten Son, Jesus Christ, and the gift of Your Holy Spirit, now and at all times and forever. Amen.`);
