@@ -31,7 +31,22 @@ if(!nativeIndex.includes('id="home"') || !nativeIndex.includes('prayer-life-nati
 // The web deployment can use same-origin /api routes. A bundled Capacitor app
 // has no Vercel functions at its local origin, so point Church-data requests
 // at the production HTTPS deployment when packaging the native shell.
-const nativeApiOrigin = process.env.COPTIC_NATIVE_API_ORIGIN || 'https://coptic-daily-prayer-git-chatgpt-mobile-pr-7e1823-my-supervisely.vercel.app';
+const nativeApiOrigin = String(process.env.COPTIC_NATIVE_API_ORIGIN || '').replace(/\/$/,'');
+if(!nativeApiOrigin){
+  throw new Error('COPTIC_NATIVE_API_ORIGIN is required for native packaging. Use the permanent HTTPS production API origin.');
+}
+let parsedNativeApiOrigin;
+try {
+  parsedNativeApiOrigin = new URL(nativeApiOrigin);
+} catch (e) {
+  throw new Error('COPTIC_NATIVE_API_ORIGIN must be a valid absolute HTTPS URL.');
+}
+if(parsedNativeApiOrigin.protocol !== 'https:' || parsedNativeApiOrigin.origin !== nativeApiOrigin){
+  throw new Error('COPTIC_NATIVE_API_ORIGIN must be an HTTPS origin with no path, query, or fragment.');
+}
+if(/vercel\.app$/i.test(parsedNativeApiOrigin.hostname)){
+  throw new Error('COPTIC_NATIVE_API_ORIGIN must use the permanent production domain, not a Vercel preview URL.');
+}
 nativeIndex = nativeIndex.replace('</head>', '<script>window.COPTIC_API_ORIGIN='+JSON.stringify(nativeApiOrigin)+'</script></head>');
 fs.writeFileSync(nativeIndexPath,nativeIndex);
 
