@@ -35,12 +35,17 @@ const nativeApiOrigin = process.env.COPTIC_NATIVE_API_ORIGIN || 'https://coptic-
 nativeIndex = nativeIndex.replace('</head>', '<script>window.COPTIC_API_ORIGIN='+JSON.stringify(nativeApiOrigin)+'</script></head>');
 fs.writeFileSync(nativeIndexPath,nativeIndex);
 
-for(const name of ['app-shell.js','home-native.js','calendar-native.js','calendar-shell.js','readings-native.js','readings-shell.js']){
+const activeChurchClients = ['home-native.js','calendar-native.js','readings-native.js'];
+for(const name of activeChurchClients){
   const file = path.join(out,name);
-  if(!fs.existsSync(file)) continue;
-  let source = fs.readFileSync(file,'utf8');
-  source = source.replace(/fetch\('\/api\/church/g, "fetch((window.COPTIC_API_ORIGIN||'')+'/api/church");
-  fs.writeFileSync(file,source);
+  if(!fs.existsSync(file)) throw new Error('Missing native Church-data client: '+name);
+  const source = fs.readFileSync(file,'utf8');
+  if(!source.includes("window.COPTIC_API_ORIGIN||''")){
+    throw new Error(name+' does not use the configurable Church API origin');
+  }
+  if(source.includes("fetch('/api/church")){
+    throw new Error(name+' still contains a hard-coded same-origin Church API request');
+  }
 }
 
 console.log('Prepared native web assets in www/ with app.html as index.html and native API origin');
