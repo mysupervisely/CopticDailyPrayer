@@ -21,8 +21,8 @@ iOS compilation and signing require a Mac with Xcode. Android compilation requir
 1. Clone this branch.
 2. Run npm install.
 3. Create the packaged web directory with npm run native:prepare.
-4. Run npx cap add ios and npx cap add android once.
-5. Run npm run native:sync after web changes.
+4. Run `npm run native:init` once. This creates both native projects, syncs plugins/assets, and runs the verification gate.
+5. Run `npm run native:sync` after web changes. It now verifies the packaged app after every sync.
 6. Open Xcode with npm run native:ios.
 7. Open Android Studio with npm run native:android.
 
@@ -31,3 +31,14 @@ Never commit signing certificates, provisioning profiles, keystores, passwords, 
 ## Release path
 
 First development builds, then device QA, native prayer reminders, icons and launch assets, TestFlight and Google Play testing, store privacy/metadata, then version 1.0 submission.
+
+
+## Current native release gates
+
+- The native package uses `app.html` as `www/index.html`.
+- Church-data requests are routed to an HTTPS API origin during native packaging.
+- Android mixed content remains disabled.
+- `npm run native:verify` fails if core packaged assets, the Home shell, Prayer Life client, or native API configuration is missing.
+- The verifier warns until the generated `ios/` and `android/` projects exist.
+- Before store registration, confirm the final bundle/application ID. The current `org.copticdailyprayer.app` value is provisional.
+- Before production submission, replace the branch-preview API origin with the permanent production origin.
