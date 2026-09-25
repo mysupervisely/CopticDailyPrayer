@@ -3,6 +3,19 @@ const path = require('path');
 
 const root = __dirname;
 const failures = [];
+const requiredSourceAssets = ['resources/icon.svg','resources/splash.svg'];
+for (const rel of requiredSourceAssets) {
+  const full = path.join(root, rel);
+  if (!fs.existsSync(full)) {
+    failures.push('Missing native artwork source: ' + rel);
+    continue;
+  }
+  const svg = fs.readFileSync(full,'utf8');
+  if (!svg.includes('<svg') || !svg.includes('viewBox=')) {
+    failures.push('Invalid native artwork source: ' + rel);
+  }
+}
+
 const requiredWeb = [
   'www/index.html',
   'www/app-shell.css',
@@ -53,7 +66,10 @@ if (fs.existsSync(indexPath)) {
 
 const config = require('./capacitor.config');
 if (!config.appId || config.appId === 'com.example.app') failures.push('Capacitor appId is not configured.');
+if (config.appName !== 'Coptic Prayer') failures.push('Capacitor appName must remain Coptic Prayer for this release.');
 if (config.webDir !== 'www') failures.push('Capacitor webDir must be www.');
+if (!config.server || config.server.hostname !== 'copticdailyprayer.app') failures.push('Capacitor hostname must remain copticdailyprayer.app.');
+if (!config.server || config.server.androidScheme !== 'https') failures.push('Android scheme must remain HTTPS.');
 if (config.android && config.android.allowMixedContent) failures.push('Android mixed content must remain disabled.');
 
 for (const name of ['home-native.js','calendar-native.js','readings-native.js']) {
