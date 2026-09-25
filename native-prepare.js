@@ -22,9 +22,25 @@ fs.copyFileSync(path.join(root,'app.html'),path.join(out,'index.html'));
 
 // Fail the native build early if the packaged entry point drifts away from the
 // current application shell.
-const nativeIndex = fs.readFileSync(path.join(out,'index.html'),'utf8');
+const nativeIndexPath = path.join(out,'index.html');
+let nativeIndex = fs.readFileSync(nativeIndexPath,'utf8');
 if(!nativeIndex.includes('id="home"') || !nativeIndex.includes('prayer-life-native.js')){
   throw new Error('Native entry point was not prepared from app.html');
 }
 
-console.log('Prepared native web assets in www/ with app.html as index.html');
+// The web deployment can use same-origin /api routes. A bundled Capacitor app
+// has no Vercel functions at its local origin, so point Church-data requests
+// at the production HTTPS deployment when packaging the native shell.
+const nativeApiOrigin = process.env.COPTIC_NATIVE_API_ORIGIN || 'https://coptic-daily-prayer-git-chatgpt-mobile-pr-7e1823-my-supervisely.vercel.app';
+nativeIndex = nativeIndex.replace('</head>', '<script>window.COPTIC_API_ORIGIN='+JSON.stringify(nativeApiOrigin)+'</script></head>');
+fs.writeFileSync(nativeIndexPath,nativeIndex);
+
+for(const name of ['app-shell.js','home-native.js','calendar-native.js','calendar-shell.js','readings-native.js','readings-shell.js']){
+  const file = path.join(out,name);
+  if(!fs.existsSync(file)) continue;
+  let source = fs.readFileSync(file,'utf8');
+  source = source.replace(/fetch\('\/api\/church/g, "fetch((window.COPTIC_API_ORIGIN||'')+'/api/church");
+  fs.writeFileSync(file,source);
+}
+
+console.log('Prepared native web assets in www/ with app.html as index.html and native API origin');
