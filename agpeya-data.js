@@ -12,7 +12,7 @@ window.loadCanonicalAgpeya=async function(){
     const item=first.find(s=>String(s.title||'').toLowerCase().includes(title.toLowerCase()));
     if(item)item.text=text;
    };
-   replace('Introduction of Every Hour',`In the name of the Father and the Son and the Holy Spirit, one God. Amen.
+   replace('Opening Prayers',`In the name of the Father and the Son and the Holy Spirit, one God. Amen.
 
 Kyrie eleison. Lord have mercy. Lord have mercy. Lord bless us. Amen.
 
@@ -82,24 +82,24 @@ The night has passed; we thank You, O Lord, and we ask You to keep us this day a
    replace("Psalm 4","When I cried out, God of my righteousness heard me: in tribulation You have made room for me; have compassion upon me, O Lord, and hear my prayer.\n\nO you, sons of men, how long will your hearts be heavy? Why do you love vanity, and seek falsehood? Know you that the Lord has made His Holy One wondrous. The Lord hears me when I cry to Him. Be angry, and do not sin; feel sorrow upon your beds for what you say in your hearts. Offer the sacrifice of righteousness, and trust in the Lord.\n\nMany say, \"Who can show us the good things?\" The light of Your countenance, O Lord, has been shined upon us. You have given gladness to my heart: they have been multiplied with the fruit of their wheat and wine and oil. I shall both lie down in peace and sleep: for You alone, O Lord, have caused me to dwell in hope. ALLELUIA.");
    replace("Holy Gospel - John 1:1-17","In the beginning was the Word, and the Word was with God, and the Word was God. He was in the beginning with God. All things were made by Him, and without Him was not anything made that was made. In Him was life, and the life was the light of men. And the light shines in darkness, and the darkness did not comprehend it.\n\nThere was a man sent from God, whose name was John. This man came for a witness, to bear witness of the Light, that all men through him might believe. He was not the Light, but was sent to bear witness of the Light. That was the true Light that gives light to every man coming into the world.\n\nHe was in the world, and the world was made by Him, and the world did not know Him. He came unto His own, and His own did not receive Him. But as many as received Him, to them He gave power to become children of God, to those who believe in His name; who were born, not of blood, nor of the will of the flesh, nor of the will of man, but of God.\n\nAnd the Word became flesh, and dwelt among us, and we beheld His glory, the glory as of the only-begotten of His Father, full of grace and truth. John bore witness of Him, and cried out, saying, \"This was He of whom I said, He who comes after me is preferred before me: for He was before me.\" And of His fullness we have all received, and grace for grace. For the law was given by Moses, but grace and truth came through Jesus Christ.\n\nGlory be to God forever. Amen.");
    replace("Morning Psali","Reader:\n\n1. O the true Light who gives light to every man coming into the world, You came into the world through Your love for mankind, and all creation rejoiced in Your coming. You saved our father, Adam, from the deception, and delivered our mother, Eve, from the pangs of death, and gave us the spirit of sonship. Let us, therefore, praise You and bless You, saying:\n\nPeople:\nGlory to the Father, and to the Son, and to the Holy Spirit.\n\nReader:\n\n2. As the daylight shines upon us, O Christ our God, the true Light, let the luminous senses and the bright thoughts shine within us, and do not let the darkness of passions hover over us, that mindfully we may praise You with David, saying, \"My eyes hastened to awake before the dawn, that I might meditate on Your sayings.\" Hear our voices according to Your great mercy, and deliver us, O Lord our God, through Your compassion.\n\nPeople:\nNow and ever and unto the ages of the ages. Amen.\n\nReader:\n\n3. You are the honored Mother of the Light; from the risings of the sun to its settings praises are offered to you, O Theotokos, the second heaven, for you are the bright and unchanging flower, and the ever-virgin mother; for the Father chose you, and the Holy Spirit overshadowed you, and the Son condescended and took flesh from you. Therefore, ask Him to give salvation to the world which He created, and to deliver it from all tribulations. Let us praise Him anew praise and bless Him. Now and ever and unto the ages of the ages. Amen.");
-   replace('Conclusion of Every Hour',`Have mercy on us, O God, and have mercy on us, who at all times and in every hour, in heaven and on earth, is worshipped and glorified; Christ our God, the good, the long suffering, the abundant in mercy, and the great in compassion, who loves the righteous and has mercy on the sinners of whom I am chief, who does not wish the death of the sinner but rather that he returns and lives, who calls all to salvation for the promise of the good things to come.
+   replace('Prayer of the Hours',`Have mercy on us, O God, and have mercy on us, who at all times and in every hour, in heaven and on earth, is worshipped and glorified; Christ our God, the good, the long suffering, the abundant in mercy, and the great in compassion, who loves the righteous and has mercy on the sinners of whom I am chief, who does not wish the death of the sinner but rather that he returns and lives, who calls all to salvation for the promise of the good things to come.
 
 Lord receive from us our prayers in this hour and in every hour. Ease our life and guide us to fulfill Your commandments. Sanctify our spirits. Cleanse our bodies. Conduct our thoughts. Purify our intentions. Heal our diseases. Forgive our sins. Deliver us from every evil grief and distress of heart. Surround us by Your holy angels, that, by their camp, we may be guarded and guided, and attain the unity of faith, and the knowledge of Your imperceptible and infinite glory. For You are blessed forever. Amen.`);
    // Common prayers use the same supplied wording in each Hour.
-   const preferredIntro=first.find(s=>String(s.title||'').toLowerCase().includes('introduction of every hour'));
+   const preferredIntro=first.find(s=>String(s.title||'').toLowerCase().includes('opening prayers'));
    const preferredOurFather=first.find(s=>String(s.title||'').toLowerCase().includes('our father'));
    const preferredThanksgiving=first.find(s=>String(s.title||'').toLowerCase().includes('thanksgiving'));
    const preferredPsalm50=first.find(s=>String(s.title||'').toLowerCase().includes('psalm 50'));
-   const preferredConclusion=first.find(s=>String(s.title||'').toLowerCase().includes('conclusion of every hour'));
+   const preferredConclusion=first.find(s=>String(s.title||'').toLowerCase().includes('prayer of the hours'));
    [data.third,data.sixth,data.ninth,data.eleventh,data.compline,data.midnight].forEach(hourSections=>{
     if(!hourSections)return;
     hourSections.forEach(section=>{
      const t=String(section.title||'').toLowerCase();
-     if(preferredIntro&&t.includes('introduction of every hour'))section.text=preferredIntro.text;
+     if(preferredIntro&&t.includes('opening prayers'))section.text=preferredIntro.text;
      else if(preferredOurFather&&t.includes('our father'))section.text=preferredOurFather.text;
      else if(preferredThanksgiving&&t.includes('thanksgiving'))section.text=preferredThanksgiving.text;
      else if(preferredPsalm50&&t.includes('psalm 50'))section.text=preferredPsalm50.text;
-     else if(preferredConclusion&&t.includes('conclusion of every hour'))section.text=preferredConclusion.text;
+     else if(preferredConclusion&&t.includes('prayer of the hours'))section.text=preferredConclusion.text;
     });
    });
 
@@ -135,12 +135,12 @@ O Virgin Mary, the holy Theotokos, the faithful advocate for all mankind, interc
 Hail to you, O Virgin, the right and true Queen. Hail to the pride of our race, who bore to us Immanuel.
 
 We ask you to remember us, O our faithful advocate, before our Lord Jesus Christ, that He may forgive us our sins.`);
-   replace('Introduction to Creed',`We exalt you, the Mother of the true Light. We glorify you, O saint, the Theotokos, for you have brought forth unto us the Savior of the whole world. He came and saved our souls.
+   replace('Introduction to the Creed',`We exalt you, the Mother of the true Light. We glorify you, O saint, the Theotokos, for you have brought forth unto us the Savior of the whole world. He came and saved our souls.
 
 Glory be to You, our Master, our King, Christ, the pride of the apostles, the crown of the martyrs, the joy of the righteous, the firmness of the churches, the forgiveness of sins.
 
 We proclaim the Holy Trinity in one Godhead. We worship Him. We glorify Him. Lord have mercy. Lord have mercy. Lord bless us. Amen.`);
-   replace('Orthodox Creed',`We believe in one God, God the Father, the Pantocrator, Creator of heaven and earth, and of all things seen and unseen.
+   replace('The Orthodox Creed',`We believe in one God, God the Father, the Pantocrator, Creator of heaven and earth, and of all things seen and unseen.
 
 We believe in one Lord, Jesus Christ, the only-begotten Son of God, begotten of the Father before all ages.
 
@@ -157,10 +157,10 @@ Yes, we believe in the Holy Spirit, the Lord, the Giver of Life, who proceeds fr
 And in one holy, catholic (universal), and apostolic Church. We confess one baptism for the remission of sins.
 
 We look for the resurrection of the dead, and the life of the age to come. Amen.`);
-   replace('First Absolution',`O Lord, God of hosts, who is existing before all ages and abides forever, who created the sun for daylight, and the night as rest for all men; we thank You, O King of ages, for You have let us pass through the night in peace, and brought us to the daybreak.
+   replace('First Morning Absolution',`O Lord, God of hosts, who is existing before all ages and abides forever, who created the sun for daylight, and the night as rest for all men; we thank You, O King of ages, for You have let us pass through the night in peace, and brought us to the daybreak.
 
 Therefore, we ask You, O our Master, the King of all ages, let Your face shine upon us and the light of Your divine knowledge enlighten us. Grant us, O our Master, to be sons of light and sons of day, to pass this day in righteousness, chastity and good conduct, that we may complete all the rest of the days of our life without offense; through the grace, the compassion and the love of mankind of Your only-begotten Son, Jesus Christ, and the gift of Your Holy Spirit, now and at all times and forever. Amen.`);
-   replace('Second Absolution',`O God who causes the light to burst forth, who lets His sun shine upon the righteous and the wicked, who created the light which illuminates the whole world, enlighten our minds, our hearts and our understandings, O Master of all, and grant us to please You this present day.
+   replace('Second Morning Absolution',`O God who causes the light to burst forth, who lets His sun shine upon the righteous and the wicked, who created the light which illuminates the whole world, enlighten our minds, our hearts and our understandings, O Master of all, and grant us to please You this present day.
 
 Guard us from every bad thing, from every sin, and from every adversative power, through Christ Jesus our Lord, with whom You are blessed, with the Holy Spirit, the Life-Giver, who is of one essence with You, now and at all times and unto the ages of all ages. Amen.`);
    // Sixth Hour: preserve the supplied edition's structure and identify its Gospel explicitly.
