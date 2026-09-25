@@ -77,6 +77,13 @@ Come let us kneel down, let us entreat Christ our Savior.
 O Lord Jesus Christ, the Word of God, our God, through the intercession of Saint Mary and all Your saints, preserve us, and bring us to a good start. Have mercy on us according to Your will forever.
 
 The night has passed; we thank You, O Lord, and we ask You to keep us this day away from sin and deliver us.`);
+   // Morning introduction after the common prayers.
+   const faithIndex=first.findIndex(s=>String(s.title||'').toLowerCase().includes('faith of the church'));
+   if(faithIndex>=0&&!first.some(s=>String(s.title||'').toLowerCase()==='first hour prayer introduction')){
+    first.splice(faithIndex+1,0,{title:'First Hour Prayer Introduction',text:`The Morning Prayer of this blessed day, we offer to Christ our King and our God, beseeching Him to forgive us our sins.
+
+From the Psalms of our teacher David the prophet. May his blessings be upon us all. Amen.`});
+   }
    replace('Ephesians 4:1-5',`I, therefore, the prisoner of the Lord, beseech you to walk worthy of the calling with which you were called, with all lowliness and meekness, with longsuffering, bearing with one another in love, endeavoring to keep the unity of the Spirit in the bond of peace. There is one body, and one Spirit, just as you were called in one hope of your calling; one Lord, one faith, one baptism.`);
    replace('Faith of the Church',`One is God the Father of everyone. One is His Son, Jesus Christ the Word, who took flesh and died and rose from the dead on the third day, and raised us with Him. One is the Holy Spirit, the Comforter, one in His hypostasis, proceeding from the Father, purifying the whole creation, and teaching us to worship the Holy Trinity, one in divinity and one in essence. We praise Him and bless Him forever. Amen.`);
    replace("Psalm 4","When I cried out, God of my righteousness heard me: in tribulation You have made room for me; have compassion upon me, O Lord, and hear my prayer.\n\nO you, sons of men, how long will your hearts be heavy? Why do you love vanity, and seek falsehood? Know you that the Lord has made His Holy One wondrous. The Lord hears me when I cry to Him. Be angry, and do not sin; feel sorrow upon your beds for what you say in your hearts. Offer the sacrifice of righteousness, and trust in the Lord.\n\nMany say, \"Who can show us the good things?\" The light of Your countenance, O Lord, has been shined upon us. You have given gladness to my heart: they have been multiplied with the fruit of their wheat and wine and oil. I shall both lie down in peace and sleep: for You alone, O Lord, have caused me to dwell in hope. ALLELUIA.");
