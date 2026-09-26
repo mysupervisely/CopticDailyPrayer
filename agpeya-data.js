@@ -8,10 +8,11 @@ window.loadCanonicalAgpeya=async function(){
    // Coptic Reader is the canonical target. Only fully verified First Hour
    // passages belong in this correction layer.
    const first=data.first||[];
+   const verifiedFirstHour=new Set();
    const replace=(title,text)=>{
     const needle=String(title||'').trim().toLowerCase();
     const item=first.find(s=>String(s.title||'').trim().toLowerCase()===needle);
-    if(item)item.text=text;
+    if(item){item.text=text;item.copticReaderVerified=true;verifiedFirstHour.add(needle)}
    };
    replace('Opening Prayers',`In the name of the Father and the Son and the Holy Spirit, one God. Amen.
 
@@ -89,6 +90,10 @@ The night has passed; we thank You, O Lord, and we ask You to keep us this day a
 
 From the Psalms of our teacher David the prophet. May his blessings be upon us all. Amen.`});
    }
+   // The inserted Morning Prayer introduction is also verified from Coptic Reader.
+   const verifiedMorningIntro=first.find(s=>String(s.title||'').trim()==='First Hour Prayer Introduction');
+   if(verifiedMorningIntro)verifiedMorningIntro.copticReaderVerified=true;
+
    // Psalm texts remain on the bundled source unless their complete wording has
    // been verified word-for-word against the user's Coptic Reader screenshots.
    replace("Holy Gospel - John 1:1-17","In the beginning was the Word, and the Word was with God, and the Word was God. He was in the beginning with God. All things were made by Him, and without Him was not anything made that was made. In Him was life, and the life was the light of men. And the light shines in darkness, and the darkness did not comprehend it.\n\nThere was a man sent from God, whose name was John. This man came for a witness, to bear witness of the Light, that all men through him might believe. He was not the Light, but was sent to bear witness of the Light. That was the true Light that gives light to every man coming into the world.\n\nHe was in the world, and the world was made by Him, and the world did not know Him. He came unto His own, and His own did not receive Him. But as many as received Him, to them He gave power to become children of God, to those who believe in His name; who were born, not of blood, nor of the will of the flesh, nor of the will of man, but of God.\n\nAnd the Word became flesh, and dwelt among us, and we beheld His glory, the glory as of the only-begotten of His Father, full of grace and truth. John bore witness of Him, and cried out, saying, \"This was He of whom I said, He who comes after me is preferred before me: for He was before me.\" And of His fullness we have all received, and grace for grace. For the law was given by Moses, but grace and truth came through Jesus Christ.\n\nGlory be to God forever. Amen.");
