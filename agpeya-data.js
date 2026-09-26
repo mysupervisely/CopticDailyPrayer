@@ -123,6 +123,16 @@ Lord receive from us our prayers in this hour and in every hour. Ease our life a
     pending:data.firstHourVerification.filter(x=>!x.copticReaderVerified).length
    };
 
+   // A section can only claim Coptic Reader verification if it was populated by
+   // this canonical layer (or is the explicitly inserted verified introduction).
+   const verifiedIntroTitle='first hour prayer introduction';
+   first.forEach(section=>{
+    const title=String(section.title||'').trim().toLowerCase();
+    if(section.copticReaderVerified===true && !verifiedFirstHour.has(title) && title!==verifiedIntroTitle){
+     throw new Error('Untracked Coptic Reader verification flag: '+section.title);
+    }
+   });
+
    // Fail closed if a passage is ever marked Coptic Reader verified without text.
    const invalidVerifiedFirst=first.filter(section=>
     section.copticReaderVerified===true && !String(section.text||'').trim()
