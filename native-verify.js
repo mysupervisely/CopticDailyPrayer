@@ -66,6 +66,7 @@ if (fs.existsSync(indexPath)) {
 
 const config = require('./capacitor.config');
 if (!config.appId || config.appId === 'com.example.app') failures.push('Capacitor appId is not configured.');
+if (config.appId !== 'org.copticdailyprayer.app') failures.push('Capacitor appId changed. Confirm the final store identity before changing it.');
 if (config.appName !== 'Coptic Prayer') failures.push('Capacitor appName must remain Coptic Prayer for this release.');
 if (config.webDir !== 'www') failures.push('Capacitor webDir must be www.');
 if (!config.server || config.server.hostname !== 'copticdailyprayer.app') failures.push('Capacitor hostname must remain copticdailyprayer.app.');
