@@ -77,6 +77,8 @@ Come let us kneel down, let us entreat Christ our Savior.
 O Lord Jesus Christ, the Word of God, our God, through the intercession of Saint Mary and all Your saints, preserve us, and bring us to a good start. Have mercy on us according to Your will forever.
 
 The night has passed; we thank You, O Lord, and we ask You to keep us this day away from sin and deliver us.`);
+   const kneelSection=first.find(s=>String(s.title||'').trim()==='First Hour Introduction');
+   if(kneelSection)kneelSection.title='Come Let Us Kneel Down';
    replace('Ephesians 4:1-5',`I, therefore, the prisoner of the Lord, beseech you to walk worthy of the calling with which you were called, with all lowliness and meekness, with longsuffering, bearing with one another in love, endeavoring to keep the unity of the Spirit in the bond of peace. There is one body, and one Spirit, just as you were called in one hope of your calling; one Lord, one faith, one baptism.`);
    replace('Faith of the Church',`One is God the Father of everyone. One is His Son, Jesus Christ the Word, who took flesh and died and rose from the dead on the third day, and raised us with Him. One is the Holy Spirit, the Comforter, one in His hypostasis, proceeding from the Father, purifying the whole creation, and teaching us to worship the Holy Trinity, one in divinity and one in essence. We praise Him and bless Him forever. Amen.`);
    // The Coptic Reader places the Morning Prayer introduction after Faith of the Church.
@@ -92,23 +94,8 @@ From the Psalms of our teacher David the prophet. May his blessings be upon us a
    replace('Prayer of the Hours',`Have mercy on us, O God, and have mercy on us, who at all times and in every hour, in heaven and on earth, is worshipped and glorified; Christ our God, the good, the long suffering, the abundant in mercy, and the great in compassion, who loves the righteous and has mercy on the sinners of whom I am chief, who does not wish the death of the sinner but rather that he returns and lives, who calls all to salvation for the promise of the good things to come.
 
 Lord receive from us our prayers in this hour and in every hour. Ease our life and guide us to fulfill Your commandments. Sanctify our spirits. Cleanse our bodies. Conduct our thoughts. Purify our intentions. Heal our diseases. Forgive our sins. Deliver us from every evil grief and distress of heart. Surround us by Your holy angels, that, by their camp, we may be guarded and guided, and attain the unity of faith, and the knowledge of Your imperceptible and infinite glory. For You are blessed forever. Amen.`);
-   // Common prayers use the same supplied wording in each Hour.
-   const preferredIntro=first.find(s=>String(s.title||'').toLowerCase().includes('opening prayers'));
-   const preferredOurFather=first.find(s=>String(s.title||'').toLowerCase().includes('our father'));
-   const preferredThanksgiving=first.find(s=>String(s.title||'').toLowerCase().includes('thanksgiving'));
-   const preferredPsalm50=first.find(s=>String(s.title||'').toLowerCase().includes('psalm 50'));
-   const preferredConclusion=first.find(s=>String(s.title||'').toLowerCase().includes('prayer of the hours'));
-   [data.third,data.sixth,data.ninth,data.eleventh,data.compline,data.midnight].forEach(hourSections=>{
-    if(!hourSections)return;
-    hourSections.forEach(section=>{
-     const t=String(section.title||'').toLowerCase();
-     if(preferredIntro&&t.includes('opening prayers'))section.text=preferredIntro.text;
-     else if(preferredOurFather&&t.includes('our father'))section.text=preferredOurFather.text;
-     else if(preferredThanksgiving&&t.includes('thanksgiving'))section.text=preferredThanksgiving.text;
-     else if(preferredPsalm50&&t.includes('psalm 50'))section.text=preferredPsalm50.text;
-     else if(preferredConclusion&&t.includes('prayer of the hours'))section.text=preferredConclusion.text;
-    });
-   });
+   // Do not propagate First Hour wording into the other Hours.
+   // Each Hour must be verified independently against the user's Coptic Reader edition.
 
    // Third Hour wording verified from the supplied screenshots.
    const third=data.third||[];
