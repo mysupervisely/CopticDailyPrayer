@@ -11,8 +11,14 @@ window.loadCanonicalAgpeya=async function(){
    const verifiedFirstHour=new Set();
    const replace=(title,text)=>{
     const needle=String(title||'').trim().toLowerCase();
-    const item=first.find(s=>String(s.title||'').trim().toLowerCase()===needle);
-    if(item){item.text=text;item.copticReaderVerified=true;verifiedFirstHour.add(needle)}
+    const matches=first.filter(s=>String(s.title||'').trim().toLowerCase()===needle);
+    if(matches.length!==1){
+     throw new Error('Canonical First Hour target must match exactly once: '+title+' (found '+matches.length+')');
+    }
+    const item=matches[0];
+    item.text=text;
+    item.copticReaderVerified=true;
+    verifiedFirstHour.add(needle);
    };
    replace('Opening Prayers',`In the name of the Father and the Son and the Holy Spirit, one God. Amen.
 
