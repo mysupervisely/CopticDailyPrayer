@@ -119,31 +119,8 @@ We ask and entreat You, O Lover of Mankind, accept our prayers and forgive our s
 Change us into a spiritual manner of life, that we may walk in the Spirit and not fulfill the lusts of the flesh. And make us worthy to serve You with purity and righteousness all the days of our life.
 
 For unto You is due glory, honor, and dominion, with Your good Father and the Holy Spirit, now and ever and unto the ages of all ages. Amen.`);
-   // First Hour common closing prayers, aligned to the supplied Coptic Reader edition.
-   replace('The Gloria',`Let us praise with the angels, saying, "Glory to God in the highest, peace on earth and goodwill toward men." We praise You, we bless You, we serve You, we worship You, we confess to You, we glorify You, we give thanks to You for Your great glory, O Lord, heavenly King, God the Father, the Pantocrator; O Lord, the only-begotten Son, Jesus Christ; and the Holy Spirit.
-
-O Lord God, Lamb of God, Son of the Father, who takes away the sin of the world, have mercy on us. You who takes away the sin of the world, receive our prayer. You who sits at the right hand of the Father, have mercy on us.
-
-For You only are holy; You only are exalted, O Lord Jesus Christ, and the Holy Spirit, to the glory of God the Father. Every day I will bless You, and I will praise Your name forever; yes, forever and ever. Amen.
-
-From the night my soul awakes early unto You, O my God, for Your commandments are a light upon the earth. I was meditating on Your ways, for You have become a helper unto me. In the morning, O Lord, You shall hear my voice. Early I will stand before You, and You shall see me.`);
-   replace('Trisagion',`Holy God, Holy Mighty, Holy Immortal, who was born of the Virgin, have mercy on us.
-
-Holy God, Holy Mighty, Holy Immortal, who was crucified for us, have mercy on us.
-
-Holy God, Holy Mighty, Holy Immortal, who rose from the dead and ascended into the heavens, have mercy on us.
-
-Glory to the Father, and to the Son, and to the Holy Spirit, now and ever and unto the ages of the ages. Amen.
-
-O Holy Trinity, have mercy on us. O Holy Trinity, have mercy on us. O Holy Trinity, have mercy on us.
-
-O Lord, forgive our sins. O Lord, forgive our iniquities. O Lord, forgive our trespasses.
-
-O Lord, visit the sick of Your people; heal them for the sake of Your holy name. Our fathers and our brethren who have fallen asleep, O Lord, repose their souls.
-
-O You who are sinless, Lord have mercy on us. O You who are sinless, Lord help us and receive our supplications. For Yours is the glory, the dominion, and the triple holiness.
-
-Lord have mercy. Lord have mercy. Lord bless. Amen.`);
+   // Gloria and Trisagion intentionally remain from the bundled source until their
+   // exact wording can be verified against the user's Coptic Reader screenshots.
    // First Hour closing prayers, transcribed from the supplied preferred wording.
    replace('Hail to You',`Hail to you. We ask you, O saint full of glory, the ever-virgin, the Theotokos, the Mother of Christ, lift up our prayers unto your beloved Son, that He may forgive us our sins.
 
