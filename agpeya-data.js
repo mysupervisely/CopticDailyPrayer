@@ -104,6 +104,19 @@ Lord receive from us our prayers in this hour and in every hour. Ease our life a
    // Do not propagate First Hour wording into the other Hours.
    // Each Hour must be verified independently against the user's Coptic Reader edition.
 
+   // Keep an explicit First Hour verification inventory so legacy text can never
+   // be mistaken for Coptic Reader text during the rebuild.
+   data.firstHourVerification=first.map((section,index)=>({
+    index:index,
+    title:String(section.title||''),
+    copticReaderVerified:section.copticReaderVerified===true
+   }));
+   data.firstHourVerificationSummary={
+    total:data.firstHourVerification.length,
+    verified:data.firstHourVerification.filter(x=>x.copticReaderVerified).length,
+    pending:data.firstHourVerification.filter(x=>!x.copticReaderVerified).length
+   };
+
    // Third Hour wording verified from the supplied screenshots.
    const third=data.third||[];
    const replaceThird=(title,text)=>{
