@@ -117,6 +117,14 @@ Lord receive from us our prayers in this hour and in every hour. Ease our life a
     pending:data.firstHourVerification.filter(x=>!x.copticReaderVerified).length
    };
 
+   // Fail closed if a passage is ever marked Coptic Reader verified without text.
+   const invalidVerifiedFirst=first.filter(section=>
+    section.copticReaderVerified===true && !String(section.text||'').trim()
+   );
+   if(invalidVerifiedFirst.length){
+    throw new Error('Verified First Hour passage is missing text: '+invalidVerifiedFirst.map(x=>x.title).join(', '));
+   }
+
    // Third Hour wording verified from the supplied screenshots.
    const third=data.third||[];
    const replaceThird=(title,text)=>{
