@@ -40,5 +40,5 @@ First development builds, then device QA, native prayer reminders, icons and lau
 - Android mixed content remains disabled.
 - `npm run native:verify` fails if core packaged assets, the Home shell, Prayer Life client, or native API configuration is missing.
 - The verifier warns until the generated `ios/` and `android/` projects exist.
-- Before store registration, confirm the final bundle/application ID. The current `org.copticdailyprayer.app` value is provisional.
+- Before store registration, confirm the final bundle/application ID. The current `org.copticdailyprayer.app` value is provisional and the verifier protects it from accidental drift. Once the store identity is intentionally finalized, update the configuration and verifier together.
 - Native packaging requires the permanent production API origin and refuses Vercel preview URLs, preventing an accidental store build against a temporary deployment.
