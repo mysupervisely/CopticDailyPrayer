@@ -5,11 +5,12 @@ window.loadCanonicalAgpeya=async function(){
    if(!window.COPTIC_LOCAL_AGPEYA)throw new Error('Local Agpeya source unavailable');
    const data=JSON.parse(JSON.stringify(window.COPTIC_LOCAL_AGPEYA));
 
-   // Preferred wording supplied by the user. Keep this override local so the
-   // reader remains stable while each Hour is transcribed and verified.
+   // Coptic Reader is the canonical target. Only fully verified First Hour
+   // passages belong in this correction layer.
    const first=data.first||[];
    const replace=(title,text)=>{
-    const item=first.find(s=>String(s.title||'').toLowerCase().includes(title.toLowerCase()));
+    const needle=String(title||'').trim().toLowerCase();
+    const item=first.find(s=>String(s.title||'').trim().toLowerCase()===needle);
     if(item)item.text=text;
    };
    replace('Opening Prayers',`In the name of the Father and the Son and the Holy Spirit, one God. Amen.
